@@ -1,0 +1,61 @@
+﻿<Window x:Class="EzTabs.View.Windows.AuthorizationWindow.AuthorizationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EzTabs.View.Windows.AuthorizationWindow"
+        xmlns:localp="clr-namespace:EzTabs.View.Windows.AuthorizationWindow.UserControls"
+        xmlns:vm="clr-namespace:EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow;assembly=EzTabs.ViewModel"
+        xmlns:vmc="clr-namespace:EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls;assembly=EzTabs.ViewModel"
+        mc:Ignorable="d"
+        FontFamily="Inter"
+        FontSize="24"
+        Title="EzTabs" MinHeight="540" Height="540" MinWidth="540" Width="540"
+        Background="#93B5C6">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vmc:LoginControlViewModel}">
+            <localp:LoginControl />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmc:RegistrationControlViewModel}">
+            <localp:RegistrationControl />
+        </DataTemplate>
+    </Window.Resources>
+    <Window.DataContext>
+        <vm:AuthorizationWindowViewModel />
+    </Window.DataContext>
+
+    <Grid>
+
+        <ContentControl Content="{Binding CurrentView}" />
+
+        <Button x:Name="LoginSwitchButton" 
+                Command="{Binding NavigatePagesCommand}"
+                CommandParameter="Login"
+                BorderBrush="Black"
+                BorderThickness="2"
+                Background="White"
+                Height="50"
+                Width="100"
+                Content="Sign in"
+                Visibility="Hidden"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Margin="15,0,0,0"/>
+        
+        <Button x:Name="RegisterSwitchButton" 
+                Command="{Binding NavigatePagesCommand}"
+                CommandParameter="Registration"
+                BorderBrush="Black"
+                BorderThickness="2"
+                Background="White"
+                Height="50"
+                Width="100"
+                Content="Sign up"
+                Visibility="Visible"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Margin="0,0,15,0"/>
+
+    </Grid>
+</Window>

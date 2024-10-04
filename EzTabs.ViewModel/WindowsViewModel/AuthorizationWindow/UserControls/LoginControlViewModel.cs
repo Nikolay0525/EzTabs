@@ -1,0 +1,66 @@
+﻿using EzTabs.Model.Model;
+using EzTabs.Model.Repository;
+using GalaSoft.MvvmLight.Command;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+
+namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
+{
+    public class LoginControlViewModel : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event Action<string, string> ShowMessage;
+
+        private readonly RepoImplementation<User> _userRepository;
+        private string _name;
+        private string _password;
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                _password = value;
+                OnPropertyChanged(nameof(Password));
+            }
+        }
+
+        public ICommand RegisterCommand { get; }
+
+        public LoginControlViewModel() { }
+
+        public LoginControlViewModel(RepoImplementation<User> userRepository)
+        {
+            RegisterCommand = new RelayCommand(async () => await Login());
+            _userRepository = userRepository;
+        }
+
+        private async Task Login()
+        {
+            #region validation
+
+            #endregion
+
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+}

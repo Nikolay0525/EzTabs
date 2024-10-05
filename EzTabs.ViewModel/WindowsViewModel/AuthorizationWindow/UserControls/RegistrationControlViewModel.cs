@@ -73,6 +73,7 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
 
         private async Task Register()
         {
+            // Check
             #region validation
             if (this.Name == null)
             {

@@ -39,7 +39,6 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow
                     break;
             }
         }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {

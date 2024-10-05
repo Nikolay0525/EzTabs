@@ -74,6 +74,11 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
         private async Task Register()
         {
             #region validation
+            if (this.Name == null)
+            {
+                ShowMessage?.Invoke("Username field is empty", "Validation error");
+                return;
+            }
             if (this.Name.Length < 2) 
             { 
                 ShowMessage?.Invoke("Username too short, write atleast 2 symbols","Validation error");
@@ -84,6 +89,11 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
                 ShowMessage?.Invoke("Username too long, it must be maximum 20 symbols","Validation error");
                 return;
             }
+            if (this.Password == null)
+            {
+                ShowMessage?.Invoke("Password field is empty", "Validation error");
+                return;
+            }
             if (this.Password.Length < 8)
             {
                 ShowMessage?.Invoke("Password too short, write atleast 8 symbols","Validation error");
@@ -92,6 +102,11 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
             if (this.Password.Length > 32)
             {
                 ShowMessage?.Invoke("Password too long, it must be maximum 32 symbols","Validation error");
+                return;
+            }
+            if (this.Email == null)
+            {
+                ShowMessage?.Invoke("Email field is empty", "Validation error");
                 return;
             }
             if (!this.Email.Contains('@')) 

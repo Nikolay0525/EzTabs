@@ -23,6 +23,17 @@ namespace EzTabs.View.Windows.AuthorizationWindow.UserControls
         public RegistrationControl()
         {
             InitializeComponent();
+            InitializeAsync();
+        }
+
+        public async void InitializeAsync()
+        {
+            /*var viewData = await Task.Run(() => new RegistrationControlViewModel(new RepoImplementation<User>(new EzTabsContext())));
+            DataContext = viewData;
+            viewData.ShowMessage += (message, title) =>
+            {
+                MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
+            };*/
         }
     }
 }

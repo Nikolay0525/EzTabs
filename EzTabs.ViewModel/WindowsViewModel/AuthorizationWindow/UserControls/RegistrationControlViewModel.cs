@@ -128,7 +128,7 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
                 Password = this.Password,
             };
 
-            await _userRepository.Add(newUser);
+            await newUser.RegisterUser(_userRepository);
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

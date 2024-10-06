@@ -5,6 +5,6 @@ namespace EzTabs.Model.Model
 {
     public class Notification : MessageBase
     {
-        public MessageType MessageType { get; set; }
+        public MessageType Type { get; set; }
     }
 }

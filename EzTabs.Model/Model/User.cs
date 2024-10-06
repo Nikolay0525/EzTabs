@@ -1,7 +1,5 @@
 ﻿using EzTabs.Model.Model.BaseClasses;
 using EzTabs.Model.Model.Enums;
-using EzTabs.Model.Repository;
-using EzTabs.Model.EmailService;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 
@@ -12,9 +10,9 @@ namespace EzTabs.Model.Model
         public string? Name { get; set; }
         public string? Password { get; set; }
         public string? Email { get; set; }
-        public bool IsEmailVerified { get; set; } = false; 
-        public Guid VerificationToken { get; set; }
-        public DateTime? TokenExpiration { get; set; } 
+        public bool IsEmailVerified { get; set; } = true; // email verif is something harder than i thought 
+        // public Guid VerificationToken { get; set; }
+        // public DateTime? TokenExpiration { get; set; } 
         public UserRole Role { get; private set; }
         public List<TabReport>? TabReports { get; set; }
         public List<TabRate>? TabRates { get; set; }
@@ -25,27 +23,10 @@ namespace EzTabs.Model.Model
         public List<Tab>? Tab { get; set; }
         public List<Notification>? Notifications { get; set; }
 
-        public void ChangeRole(User user, UserRole role)
+        public void ChangeRole(User roleChanger, UserRole newRole)
         {
-            if (user.Role != UserRole.Admin) return;
-            this.Role = role;
-        }
-
-        public Guid GenerateVerificationToken()
-        {
-            return Guid.NewGuid();
-        }
-
-        public async Task RegisterUser(RepoImplementation<User> userRepository)
-        {
-            var verifToken = this.VerificationToken = GenerateVerificationToken();
-            this.TokenExpiration = DateTime.UtcNow.AddHours(24);
-            await userRepository.Add(this);
-
-            string verificationLink = $"yourapp://verify?token={verifToken}";
-
-            // Send verification email
-            EmailSender.SendVerificationEmail(this.Email, verificationLink);
+            if (roleChanger.Role != UserRole.Admin) return;
+            this.Role = newRole;
         }
     }
 }

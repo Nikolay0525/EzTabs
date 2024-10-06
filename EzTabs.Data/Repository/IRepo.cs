@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EzTabs.Model.Repository
+namespace EzTabs.Data.Repository
 {
     public interface IRepo<T>
     {

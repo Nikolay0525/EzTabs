@@ -1,5 +1,4 @@
 ﻿using EzTabs.Model.Model;
-using EzTabs.Model.Repository;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
@@ -16,7 +15,6 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
         public event PropertyChangedEventHandler PropertyChanged;
         public event Action<string, string> ShowMessage;
 
-        private readonly RepoImplementation<User> _userRepository;
         private string _name;
         private string _password;
 
@@ -42,12 +40,9 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
 
         public ICommand RegisterCommand { get; }
 
-        public LoginControlViewModel() { }
-
-        public LoginControlViewModel(RepoImplementation<User> userRepository)
+        public LoginControlViewModel()
         {
             RegisterCommand = new RelayCommand(async () => await Login());
-            _userRepository = userRepository;
         }
 
         private async Task Login()

@@ -1,5 +1,4 @@
 ﻿using EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System.ComponentModel;
 using System.Windows.Input;

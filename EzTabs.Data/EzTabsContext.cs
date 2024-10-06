@@ -1,9 +1,9 @@
-﻿using EzTabs.Model.Model;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using EzTabs.Model.Model;
 
-namespace EzTabs.Model
+namespace EzTabs.Data
 {
     public class EzTabsContext : DbContext
     {

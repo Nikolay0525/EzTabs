@@ -7,12 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\EzTabs.Data\EzTabs.Data.csproj" />
     <ProjectReference Include="..\EzTabs.Model\EzTabs.Model.csproj" />
-    <ProjectReference Include="..\EzTabs.Services\EzTabs.Services.csproj" />
   </ItemGroup>
 
 </Project>

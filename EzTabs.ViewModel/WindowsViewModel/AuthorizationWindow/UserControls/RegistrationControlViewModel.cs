@@ -1,8 +1,9 @@
 ﻿using EzTabs.Model.Model;
-using EzTabs.Model.Repository;
 using GalaSoft.MvvmLight.Command;
 using System.ComponentModel;
 using System.Windows.Input;
+using EzTabs.Services.ModelServices;
+using EzTabs.Data.Repository;
 
 
 namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
@@ -12,7 +13,9 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
         public event PropertyChangedEventHandler PropertyChanged;
         public event Action<string, string> ShowMessage;
 
-        private readonly RepoImplementation<User> _userRepository;
+        private UserService _userService;
+        //private RepoImplementation<User>
+
         private string _name;
         private string _email;
         private string _password;
@@ -64,11 +67,11 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
             // Parameterless constructor for XAML compatibility
         }
 
-        public RegistrationControlViewModel(RepoImplementation<User> userRepository)
+        public RegistrationControlViewModel(UserService userService)
         {
             // Initialize the RegisterCommand
             RegisterCommand = new RelayCommand(async () => await Register());
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         private async Task Register()
@@ -128,7 +131,7 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
                 Password = this.Password,
             };
 
-            await newUser.RegisterUser(_userRepository);
+            //await newUser.RegisterUser(_userRepository);
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

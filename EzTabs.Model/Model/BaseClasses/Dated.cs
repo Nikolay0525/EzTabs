@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace EzTabs.Model.Model.BaseClasses
 {
-    public class Dated
+    public abstract class Dated
     {
-        public DateTime DateOfCreation { get; set; } = DateTime.Now;
+        public DateTime DateOfCreation { get; private set; }
+        public Dated() 
+        { 
+            DateOfCreation = DateTime.Now;
+        }
     }
 }

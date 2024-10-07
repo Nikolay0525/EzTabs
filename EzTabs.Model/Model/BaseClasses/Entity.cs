@@ -3,9 +3,13 @@
 
 namespace EzTabs.Model.Model.BaseClasses
 {
-    public class Entity : Dated
+    public abstract class Entity : Dated
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; private set; }
+        public Entity() 
+        { 
+            Id = Guid.NewGuid();
+        }
     }
 }

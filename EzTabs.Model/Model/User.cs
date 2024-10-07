@@ -10,9 +10,7 @@ namespace EzTabs.Model.Model
         public string? Name { get; set; }
         public string? Password { get; set; }
         public string? Email { get; set; }
-        public bool IsEmailVerified { get; set; } = true; // email verif is something harder than i thought 
-        // public Guid VerificationToken { get; set; }
-        // public DateTime? TokenExpiration { get; set; } 
+        public bool IsEmailVerified { get; set; } = true;
         public UserRole Role { get; private set; }
         public List<TabReport>? TabReports { get; set; }
         public List<TabRate>? TabRates { get; set; }

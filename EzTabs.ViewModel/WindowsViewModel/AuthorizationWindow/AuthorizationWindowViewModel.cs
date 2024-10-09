@@ -7,8 +7,8 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow
 {
     public class AuthorizationWindowViewModel : INotifyPropertyChanged
     {
-        private object _currentView;
-        public object CurrentView
+        private object? _currentView;
+        public object? CurrentView
         {
             get => _currentView;
             set
@@ -38,7 +38,7 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow
                     break;
             }
         }
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -76,7 +76,6 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
 
         private async Task Register()
         {
-            // Check
             #region validation
             if (this.Name == null)
             {
@@ -131,7 +130,8 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
                 Password = this.Password,
             };
 
-            //await newUser.RegisterUser(_userRepository);
+            var userService = new UserService();
+            await userService.RegisterUser(newUser);
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

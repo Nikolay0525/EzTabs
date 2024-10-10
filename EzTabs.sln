@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EzTabs.Model", "EzTabs.Mode
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EzTabs.ViewModel", "EzTabs.ViewModel\EzTabs.ViewModel.csproj", "{7F0B58D6-05C9-4231-849F-EF9CBAB6BE41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzTabs.Services", "EzTabs.Services\EzTabs.Services.csproj", "{0FA96276-C861-4DA4-90AF-1C5AC0E7C211}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EzTabs.Services", "EzTabs.Services\EzTabs.Services.csproj", "{0FA96276-C861-4DA4-90AF-1C5AC0E7C211}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzTabs.Data", "EzTabs.Data\EzTabs.Data.csproj", "{FAB1E1B7-6D6E-4228-85A6-00D34172D0C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EzTabs.Data", "EzTabs.Data\EzTabs.Data.csproj", "{FAB1E1B7-6D6E-4228-85A6-00D34172D0C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

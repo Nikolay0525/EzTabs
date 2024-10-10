@@ -13,6 +13,7 @@
     <UserControl.Resources>
 
     </UserControl.Resources>
+    
     <UserControl.DataContext>
         <vm:RegistrationControlViewModel />
     </UserControl.DataContext>

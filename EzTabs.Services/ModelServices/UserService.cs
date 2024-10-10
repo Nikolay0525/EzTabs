@@ -13,10 +13,12 @@ namespace EzTabs.Services.ModelServices
     public class UserService
     {
         private readonly RepoImplementation<User> _userRepository;
+
         public UserService()
         {
             _userRepository = new RepoImplementation<User>(new EzTabsContext());
         }
+
         public async Task VerificateUser(User user, string verificationCode)
         {
             if (user == null || verificationCode == null) 
@@ -31,10 +33,10 @@ namespace EzTabs.Services.ModelServices
             return;
         }
 
-        public async Task RegisterUser(User? user)
+        public async Task RegisterUser(User? user, string verificationCode)
         {
             if (user == null || user.Email == null) return;
-            EmailService.EmailService.SendVerificationEmail(user.Email, Guid.NewGuid().ToString());
+            EmailService.EmailService.SendVerificationEmail(user.Email, verificationCode);
             await _userRepository.Add(user);
         }
 

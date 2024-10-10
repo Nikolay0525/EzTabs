@@ -18,7 +18,7 @@ namespace EzTabs.Services.EmailService
             bool enableSSL = true;
 
             string emailFrom = "eztabsverif@gmail.com"; 
-            string password = "TyYvuzkJamZ2";          
+            string password = "szov zwks szgx yywd";          
             string subject = "Verify Your Email";
             string body = $"Welcome to our community, here's your code: {verificationCode}";
 

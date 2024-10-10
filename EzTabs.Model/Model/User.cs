@@ -11,7 +11,7 @@ namespace EzTabs.Model.Model
         public string? Password { get; set; }
         public string? Email { get; set; }
         public bool IsEmailVerified { get; set; } = false;
-        public string VerificationCode { get; private set; }
+        public string? VerificationCode { get; set; }
         public UserRole Role { get; private set; }
         public List<TabReport>? TabReports { get; set; }
         public List<TabRate>? TabRates { get; set; }

@@ -11,9 +11,9 @@ namespace EzTabs.Model.Model
         public string? Key { get; set; }
         public int BitsPerMinute { get; set; } = 0;
         public string? Description { get; set; }
-        public string? TabText { get; set; }
         public long Views { get; private set; } = 0;
         public User? Author { get; set; }
+        public List<Note>? Notes { get; set; }
         public List<TabReport>? TabReports { get; set; }
         public List<Comment>? Comments { get; set; }
         public List<FavouriteTab>? FavouriteTabs { get; set; }

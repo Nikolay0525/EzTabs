@@ -4,22 +4,22 @@ using System.ComponentModel;
 using System.Windows.Input;
 using EzTabs.Services.ModelServices;
 using EzTabs.Data.Repository;
+using EzTabs.Data;
 
 
 namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
 {
     public class RegistrationControlViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event Action<string, string> ShowMessage;
-
         private UserService _userService;
-        //private RepoImplementation<User>
 
         private string _name;
         private string _email;
         private string _password;
         private string _confirmPassword;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event Action<string, string> ShowMessage;
 
         public string Name
         {
@@ -62,19 +62,15 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
 
         public ICommand RegisterCommand { get; }
 
-        public RegistrationControlViewModel()
-        {
-            // Parameterless constructor for XAML compatibility
-        }
+        public RegistrationControlViewModel() { }
 
-        public RegistrationControlViewModel(UserService userService)
+        public RegistrationControlViewModel(UserService userService, AuthorizationWindowViewModel authorizationWindowViewModel)
         {
-            // Initialize the RegisterCommand
-            RegisterCommand = new RelayCommand(async () => await Register());
+            RegisterCommand = new RelayCommand(async () => await Register(authorizationWindowViewModel));
             _userService = userService;
         }
 
-        private async Task Register()
+        private async Task Register(AuthorizationWindowViewModel authorizationWindowViewModel)
         {
             #region validation
             if (this.Name == null)
@@ -123,15 +119,18 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
                 return;
             }
             #endregion
+            string verificationCode = Guid.NewGuid().ToString();
             var newUser = new User
             {
                 Name = this.Name,
                 Email = this.Email,
                 Password = this.Password,
+                VerificationCode = verificationCode
             };
 
-            var userService = new UserService();
-            await userService.RegisterUser(newUser);
+            authorizationWindowViewModel.NavigatePagesCommand.Execute("Verification");
+            await _userService.RegisterUser(newUser, verificationCode);
+            
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

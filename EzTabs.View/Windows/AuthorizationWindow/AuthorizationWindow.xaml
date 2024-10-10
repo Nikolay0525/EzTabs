@@ -7,12 +7,15 @@
         xmlns:localp="clr-namespace:EzTabs.View.Windows.AuthorizationWindow.UserControls"
         xmlns:vm="clr-namespace:EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow;assembly=EzTabs.ViewModel"
         xmlns:vmc="clr-namespace:EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls;assembly=EzTabs.ViewModel"
+        xmlns:conv="clr-namespace:EzTabs.View.ViewServices.Converters"
         mc:Ignorable="d"
         FontFamily="Inter"
         FontSize="24"
         Title="EzTabs" MinHeight="540" Height="540" MinWidth="540" Width="540"
         Background="#93B5C6">
     <Window.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
         <DataTemplate DataType="{x:Type vmc:LoginControlViewModel}">
             <localp:LoginControl />
         </DataTemplate>
@@ -20,7 +23,12 @@
         <DataTemplate DataType="{x:Type vmc:RegistrationControlViewModel}">
             <localp:RegistrationControl />
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vmc:VerificationControlViewModel}">
+            <localp:VerificationControl />
+        </DataTemplate>
     </Window.Resources>
+    
     <Window.DataContext>
         <vm:AuthorizationWindowViewModel />
     </Window.DataContext>
@@ -38,7 +46,7 @@
                 Height="50"
                 Width="100"
                 Content="Sign in"
-                Visibility="Hidden"
+                Visibility="{Binding SignInButtonVisibility, Converter={StaticResource BoolToVisibilityConverter}}"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Margin="15,0,0,0"/>
@@ -52,10 +60,25 @@
                 Height="50"
                 Width="100"
                 Content="Sign up"
-                Visibility="Visible"
+                Visibility="{Binding SignUpButtonVisibility, Converter={StaticResource BoolToVisibilityConverter}}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Margin="0,0,15,0"/>
+
+        <Button x:Name="SwitchBackButton" 
+                Command="{Binding NavigatePagesCommand}"
+                CommandParameter="Login"
+                BorderBrush="Black"
+                BorderThickness="2"
+                Background="White"
+                Height="50"
+                Width="100"
+                Content="Go Back"
+                Visibility="{Binding GoBackButtonVisibility, Converter={StaticResource BoolToVisibilityConverter}}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Margin="0,200,0,0"/>
+
 
     </Grid>
 </Window>

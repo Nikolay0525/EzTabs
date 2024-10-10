@@ -2,11 +2,43 @@
 using GalaSoft.MvvmLight.Command;
 using System.ComponentModel;
 using System.Windows.Input;
+using System.Windows;
 
 namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow
 {
     public class AuthorizationWindowViewModel : INotifyPropertyChanged
     {
+        private bool? _signInButtonVisibility;
+        public bool? SignInButtonVisibility
+        {
+            get => _signInButtonVisibility;
+            set
+            {
+                _signInButtonVisibility = value;
+                OnPropertyChanged(nameof(SignInButtonVisibility));
+            }
+        }
+        private bool? _signUpButtonVisibility;
+        public bool? SignUpButtonVisibility
+        {
+            get => _signUpButtonVisibility;
+            set
+            {
+                _signUpButtonVisibility = value;
+                OnPropertyChanged(nameof(SignUpButtonVisibility));
+            }
+        }
+        private bool? _goBackButtonVisibility;
+        public bool? GoBackButtonVisibility
+        {
+            get => _goBackButtonVisibility;
+            set
+            {
+                _goBackButtonVisibility = value;
+                OnPropertyChanged(nameof(GoBackButtonVisibility));
+            }
+        }
+
         private object? _currentView;
         public object? CurrentView
         {
@@ -22,6 +54,9 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow
 
         public AuthorizationWindowViewModel()
         {
+            SignUpButtonVisibility = true;
+            SignInButtonVisibility = false;
+            GoBackButtonVisibility = false;
             CurrentView = new LoginControlViewModel();
             NavigatePagesCommand = new RelayCommand<object>(async (viewModelName) => await NavigatePages(viewModelName));
         }
@@ -32,9 +67,21 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow
             {
                 case "Login":
                     CurrentView = new LoginControlViewModel();
+                    SignUpButtonVisibility = true;
+                    SignInButtonVisibility = false;
+                    GoBackButtonVisibility = false;
                     break;
                 case "Registration":
                     CurrentView = new RegistrationControlViewModel();
+                    SignUpButtonVisibility = false;
+                    SignInButtonVisibility = true;
+                    GoBackButtonVisibility = false;
+                    break;
+                case "Verification":
+                    CurrentView = new VerificationControlViewModel();
+                    SignInButtonVisibility = false;
+                    SignUpButtonVisibility = false;
+                    GoBackButtonVisibility = true;
                     break;
             }
         }

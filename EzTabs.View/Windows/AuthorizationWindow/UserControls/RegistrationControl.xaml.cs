@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls;
+using EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EzTabs.View.Windows.AuthorizationWindow.UserControls
 {
@@ -20,20 +10,22 @@ namespace EzTabs.View.Windows.AuthorizationWindow.UserControls
     /// </summary>
     public partial class RegistrationControl : UserControl
     {
-        public RegistrationControl()
+        private AuthorizationWindowViewModel _viewModel;
+        public RegistrationControl(AuthorizationWindowViewModel authorizationWindow)
         {
+            _viewModel = authorizationWindow;
             InitializeComponent();
             InitializeAsync();
         }
 
         public async void InitializeAsync()
         {
-            /*var viewData = await Task.Run(() => new RegistrationControlViewModel(new RepoImplementation<User>(new EzTabsContext())));
+            var viewData = await Task.Run(() => new RegistrationControlViewModel(new Services.ModelServices.UserService(), _viewModel));
             DataContext = viewData;
             viewData.ShowMessage += (message, title) =>
             {
                 MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
-            };*/
+            };
         }
     }
 }

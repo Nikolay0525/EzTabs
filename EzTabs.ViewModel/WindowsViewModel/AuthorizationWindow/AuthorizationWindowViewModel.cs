@@ -72,7 +72,7 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow
                     GoBackButtonVisibility = false;
                     break;
                 case "Registration":
-                    CurrentView = new RegistrationControlViewModel();
+                    CurrentView = new RegistrationControlViewModel(new Services.ModelServices.UserService(), this);
                     SignUpButtonVisibility = false;
                     SignInButtonVisibility = true;
                     GoBackButtonVisibility = false;

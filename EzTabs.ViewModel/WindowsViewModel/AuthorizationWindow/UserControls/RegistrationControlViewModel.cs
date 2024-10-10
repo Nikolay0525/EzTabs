@@ -64,6 +64,11 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
 
         public RegistrationControlViewModel() { }
 
+        public RegistrationControlViewModel(UserService userService)
+        {
+            RegisterCommand = new RelayCommand(async () => await Register());
+            _userService = userService;
+        }
         public RegistrationControlViewModel(UserService userService, AuthorizationWindowViewModel authorizationWindowViewModel)
         {
             RegisterCommand = new RelayCommand(async () => await Register(authorizationWindowViewModel));
@@ -129,6 +134,68 @@ namespace EzTabs.ViewModel.WindowsViewModel.AuthorizationWindow.UserControls
             };
 
             authorizationWindowViewModel.NavigatePagesCommand.Execute("Verification");
+            await _userService.RegisterUser(newUser, verificationCode);
+            
+        }
+        
+        private async Task Register()
+        {
+            #region validation
+            if (this.Name == null)
+            {
+                ShowMessage?.Invoke("Username field is empty", "Validation error");
+                return;
+            }
+            if (this.Name.Length < 2) 
+            { 
+                ShowMessage?.Invoke("Username too short, write atleast 2 symbols","Validation error");
+                return;
+            }
+            if (this.Name.Length > 20) 
+            { 
+                ShowMessage?.Invoke("Username too long, it must be maximum 20 symbols","Validation error");
+                return;
+            }
+            if (this.Password == null)
+            {
+                ShowMessage?.Invoke("Password field is empty", "Validation error");
+                return;
+            }
+            if (this.Password.Length < 8)
+            {
+                ShowMessage?.Invoke("Password too short, write atleast 8 symbols","Validation error");
+                return;
+            }
+            if (this.Password.Length > 32)
+            {
+                ShowMessage?.Invoke("Password too long, it must be maximum 32 symbols","Validation error");
+                return;
+            }
+            if (this.Email == null)
+            {
+                ShowMessage?.Invoke("Email field is empty", "Validation error");
+                return;
+            }
+            if (!this.Email.Contains('@')) 
+            {
+                ShowMessage?.Invoke("Your email is wrong, there are no @ symbol", "Validation error");
+                return;
+            }
+            if(Password != ConfirmPassword)
+            {
+                ShowMessage?.Invoke("Your passwords don't match","Validation error");
+                return;
+            }
+            #endregion
+            string verificationCode = Guid.NewGuid().ToString();
+            var newUser = new User
+            {
+                Name = this.Name,
+                Email = this.Email,
+                Password = this.Password,
+                VerificationCode = verificationCode
+            };
+
             await _userService.RegisterUser(newUser, verificationCode);
             
         }

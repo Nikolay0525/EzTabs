@@ -10,10 +10,10 @@ namespace EzTabs.View.Windows.AuthorizationWindow
 {
     public partial class AuthorizationWindow : Window
     {
-        bool BrightTheme = true;
         public AuthorizationWindow()
         {
             InitializeComponent();
+
         }
 
         private void BrightnessModeButton_Click(object sender, RoutedEventArgs e)

@@ -10,17 +10,15 @@ namespace EzTabs.View.Windows.AuthorizationWindow.UserControls
     /// </summary>
     public partial class RegistrationControl : UserControl
     {
-        private AuthorizationWindowViewModel _viewModel;
-        public RegistrationControl(AuthorizationWindowViewModel authorizationWindow)
+        public RegistrationControl()
         {
-            _viewModel = authorizationWindow;
             InitializeComponent();
             InitializeAsync();
         }
 
         public async void InitializeAsync()
         {
-            var viewData = await Task.Run(() => new RegistrationControlViewModel(new Services.ModelServices.UserService(), _viewModel));
+            var viewData = await Task.Run(() => new RegistrationControlViewModel(new Services.ModelServices.UserService()));
             DataContext = viewData;
             viewData.ShowMessage += (message, title) =>
             {

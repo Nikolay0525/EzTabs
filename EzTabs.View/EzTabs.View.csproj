@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Images\BrightMode.png" />
+    <None Remove="Resources\Images\DarkMode.png" />
+    <None Remove="Resources\Images\Menu.png" />
+    <None Remove="Resources\Images\NewNotification.png" />
+    <None Remove="Resources\Images\Notification.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EzTabs.ViewModel\EzTabs.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\BrightMode.png" />
+    <Resource Include="Resources\Images\DarkMode.png" />
+    <Resource Include="Resources\Images\Menu.png" />
+    <Resource Include="Resources\Images\NewNotification.png" />
+    <Resource Include="Resources\Images\Notification.png" />
+  </ItemGroup>
+
+</Project>

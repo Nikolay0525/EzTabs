@@ -27,7 +27,7 @@
                  BorderThickness="2"
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
-                 Margin="0,0,0,300"/>
+                 Margin="0,0,0,325"/>
 
         <TextBlock x:Name="UsernameTextBlock"
                    Text="Username"
@@ -44,7 +44,7 @@
                  BorderThickness="2"
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
-                 Margin="0,0,0,100"/>
+                 Margin="0,0,0,175"/>
 
         <TextBlock x:Name="EmailTextBlock"
                    Text="Email"
@@ -52,7 +52,7 @@
                    Width="200"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Margin="0,0,0,200"/>
+                   Margin="0,0,0,250"/>
 
         <TextBox x:Name="PasswordTextBox" 
                  Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
@@ -61,7 +61,7 @@
                  BorderThickness="2"
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
-                 Margin="0,0,0,-100"/>
+                 Margin="0,0,0,25"/>
 
 
         <TextBlock x:Name="PasswordTextBlock"
@@ -70,7 +70,7 @@
                    Width="150"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Margin="0,0,0,0"/>
+                   Margin="0,0,0,100"/>
 
         <TextBox x:Name="ConfirmPasswordTextBox" 
                  Text="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged}"
@@ -79,7 +79,7 @@
                  BorderThickness="2"
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
-                 Margin="0,0,0,-300"/>
+                 Margin="0,0,0,-125"/>
 
         <TextBlock x:Name="ConfirmPasswordTextBlock"
                    Text="Confirm password"
@@ -87,7 +87,7 @@
                    Width="270"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Margin="0,0,0,-200"/>
+                   Margin="0,0,0,-50"/>
 
         <Button x:Name="RegisterButton" 
                 Command="{Binding RegisterCommand}"
@@ -98,6 +98,17 @@
                 BorderThickness="2"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Margin="0,0,0,-400" />
+                Margin="0,0,0,-225" />
+        
+        <Button x:Name="SignInButton" 
+                Command="{Binding GoToLogin}"
+                Width="270"
+                Content="Sign in"
+                Background="White"
+                BorderBrush="Black"
+                BorderThickness="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Margin="0,0,0,-325" />
     </Grid>
 </UserControl>

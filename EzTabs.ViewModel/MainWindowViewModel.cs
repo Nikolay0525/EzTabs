@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using EzTabs.Services.NavigationServices;
 using EzTabs.ViewModel.AuthControlsViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,27 +13,30 @@ namespace EzTabs.ViewModel
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        private readonly NavigationService _navigationService;
 
-        private object? _currentViewModel;
-        public object? CurrentViewModel
-        {
-            get => _currentViewModel;
-            set
-            {
-                _currentViewModel = value;
-                OnPropertyChanged(nameof(CurrentViewModel));
-            }
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public MainWindowViewModel()
         {
-            CurrentViewModel = new LoginControlViewModel();
+            _navigationService = NavigationService.Instance;
+
+            _navigationService.NavigateTo(new LoginControlViewModel());
+
+            _navigationService.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public object CurrentViewModel => _navigationService.CurrentViewModel;
+
+        private void OnCurrentViewModelChanged()
+        {
+            OnPropertyChanged(nameof(CurrentViewModel));
+        }
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }

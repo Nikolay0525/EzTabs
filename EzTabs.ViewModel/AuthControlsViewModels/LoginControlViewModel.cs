@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Input;
+using EzTabs.Services.NavigationServices;
 
 namespace EzTabs.ViewModel.AuthControlsViewModels
 {
@@ -37,11 +38,11 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             }
         }
 
-        public ICommand? RegisterCommand { get; }
+        public ICommand? GoToRegistrationCommand { get; }
 
         public LoginControlViewModel()
         {
-            RegisterCommand = new RelayCommand(async () => await Login());
+            GoToRegistrationCommand = new RelayCommand(GoToRegistration);
         }
 
         private async Task Login()
@@ -50,6 +51,11 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
 
             #endregion
 
+        }
+
+        public void GoToRegistration()
+        {
+            NavigationService.Instance.NavigateTo(new RegistrationControlViewModel());
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

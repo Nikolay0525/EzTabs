@@ -14,7 +14,7 @@
         FontSize="24"
         Title="EzTabs" MinHeight="540" Height="540" MinWidth="540" Width="540"
         Background="#93B5C6">
-    
+
     <Window.Resources>
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 
@@ -32,10 +32,9 @@
     </Window.Resources>
 
     <Window.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Window.DataContext>
-
     <Grid>
-        <ContentControl Content="{Binding CurrentViewModel, Source={x:Static services:NavigationService.Instance}}" />
+        <ContentControl Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>

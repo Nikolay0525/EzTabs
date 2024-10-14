@@ -15,13 +15,13 @@ namespace EzTabs.ViewModel
     {
         private readonly NavigationService _navigationService;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public MainWindowViewModel()
         {
             _navigationService = NavigationService.Instance;
 
-            _navigationService.NavigateTo(new LoginControlViewModel());
+            _navigationService.NavigateTo<AuthViews>(AuthViews.LoginControlViewModel);
 
             _navigationService.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }

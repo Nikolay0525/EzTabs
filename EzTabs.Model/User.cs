@@ -1,4 +1,4 @@
-﻿using EzTabs.Model.BaseClasses;
+﻿using EzTabs.Model.BaseModels;
 using EzTabs.Model.Enums;
 using System.Net.Mail;
 

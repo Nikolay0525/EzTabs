@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 
-namespace EzTabs.Model.BaseClasses
+namespace EzTabs.Model.BaseModels
 {
     public abstract class Entity : Dated
     {

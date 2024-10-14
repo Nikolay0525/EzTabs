@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EzTabs.Data.Repository
 {
-    public interface IRepo<T>
+    public interface IRepo<T> where T : class
     {
         Task<IEnumerable<T>> GetAll();
         Task<T?> GetById(Guid id);

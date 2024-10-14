@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EzTabs.Model.BaseClasses
+namespace EzTabs.Model.BaseModels
 {
     public abstract class Dated
     {

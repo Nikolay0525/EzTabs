@@ -7,13 +7,16 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Input;
 using EzTabs.Services.NavigationServices;
+using EzTabs.Model;
+using EzTabs.Services.ModelServices;
+using EzTabs.Services.RepoServices;
+using EzTabs.ViewModel.BaseViewModels;
 
 namespace EzTabs.ViewModel.AuthControlsViewModels
 {
-    public class LoginControlViewModel : INotifyPropertyChanged
+    public class LoginControlViewModel : BaseViewModel
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public event Action<string, string>? ShowMessage;
+        public UserService? _userService = null;
 
         private string? _name;
         private string? _password;
@@ -38,11 +41,19 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             }
         }
 
+        public ICommand? LoginCommand { get; }
         public ICommand? GoToRegistrationCommand { get; }
 
         public LoginControlViewModel()
         {
             GoToRegistrationCommand = new RelayCommand(GoToRegistration);
+            Task.Run(InitializeAsync);
+        }
+
+        private async Task<UserService> InitializeAsync()
+        {
+            var userRepo = await RepoInitializeService.InitializeRepoAsync<User>();
+            return _userService = new UserService(userRepo);
         }
 
         private async Task Login()
@@ -55,12 +66,7 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
 
         public void GoToRegistration()
         {
-            NavigationService.Instance.NavigateTo(new RegistrationControlViewModel());
-        }
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            NavigationService.Instance.NavigateTo(AuthViews.RegistrationControlViewModel);
         }
     }
 }

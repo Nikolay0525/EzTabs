@@ -9,13 +9,21 @@ namespace EzTabs.Data.Repository
 {
     public class RepoImplementation<T> : IRepo<T> where T : class 
     {
-        private readonly DbContext _context;
+        private readonly EzTabsContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public RepoImplementation(DbContext context)
+        private RepoImplementation(EzTabsContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();
+        }
+
+        public static async Task<RepoImplementation<T>> CreateRepoAsync()
+        {
+            var context = new EzTabsContext();
+            await context.Database.EnsureCreatedAsync();  
+
+            return new RepoImplementation<T>(context);
         }
 
         public async Task<IEnumerable<T>> GetAll()

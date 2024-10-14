@@ -2,17 +2,13 @@
 using EzTabs.Data.Repository;
 using EzTabs.Model;
 using EzTabs.Data;
+using EzTabs.Services.RepoServices;
 
 namespace EzTabs.Services.ModelServices
 {
-    public class UserService
+    public class UserService(RepoImplementation<User> userRepository)
     {
-        private readonly RepoImplementation<User> _userRepository;
-
-        public UserService()
-        {
-            _userRepository = new RepoImplementation<User>(new EzTabsContext());
-        }
+        private readonly RepoImplementation<User> _userRepository = userRepository;
 
         public async Task VerificateUser(User user, string verificationCode)
         {

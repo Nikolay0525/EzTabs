@@ -101,7 +101,7 @@
                 Margin="0,0,0,-225" />
         
         <Button x:Name="SignInButton" 
-                Command="{Binding GoToLogin}"
+                Command="{Binding GoToLoginCommand}"
                 Width="270"
                 Content="Sign in"
                 Background="White"

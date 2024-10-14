@@ -1,4 +1,4 @@
-﻿namespace EzTabs.Model.BaseClasses
+﻿namespace EzTabs.Model.BaseModels
 {
     public abstract class MessageBase : Entity
     {

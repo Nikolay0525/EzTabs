@@ -43,9 +43,7 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
 
         private async Task TryToVerificate()
         {
-            #region validation
-
-            #endregion
+            _userService.VerificateUser()
         }
     }
 }

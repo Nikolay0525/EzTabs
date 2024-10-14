@@ -21,7 +21,7 @@ namespace EzTabs.Data.Repository
         public static async Task<RepoImplementation<T>> CreateRepoAsync()
         {
             var context = new EzTabsContext();
-            await context.Database.EnsureCreatedAsync();  
+            await context.Database.EnsureCreatedAsync();
 
             return new RepoImplementation<T>(context);
         }

@@ -29,7 +29,6 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             {
                 _name = value;
                 OnPropertyChanged(nameof(Name));
-                Validate();
             }
         }
 
@@ -42,7 +41,6 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             {
                 _email = value;
                 OnPropertyChanged(nameof(Email));
-                Validate();
             }
         }
 
@@ -56,7 +54,6 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             {
                 _password = value;
                 OnPropertyChanged(nameof(Password));
-                Validate();
             }
         }
 
@@ -69,75 +66,32 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             {
                 _confirmPassword = value;
                 OnPropertyChanged(nameof(ConfirmPassword));
-                Validate();
             }
         }
 
         public ICommand RegisterCommand { get; }
         public ICommand GoToLoginCommand { get; }
+        public ICommand GoToVerificationCommand { get; }
 
         public RegistrationControlViewModel()
         {
             RegisterCommand = new RelayCommand(async () => await Register());
             GoToLoginCommand = new RelayCommand(GoToLogin);
+            GoToVerificationCommand = new RelayCommand(GoToVerification);
             Task.Run(InitializeAsync);
         }
 
-        private async Task<UserService> InitializeAsync()
+        private async Task InitializeAsync()
         {
             var userRepo = await RepoInitializeService.InitializeRepoAsync<User>();
-            return _userService = new UserService(userRepo);
+            _userService = new UserService(userRepo);
         }
 
         private async Task Register()
         {
-/*            #region validation
-            if (Name == null)
-            {
-                OnShowMessage("Username field is empty", "Validation error");
-                return;
-            }
-            if (Name.Length < 2)
-            {
-                OnShowMessage("Username too short, write atleast 2 symbols", "Validation error");
-                return;
-            }
-            if (Name.Length > 20)
-            {
-                OnShowMessage("Username too long, it must be maximum 20 symbols", "Validation error");
-                return;
-            }
-            if (Password == null)
-            {
-                OnShowMessage("Password field is empty", "Validation error");
-                return;
-            }
-            if (Password.Length < 8)
-            {
-                OnShowMessage("Password too short, write atleast 8 symbols", "Validation error");
-                return;
-            }
-            if (Password.Length > 32)
-            {
-                OnShowMessage("Password too long, it must be maximum 32 symbols", "Validation error");
-                return;
-            }
-            if (Email == null)
-            {
-                OnShowMessage("Email field is empty", "Validation error");
-                return;
-            }
-            if (!Email.Contains('@'))
-            {
-                OnShowMessage("Your email is wrong, there are no @ symbol", "Validation error");
-                return;
-            }
-            if (Password != ConfirmPassword)
-            {
-                OnShowMessage("Your passwords don't match", "Validation error");
-                return;
-            }
-            #endregion*/
+            Validate();
+            if (HasErrors) return;
+
             string verificationCode = Guid.NewGuid().ToString();
             var newUser = new User
             {
@@ -148,12 +102,16 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             };
             if (_userService is null) throw new ArgumentNullException(nameof(_userService));
             await _userService.RegisterUser(newUser, verificationCode);
-            if(GoToLoginCommand.CanExecute(null)) GoToLoginCommand.Execute(null);
+            if(GoToVerificationCommand.CanExecute(null)) GoToVerificationCommand.Execute(null);
         }
 
         public static void GoToLogin()
         {
             NavigationService.Instance.NavigateTo(AuthViews.LoginControlViewModel);
+        }
+        public static void GoToVerification()
+        {
+            NavigationService.Instance.NavigateTo(AuthViews.VerificationControlViewModel);
         }
     }
 }

@@ -6,9 +6,21 @@ using EzTabs.Services.RepoServices;
 
 namespace EzTabs.Services.ModelServices
 {
-    public class UserService(RepoImplementation<User> userRepository)
+    public class UserService
     {
-        private readonly RepoImplementation<User> _userRepository = userRepository;
+        private readonly RepoImplementation<User> _userRepository;
+
+        public UserService(RepoImplementation<User> userRepository)
+        {
+            _userRepository = userRepository;
+        }
+
+        public async Task RegisterUser(User? user, string verificationCode)
+        {
+            if (user == null || user.Email == null) return;
+            EmailService.SendVerificationEmail(user.Email, verificationCode);
+            await _userRepository.Add(user);
+        }
 
         public async Task VerificateUser(User user, string verificationCode)
         {
@@ -23,14 +35,6 @@ namespace EzTabs.Services.ModelServices
             }
             return;
         }
-
-        public async Task RegisterUser(User? user, string verificationCode)
-        {
-            if (user == null || user.Email == null) return;
-            EmailService.SendVerificationEmail(user.Email, verificationCode);
-            await _userRepository.Add(user);
-        }
-
         public async Task<User?> LoginUser(User userToLogin)
         {
             var allUsers = await _userRepository.GetAll();

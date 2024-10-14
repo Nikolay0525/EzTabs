@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace EzTabs.ViewModel.BaseViewModels;
 public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
@@ -27,9 +28,20 @@ public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorIn
     protected void Validate()
     {
         _errors = ValidationService.Validate(this);
-        foreach(var error in _errors)
+        foreach (var error in _errors)
         {
             OnErrorsChanged(error.Key);
+        }
+
+        if (HasErrors)
+        {
+            var errorMessage = new StringBuilder("Please correct the following errors:\n");
+            foreach (var error in _errors)
+            {
+                errorMessage.AppendLine($"{error.Key}: {string.Join(", ", error.Value)}");
+            }
+
+            OnShowMessage("Validation Error", errorMessage.ToString());
         }
     }
 

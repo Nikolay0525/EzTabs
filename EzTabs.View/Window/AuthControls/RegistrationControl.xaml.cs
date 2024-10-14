@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EzTabs.ViewModel.AuthControlsViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,14 @@ namespace EzTabs.View.Window.AuthControls
         public RegistrationControl()
         {
             InitializeComponent();
+
+            var viewModel = new RegistrationControlViewModel();
+            viewModel.ShowMessage += (title, message) =>
+            {
+                MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
+            };
+
+            DataContext = viewModel;
         }
     }
 }

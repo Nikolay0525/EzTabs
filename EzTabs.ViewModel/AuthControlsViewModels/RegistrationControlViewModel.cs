@@ -91,7 +91,7 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
 
         private async Task Register()
         {
-            #region validation
+/*            #region validation
             if (Name == null)
             {
                 OnShowMessage("Username field is empty", "Validation error");
@@ -137,7 +137,7 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
                 OnShowMessage("Your passwords don't match", "Validation error");
                 return;
             }
-            #endregion
+            #endregion*/
             string verificationCode = Guid.NewGuid().ToString();
             var newUser = new User
             {

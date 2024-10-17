@@ -3,7 +3,7 @@
 
 namespace EzTabs.Model.BaseModels
 {
-    public abstract class Entity : Dated
+    public abstract class Entity
     {
         [Key]
         public Guid Id { get; private set; }

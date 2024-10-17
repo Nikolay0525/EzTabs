@@ -47,13 +47,7 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
         public LoginControlViewModel()
         {
             GoToRegistrationCommand = new RelayCommand(GoToRegistration);
-            Task.Run(InitializeAsync);
-        }
-
-        private async Task<UserService> InitializeAsync()
-        {
-            var userRepo = await RepoInitializeService.InitializeRepoAsync<User>();
-            return _userService = new UserService(userRepo);
+            _userService = new UserService();
         }
 
         private async Task Login()

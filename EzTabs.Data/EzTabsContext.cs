@@ -32,18 +32,26 @@ namespace EzTabs.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<CommentRate>()
-                .HasKey(sc => new { sc.UserId, sc.CommentId });
+            modelBuilder.Entity<Tuning>()
+                .HasKey(t => new { t.TabId, t.StringOrder });
+
+            modelBuilder.Entity<Tuning>()
+                .HasOne(t => t.Tab)
+                .WithMany(t => t.Tunings)
+                .HasForeignKey(t => t.TabId);
 
             modelBuilder.Entity<CommentRate>()
-                .HasOne(sc => sc.User)
-                .WithMany(s => s.CommentRates)
-                .HasForeignKey(sc => sc.UserId);
+                .HasKey(cr => new { cr.CommentId, cr.UserId });
 
             modelBuilder.Entity<CommentRate>()
-                .HasOne(sc => sc.Comment)
-                .WithMany(c => c.CommentRates)
-                .HasForeignKey(sc => sc.CommentId);
+                .HasOne(cr => cr.User)
+                .WithMany(cr => cr.CommentRates)
+                .HasForeignKey(cr => cr.UserId);
+
+            modelBuilder.Entity<CommentRate>()
+                .HasOne(cr => cr.Comment)
+                .WithMany(cr => cr.CommentRates)
+                .HasForeignKey(cr => cr.CommentId);
 
             modelBuilder.Entity<FavouriteTab>()
                         .HasKey(sc => new { sc.UserId, sc.TabId });
@@ -72,10 +80,10 @@ namespace EzTabs.Data
                 .HasForeignKey(sc => sc.TabId);
 
             modelBuilder.Entity<TabReport>()
-            .HasKey(sc => new { sc.UserId, sc.TabId });
+            .HasKey(tr => new { tr.UserId, tr.TabId });
 
             modelBuilder.Entity<TabReport>()
-                .HasOne(sc => sc.User)
+                .HasOne(tr => tr.User)
                 .WithMany(s => s.TabReports)
                 .HasForeignKey(sc => sc.UserId);
 

@@ -78,13 +78,7 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             RegisterCommand = new RelayCommand(async () => await Register());
             GoToLoginCommand = new RelayCommand(GoToLogin);
             GoToVerificationCommand = new RelayCommand(GoToVerification);
-            Task.Run(InitializeAsync);
-        }
-
-        private async Task InitializeAsync()
-        {
-            var userRepo = await RepoInitializeService.InitializeRepoAsync<User>();
-            _userService = new UserService(userRepo);
+            _userService = new UserService();
         }
 
         private async Task Register()
@@ -92,16 +86,10 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             Validate();
             if (HasErrors) return;
 
-            string verificationCode = Guid.NewGuid().ToString();
-            var newUser = new User
-            {
-                Name = Name,
-                Email = Email,
-                Password = Password,
-                VerificationCode = verificationCode
-            };
             if (_userService is null) throw new ArgumentNullException(nameof(_userService));
-            await _userService.RegisterUser(newUser, verificationCode);
+            if (_name is null || _email is null || _password is null) throw new NullReferenceException("Some of user data is missing");
+            string verificationCode = Guid.NewGuid().ToString();
+            await _userService.RegisterUser(_name,_email,_password, verificationCode);
             if(GoToVerificationCommand.CanExecute(null)) GoToVerificationCommand.Execute(null);
         }
 

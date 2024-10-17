@@ -33,17 +33,12 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
         public VerificationControlViewModel()
         {
             TryToVerificateCommand = new RelayCommand(async () => await TryToVerificate());
-            Task.Run(InitializeAsync);
-        }
-        private async Task<UserService> InitializeAsync()
-        {
-            var userRepo = await RepoInitializeService.InitializeRepoAsync<User>();
-            return _userService = new UserService(userRepo);
+            _userService = new UserService();
         }
 
         private async Task TryToVerificate()
         {
-            _userService.VerificateUser()
+            //_userService.VerificateUser(_userService);
         }
     }
 }

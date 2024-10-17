@@ -37,6 +37,5 @@ namespace EzTabs.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

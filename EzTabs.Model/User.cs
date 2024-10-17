@@ -11,7 +11,8 @@ namespace EzTabs.Model
         public string? Email { get; set; }
         public bool IsEmailVerified { get; set; } = false;
         public string? VerificationCode { get; set; }
-        public UserRole Role { get; private set; }
+        public UserRole Role { get; private set; } = UserRole.User;
+        public DateTime DateOfCreation { get; private set; } = DateTime.Now;
         public List<TabReport>? TabReports { get; set; }
         public List<TabRate>? TabRates { get; set; }
         public List<FavouriteTab>? FavouriteTabs { get; set; }
@@ -20,12 +21,5 @@ namespace EzTabs.Model
         public List<CommentRate>? CommentRates { get; set; }
         public List<Tab>? Tab { get; set; }
         public List<Notification>? Notifications { get; set; }
-
-
-        public void ChangeRole(User roleChanger, UserRole newRole)
-        {
-            if (roleChanger.Role != UserRole.Admin) return;
-            Role = newRole;
-        }
     }
 }

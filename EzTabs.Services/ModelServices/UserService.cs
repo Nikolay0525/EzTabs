@@ -3,47 +3,72 @@ using EzTabs.Data.Repository;
 using EzTabs.Model;
 using EzTabs.Data;
 using EzTabs.Services.RepoServices;
+using EzTabs.Model.Enums;
 
 namespace EzTabs.Services.ModelServices
 {
     public class UserService
     {
-        private readonly RepoImplementation<User> _userRepository;
+        private RepoImplementation<User> _userRepository;
+        private static User? _savedUser = null; 
 
-        public UserService(RepoImplementation<User> userRepository)
+        public UserService()
         {
-            _userRepository = userRepository;
+            Task.Run(InitializeAsync);
         }
 
-        public async Task RegisterUser(User? user, string verificationCode)
+        public static User? GetSavedUser()
         {
-            if (user == null || user.Email == null) return;
-            EmailService.SendVerificationEmail(user.Email, verificationCode);
-            await _userRepository.Add(user);
+            return _savedUser;
         }
 
-        public async Task VerificateUser(User user, string verificationCode)
+        private async Task InitializeAsync()
         {
-            if (user == null || verificationCode == null) 
+            _userRepository =  await RepoInitializeService.InitializeRepoAsync<User>();
+        }
+
+        public async Task RegisterUser(string name, string password, string email, string verificationCode)
+        {
+            UserRole role = UserRole.User;
+            if (name is null || email is null || password is null) throw new NullReferenceException("Some of user data is missing");
+            EmailService.SendVerificationEmail(email, verificationCode);
+            var users = await _userRepository.GetAll();
+            if (!users.Any()) role = Model.Enums.UserRole.Admin;
+            User newUser = new()
+            {
+                Name = name,
+                Email = email,
+                Password = password,
+                Role = role
+            };
+            await _userRepository.Add(newUser);
+            _savedUser = newUser;
+        }
+
+        public async Task VerificateUser(string verificationCode)
+        {
+            if (_savedUser == null || verificationCode == null) 
             {
                 throw new NullReferenceException();
             };
-            if (user.VerificationCode == verificationCode)
+            if (_savedUser.VerificationCode == verificationCode)
             {
-                user.IsEmailVerified = true;
-                await _userRepository.Update(user);
+                _savedUser.IsEmailVerified = true;
+                await _userRepository.Update(_savedUser);
+                _savedUser = null;
             }
             return;
         }
-        public async Task<User?> LoginUser(User userToLogin)
+        public async Task<bool> LoginUser(User userToLogin)
         {
             var allUsers = await _userRepository.GetAll();
             var foundedUser = allUsers.FirstOrDefault(u => u.Name == userToLogin.Name);
             if (foundedUser != null && foundedUser.Password == userToLogin.Password)
             {
-                return foundedUser;
+                _savedUser = foundedUser;
+                return true;
             }
-            return null;
+            return false;
         }
     }
 }

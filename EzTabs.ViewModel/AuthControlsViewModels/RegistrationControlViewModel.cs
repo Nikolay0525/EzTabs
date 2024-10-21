@@ -5,6 +5,8 @@ using EzTabs.ViewModel.BaseViewModels;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using EzTabs.Services.ValidationServices.CustomAttributes;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text;
 
 namespace EzTabs.ViewModel.AuthControlsViewModels
 {
@@ -12,7 +14,7 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
     {
         private UserService? _userService;
 
-        private string? _name;
+        private string? _username;
         private string? _email;
         private string? _password;
         private string? _confirmPassword;
@@ -20,17 +22,17 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
         [Required(ErrorMessage = "Username is required")]
         [MaxLength(20, ErrorMessage = "Username length can't be more than 20 characters")]
         [MinLength(2, ErrorMessage = "Username length can't be less than 2 charecters")]
-        public string? Name
+        public string? Username
         {
-            get => _name;
+            get => _username;
             set
             {
-                _name = value;
-                OnPropertyChanged(nameof(Name));
+                _username = value;
+                OnPropertyChanged(nameof(Username));
             }
         }
 
-        [Required(ErrorMessage = "Username is required")]
+        [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email address")]
         public string? Email
         {
@@ -85,10 +87,23 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             if (HasErrors) return;
 
             if (_userService is null) throw new ArgumentNullException(nameof(_userService));
-            if (_name is null || _email is null || _password is null) throw new NullReferenceException("Some of user data is missing");
+            if (_username is null || _email is null || _password is null) throw new NullReferenceException("Some of user data is missing");
             string verificationCode = Guid.NewGuid().ToString();
-            await _userService.RegisterUser(_name,_email,_password, verificationCode);
-            if(GoToVerificationCommand.CanExecute(null)) GoToVerificationCommand.Execute(null);
+            List<string> errors = await _userService.RegisterUser(_username, _email, _password, verificationCode);
+            #region validation
+            if (errors.Count != 0)
+            {
+                var errorMessage = new StringBuilder("Please correct the following errors:\n");
+                foreach (var error in errors)
+                {
+                    errorMessage.AppendLine(error);
+                }
+
+                OnShowMessage("Validation Error", errorMessage.ToString());
+                return;
+            }
+            #endregion
+            if (GoToVerificationCommand.CanExecute(null)) GoToVerificationCommand.Execute(null);
         }
 
         private static void GoToLogin()

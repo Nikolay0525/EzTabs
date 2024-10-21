@@ -22,52 +22,55 @@
     <Grid>
 
         <TextBox x:Name="UsernameTextBox" 
-             FontSize="24"
-             Width="270" 
-             BorderBrush="Black"
-             BorderThickness="2"
-             HorizontalAlignment="Center" 
-             VerticalAlignment="Center" 
-             Margin="0,0,0,100"/>
+                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                 FontSize="24"
+                 Width="270" 
+                 BorderBrush="Black"
+                 BorderThickness="2"
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 Margin="0,0,0,100"/>
 
         <TextBlock x:Name="UsernameTextBlock"
-               Text="Username"
-               FontFamily="Inter"
-               FontSize="24"
-               TextAlignment="Center"
-               Width="270"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"
-               Margin="0,0,0,200"/>
+                   Text="Username"
+                   FontFamily="Inter"
+                   FontSize="24"
+                   TextAlignment="Center"
+                   Width="270"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="0,0,0,200"/>
 
         <TextBox x:Name="PasswordTextBox" 
-             FontSize="24"
-             Width="270" 
-             BorderBrush="Black"
-             BorderThickness="2"
-             HorizontalAlignment="Center" 
-             VerticalAlignment="Center" 
-             Margin="0,0,0,-100"/>
+                 Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                 FontSize="24"
+                 Width="270" 
+                 BorderBrush="Black"
+                 BorderThickness="2"
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 Margin="0,0,0,-100"/>
 
         <TextBlock x:Name="PasswordTextBlock"
-               Text="Password"
-               FontFamily="Inter"
-               FontSize="24"
-               TextAlignment="Center"
-               Width="270"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"
-               Margin="0,0,0,0"/>
+                   Text="Password"
+                   FontFamily="Inter"
+                   FontSize="24"
+                   TextAlignment="Center"
+                   Width="270"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="0,0,0,0"/>
 
         <Button x:Name="LoginButton" 
-            Background="White"
-            Width="270"
-            Content="Login"
-            BorderBrush="Black"
-            BorderThickness="2"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Margin="0,0,0,-200"/>
+                Command="{Binding LoginCommand}"
+                Background="White"
+                Width="270"
+                Content="Login"
+                BorderBrush="Black"
+                BorderThickness="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Margin="0,0,0,-200"/>
         
         <Button x:Name="SignUpButton"
                 Command="{Binding GoToRegistrationCommand}"

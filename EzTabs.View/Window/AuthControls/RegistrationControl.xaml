@@ -21,7 +21,7 @@
     <Grid>
 
         <TextBox x:Name="UsernameTextBox"
-                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                  Width="270" 
                  BorderBrush="Black"
                  BorderThickness="2"

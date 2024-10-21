@@ -10,7 +10,7 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
 {
     public class VerificationControlViewModel : BaseViewModel
     {
-        private UserService? _userService = null;
+        private UserService _userService;
 
         private string? _verificationCode;
 
@@ -52,7 +52,6 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
         {
             Validate();
             if (HasErrors) return;
-            if (_userService is null) throw new ArgumentNullException(nameof(_userService));
             if (_verificationCode is null) throw new ArgumentNullException(nameof(_verificationCode));
             var isVerificated = await _userService.VerificateUser(_verificationCode);
             if (isVerificated)

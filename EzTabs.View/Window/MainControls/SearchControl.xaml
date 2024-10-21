@@ -4,11 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.View.Window.MainControls"
+             xmlns:vm="clr-namespace:EzTabs.ViewModel.MainControlsViewModels;assembly=EzTabs.ViewModel"
              mc:Ignorable="d" 
              FontFamily="Inter"
              FontSize="24"
              d:DesignHeight="540" d:DesignWidth="960"
              Background="#93B5C6">
+    
+    <UserControl.DataContext>
+        <vm:SearchControlViewModel/>
+    </UserControl.DataContext>
+    
     <Grid>
         <Rectangle Stroke="Black"
                    Fill="White"
@@ -41,10 +47,10 @@
             Margin="68,0,0,0"/>
 
 
-        <TextBlock x:Name="UserLoginTextBlock"
+        <TextBlock x:Name="UsernameTextBlock"
            Width="281"
  
-           Text ="Nik0_ola"
+           Text ="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
            Foreground="Black"
            TextAlignment="Center"
            HorizontalAlignment="Right" 

@@ -23,7 +23,6 @@ namespace EzTabs.Services.ValidationServices
                             value = new List<string>();
                             errors[memberName] = value;
                         }
-
                         value.Add(validationResult.ErrorMessage);
                     }
                 }

@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EzTabs.View.Window" 
         xmlns:localac="clr-namespace:EzTabs.View.Window.AuthControls" 
+        xmlns:localmc="clr-namespace:EzTabs.View.Window.MainControls" 
         xmlns:vm="clr-namespace:EzTabs.ViewModel;assembly=EzTabs.ViewModel"
         xmlns:vmac="clr-namespace:EzTabs.ViewModel.AuthControlsViewModels;assembly=EzTabs.ViewModel"
+        xmlns:vmmc="clr-namespace:EzTabs.ViewModel.MainControlsViewModels;assembly=EzTabs.ViewModel"
         xmlns:conv="clr-namespace:EzTabs.View.Converters"
         xmlns:services="clr-namespace:EzTabs.Services.NavigationServices;assembly=EzTabs.Services"
         mc:Ignorable="d"
@@ -29,12 +31,16 @@
         <DataTemplate DataType="{x:Type vmac:VerificationControlViewModel}">
             <localac:VerificationControl />
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vmmc:SearchControlViewModel}">
+            <localmc:SearchControl />
+        </DataTemplate>
     </Window.Resources>
 
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
     <Grid>
-        <ContentControl Content="{Binding CurrentViewModel}" />
+        <ContentControl x:Name="ViewContentControl" Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>

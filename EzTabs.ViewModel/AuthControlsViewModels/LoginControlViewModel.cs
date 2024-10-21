@@ -11,23 +11,24 @@ using EzTabs.Model;
 using EzTabs.Services.ModelServices;
 using EzTabs.Services.RepoServices;
 using EzTabs.ViewModel.BaseViewModels;
+using EzTabs.ViewModel.MainControlsViewModels;
 
 namespace EzTabs.ViewModel.AuthControlsViewModels
 {
     public class LoginControlViewModel : BaseViewModel
     {
-        public UserService? _userService = null;
+        public UserService _userService;
 
-        private string? _name;
+        private string? _username;
         private string? _password;
 
-        public string? Name
+        public string? Username
         {
-            get => _name;
+            get => _username;
             set
             {
-                _name = value;
-                OnPropertyChanged(nameof(Name));
+                _username = value;
+                OnPropertyChanged(nameof(Username));
             }
         }
 
@@ -53,8 +54,17 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
 
         private async Task Login()
         {
-            
-
+            var userToLogin = new User
+            {
+                Name = Username,
+                Password = Password
+            };
+            if (userToLogin is null) throw new ArgumentNullException(nameof(userToLogin));
+            if (await _userService.LoginUser(userToLogin))
+            {
+                NavigationService.Instance.NavigateTo(new SearchControlViewModel());
+            }
+            else { OnShowMessage("Validation error", "User with such name and password not found"); }
         }
 
         private void GoToRegistration()

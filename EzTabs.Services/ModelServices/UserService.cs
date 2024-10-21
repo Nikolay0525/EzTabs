@@ -27,7 +27,7 @@ namespace EzTabs.Services.ModelServices
             _userRepository =  await RepoInitializeService.InitializeRepoAsync<User>();
         }
 
-        public async Task RegisterUser(string name, string password, string email, string verificationCode)
+        public async Task RegisterUser(string name, string email, string password, string verificationCode)
         {
             UserRole role = UserRole.User;
             if (name is null || email is null || password is null) throw new NullReferenceException("Some of user data is missing");
@@ -39,13 +39,14 @@ namespace EzTabs.Services.ModelServices
                 Name = name,
                 Email = email,
                 Password = password,
-                Role = role
+                Role = role,
+                VerificationCode = verificationCode
             };
             await _userRepository.Add(newUser);
             _savedUser = newUser;
         }
 
-        public async Task VerificateUser(string verificationCode)
+        public async Task<bool> VerificateUser(string verificationCode)
         {
             if (_savedUser == null || verificationCode == null) 
             {
@@ -56,8 +57,9 @@ namespace EzTabs.Services.ModelServices
                 _savedUser.IsEmailVerified = true;
                 await _userRepository.Update(_savedUser);
                 _savedUser = null;
+                return true;
             }
-            return;
+            return false;
         }
         public async Task<bool> LoginUser(User userToLogin)
         {

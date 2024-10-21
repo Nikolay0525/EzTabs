@@ -54,18 +54,18 @@ namespace EzTabs.Data.Migrations
 
             modelBuilder.Entity("EzTabs.Model.CommentRate", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("CommentId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("CommentId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
                     b.Property<bool>("Rate")
                         .HasColumnType("tinyint(1)");
 
-                    b.HasKey("UserId", "CommentId");
+                    b.HasKey("CommentId", "UserId");
 
-                    b.HasIndex("CommentId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("CommentRate");
                 });
@@ -115,8 +115,11 @@ namespace EzTabs.Data.Migrations
                     b.Property<int?>("Fret")
                         .HasColumnType("int");
 
-                    b.Property<string>("String")
-                        .HasColumnType("longtext");
+                    b.Property<int?>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("String")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("TabId")
                         .HasColumnType("char(36)");
@@ -230,6 +233,22 @@ namespace EzTabs.Data.Migrations
                     b.HasIndex("TabId");
 
                     b.ToTable("TabReport");
+                });
+
+            modelBuilder.Entity("EzTabs.Model.Tuning", b =>
+                {
+                    b.Property<Guid?>("TabId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int?>("StringOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StringNote")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("TabId", "StringOrder");
+
+                    b.ToTable("Tuning");
                 });
 
             modelBuilder.Entity("EzTabs.Model.User", b =>
@@ -403,6 +422,17 @@ namespace EzTabs.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EzTabs.Model.Tuning", b =>
+                {
+                    b.HasOne("EzTabs.Model.Tab", "Tab")
+                        .WithMany("Tunings")
+                        .HasForeignKey("TabId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tab");
+                });
+
             modelBuilder.Entity("EzTabs.Model.Comment", b =>
                 {
                     b.Navigation("CommentRates");
@@ -421,6 +451,8 @@ namespace EzTabs.Data.Migrations
                     b.Navigation("TabRates");
 
                     b.Navigation("TabReports");
+
+                    b.Navigation("Tunings");
                 });
 
             modelBuilder.Entity("EzTabs.Model.User", b =>

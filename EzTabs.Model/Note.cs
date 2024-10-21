@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EzTabs.Model
 {
-    public class Note : Entity
+    public sealed class Note : Entity
     {
         public int? Order { get; set; }
         public int? String { get; set; }

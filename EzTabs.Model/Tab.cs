@@ -2,7 +2,7 @@
 
 namespace EzTabs.Model
 {
-    public class Tab : Entity
+    public sealed class Tab : Entity
     {
         public Guid? AuthorId { get; set; }
         public string? Title { get; set; }

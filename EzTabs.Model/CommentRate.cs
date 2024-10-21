@@ -1,6 +1,6 @@
 ﻿namespace EzTabs.Model
 {
-    public class CommentRate
+    public sealed class CommentRate
     {
         public bool Rate { get; set; }
         public Guid UserId { get; set; }

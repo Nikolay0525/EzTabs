@@ -43,10 +43,10 @@ namespace EzTabs.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    DateOfCreation = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     Text = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DateOfCreation = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,10 +97,10 @@ namespace EzTabs.Data.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     TabId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     ParentCommentId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    DateOfCreation = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     Text = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DateOfCreation = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -149,9 +149,9 @@ namespace EzTabs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Order = table.Column<int>(type: "int", nullable: true),
+                    String = table.Column<int>(type: "int", nullable: true),
                     Fret = table.Column<int>(type: "int", nullable: true),
-                    String = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     TabId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>
@@ -220,6 +220,27 @@ namespace EzTabs.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Tuning",
+                columns: table => new
+                {
+                    StringOrder = table.Column<int>(type: "int", nullable: false),
+                    TabId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    StringNote = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tuning", x => new { x.TabId, x.StringOrder });
+                    table.ForeignKey(
+                        name: "FK_Tuning_Tabs_TabId",
+                        column: x => x.TabId,
+                        principalTable: "Tabs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "CommentRate",
                 columns: table => new
                 {
@@ -229,7 +250,7 @@ namespace EzTabs.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CommentRate", x => new { x.UserId, x.CommentId });
+                    table.PrimaryKey("PK_CommentRate", x => new { x.CommentId, x.UserId });
                     table.ForeignKey(
                         name: "FK_CommentRate_Comments_CommentId",
                         column: x => x.CommentId,
@@ -274,9 +295,9 @@ namespace EzTabs.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CommentRate_CommentId",
+                name: "IX_CommentRate_UserId",
                 table: "CommentRate",
-                column: "CommentId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CommentReport_CommentId",
@@ -347,6 +368,9 @@ namespace EzTabs.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "TabReport");
+
+            migrationBuilder.DropTable(
+                name: "Tuning");
 
             migrationBuilder.DropTable(
                 name: "Comments");

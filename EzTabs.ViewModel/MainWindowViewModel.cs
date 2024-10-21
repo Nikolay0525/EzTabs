@@ -21,7 +21,7 @@ namespace EzTabs.ViewModel
         {
             _navigationService = NavigationService.Instance;
 
-            _navigationService.NavigateTo<AuthViews>(AuthViews.LoginControlViewModel);
+            _navigationService.NavigateTo(new VerificationControlViewModel());
 
             _navigationService.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }

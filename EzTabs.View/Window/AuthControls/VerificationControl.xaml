@@ -19,16 +19,17 @@
     </UserControl.DataContext>
 
     <Grid>
-        <TextBlock x:Name="VerifCodeTextBlock"
-                   Text="Write your verification code"
-                   Width="300" 
+        <TextBlock x:Name="VerificationCodeTextBlock"
+                   Text="Write your verification code sended to your email"
+                   TextWrapping="Wrap"
+                   Width="400" 
                    TextAlignment="Center"
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Center" 
-                   Margin="0,0,0,100"/>
+                   Margin="0,0,0,125"/>
 
 
-        <TextBox x:Name="UsernameTextBox"
+        <TextBox x:Name="VerificationCodeTextBox"
                  Text="{Binding VerificationCode, UpdateSourceTrigger=PropertyChanged}"
                  Width="270" 
                  BorderBrush="Black"
@@ -41,10 +42,22 @@
                 Command="{Binding TryToVerificateCommand}"
                 Width="270"
                 Content="Verificate account"
+                Background="White"
                 BorderBrush="Black"
                 BorderThickness="2"
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center"
                 Margin="0,100,0,0"/>
+        
+        <Button x:Name="SignUpButton"
+                Command="{Binding GoToRegistrationCommand}"
+                Width="270"
+                Content="Go back"
+                Background="White"
+                BorderBrush="Black"
+                BorderThickness="2"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center"
+                Margin="0,200,0,0"/>
     </Grid>
 </UserControl>

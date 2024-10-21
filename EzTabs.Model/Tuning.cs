@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EzTabs.Model
 {
-    public class Tuning
+    public sealed class Tuning
     {
         public int? StringOrder { get; set; }
         public string? StringNote {  get; set; }

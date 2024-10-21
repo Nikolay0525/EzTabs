@@ -16,10 +16,15 @@ public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorIn
     public event PropertyChangedEventHandler? PropertyChanged;
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
     public event Action<string, string>? ShowMessage;
+    public event Action<string, string>? ShowOkCancelMessage;
 
     protected void OnShowMessage(string title, string message)
     {
         ShowMessage?.Invoke(title, message);
+    } 
+    protected void OnShowOkCancelMessage(string title, string message)
+    {
+        ShowOkCancelMessage?.Invoke(title, message);
     }
     protected void OnPropertyChanged(string propertyName)
     {

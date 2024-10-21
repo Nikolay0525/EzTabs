@@ -20,4 +20,8 @@
     <ProjectReference Include="..\EzTabs.Model\EzTabs.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

@@ -2,7 +2,7 @@
 
 namespace EzTabs.Model
 {
-    public class Comment : MessageBase
+    public sealed class Comment : MessageBase
     {
         public Guid TabId { get; set; }
         public Guid? ParentCommentId { get; set; } = null;

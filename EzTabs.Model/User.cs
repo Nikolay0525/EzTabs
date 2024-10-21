@@ -4,14 +4,14 @@ using System.Net.Mail;
 
 namespace EzTabs.Model
 {
-    public class User : Entity
+    public sealed class User : Entity
     {
         public string? Name { get; set; }
         public string? Password { get; set; }
         public string? Email { get; set; }
         public bool IsEmailVerified { get; set; } = false;
         public string? VerificationCode { get; set; }
-        public UserRole Role { get; private set; } = UserRole.User;
+        public UserRole Role { get; set; } = UserRole.User;
         public DateTime DateOfCreation { get; private set; } = DateTime.Now;
         public List<TabReport>? TabReports { get; set; }
         public List<TabRate>? TabRates { get; set; }

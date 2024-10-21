@@ -1,6 +1,6 @@
 ﻿namespace EzTabs.Model
 {
-    public class FavouriteTab
+    public sealed class FavouriteTab
     {
         public Guid UserId { get; set; }
         public Guid TabId { get; set; }

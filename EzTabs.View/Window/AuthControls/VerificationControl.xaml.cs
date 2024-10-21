@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EzTabs.ViewModel.AuthControlsViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,17 @@ namespace EzTabs.View.Window.AuthControls
         public VerificationControl()
         {
             InitializeComponent();
+            var viewModel = new VerificationControlViewModel();
+            viewModel.ShowMessage += (title, message) =>
+            {
+                MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
+            };
+            viewModel.ShowOkCancelMessage += (title, message) =>
+            {
+                MessageBoxResult result = MessageBox.Show(message, title, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                viewModel.UserConfirm = result == MessageBoxResult.OK;
+            };
+            DataContext = viewModel;
         }
     }
 }

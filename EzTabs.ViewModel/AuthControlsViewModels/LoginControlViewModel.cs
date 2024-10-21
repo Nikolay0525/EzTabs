@@ -46,19 +46,18 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
 
         public LoginControlViewModel()
         {
+            LoginCommand = new RelayCommand(async () => await Login());
             GoToRegistrationCommand = new RelayCommand(GoToRegistration);
             _userService = new UserService();
         }
 
         private async Task Login()
         {
-            #region validation
-
-            #endregion
+            
 
         }
 
-        public void GoToRegistration()
+        private void GoToRegistration()
         {
             NavigationService.Instance.NavigateTo(AuthViews.RegistrationControlViewModel);
         }

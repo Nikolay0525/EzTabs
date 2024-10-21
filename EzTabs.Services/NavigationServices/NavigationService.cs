@@ -1,11 +1,10 @@
-﻿
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace EzTabs.Services.NavigationServices
 {
     public class NavigationService : INavigationService
     {
-        private static NavigationService _instance;
+        private static NavigationService? _instance;
         public static NavigationService Instance => _instance ??= new NavigationService();
 
         public event Action CurrentViewModelChanged;
@@ -40,6 +39,10 @@ namespace EzTabs.Services.NavigationServices
             Type? type = assembly.GetType($"EzTabs.ViewModel.{viewNamespace}.{viewString}");
             if (type is null) throw new ArgumentNullException(nameof(type));
             CurrentViewModel = Activator.CreateInstance(type);
+        }
+        public void NavigateTo(object viewModel)
+        {
+            CurrentViewModel = viewModel;
         }
         private NavigationService() { }
     }

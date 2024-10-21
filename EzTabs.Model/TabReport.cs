@@ -2,7 +2,7 @@
 
 namespace EzTabs.Model
 {
-    public class TabReport
+    public sealed class TabReport
     {
         public string? Text { get; set; }
         public DateTime DateOfCreation { get; private set; } = DateTime.Now;

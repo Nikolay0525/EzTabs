@@ -1,6 +1,6 @@
 ﻿namespace EzTabs.Model
 {
-    public class TabRate
+    public sealed class TabRate
     {
         public int Rate { get; set; }
         public Guid UserId { get; set; }

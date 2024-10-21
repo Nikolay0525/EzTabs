@@ -1,12 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using EzTabs.Model;
 using EzTabs.Services.ModelServices;
 using EzTabs.Services.NavigationServices;
-using EzTabs.Services.RepoServices;
-using System.ComponentModel;
-using System.Windows.Input;
 using EzTabs.ViewModel.BaseViewModels;
 using System.ComponentModel.DataAnnotations;
+using System.Windows.Input;
+using EzTabs.Services.ValidationServices.CustomAttributes;
 
 namespace EzTabs.ViewModel.AuthControlsViewModels
 {
@@ -93,13 +91,13 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             if(GoToVerificationCommand.CanExecute(null)) GoToVerificationCommand.Execute(null);
         }
 
-        public static void GoToLogin()
+        private static void GoToLogin()
         {
-            NavigationService.Instance.NavigateTo(AuthViews.LoginControlViewModel);
+            NavigationService.Instance.NavigateTo(new LoginControlViewModel());
         }
-        public static void GoToVerification()
+        private static void GoToVerification()
         {
-            NavigationService.Instance.NavigateTo(AuthViews.VerificationControlViewModel);
+            NavigationService.Instance.NavigateTo(new VerificationControlViewModel());
         }
-    }
+    }   
 }

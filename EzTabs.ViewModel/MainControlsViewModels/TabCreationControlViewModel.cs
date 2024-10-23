@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EzTabs.ViewModel.MainControlsViewModels
 {
-    internal class TabCreationControlViewModel
+    public class TabCreationControlViewModel
     {
     }
 }

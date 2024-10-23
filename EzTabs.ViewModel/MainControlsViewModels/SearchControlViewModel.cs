@@ -10,6 +10,7 @@ namespace EzTabs.ViewModel.MainControlsViewModels
 {
     public class SearchControlViewModel : BaseViewModel
     {
+
         private UserService _userService;
         private string _username;
         public string Username

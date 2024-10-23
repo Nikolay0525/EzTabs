@@ -35,10 +35,16 @@ namespace EzTabs.Data.Repository
         {
             return await _dbSet.FindAsync(id);
         }
-
+       
         public async Task Add(T entity)
         {
             await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Add(IEnumerable<T> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
             await _context.SaveChangesAsync();
         }
 
@@ -48,10 +54,23 @@ namespace EzTabs.Data.Repository
             await _context.SaveChangesAsync();
         }
 
+        public async Task Update(IEnumerable<T> entities)
+        {
+            _dbSet.UpdateRange(entities);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task Delete(T entity)
         {
             _dbSet.Remove(entity);
             await _context.SaveChangesAsync();
         }
+
+        public async Task Delete(IEnumerable<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

@@ -13,6 +13,7 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
         private UserService _userService;
 
         private string? _verificationCode;
+        private bool _userConfirm = false;
 
         [Required(ErrorMessage = "Verification code is required")]
         [MaxLength(36, ErrorMessage ="Wrong type of code")]
@@ -27,7 +28,6 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             }
         }
 
-        private bool _userConfirm = false;
         public bool UserConfirm
         {
             get => _userConfirm;

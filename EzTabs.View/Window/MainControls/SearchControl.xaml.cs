@@ -12,6 +12,7 @@ namespace EzTabs.View.Window.MainControls
         {
             InitializeComponent();
             DataContext = new SearchControlViewModel();
+
         }
     }
 }

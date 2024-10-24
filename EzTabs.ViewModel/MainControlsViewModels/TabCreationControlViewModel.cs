@@ -1,6 +1,5 @@
 ﻿using EzTabs.Services.ModelServices;
 using EzTabs.ViewModel.BaseViewModels;
-using System.Text.RegularExpressions;
 
 namespace EzTabs.ViewModel.MainControlsViewModels
 {

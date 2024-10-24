@@ -1,32 +1,21 @@
-﻿using EzTabs.Services.ModelServices;
-using EzTabs.ViewModel.BaseViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EzTabs.ViewModel.BaseViewModels;
+using EzTabs.Services.NavigationServices;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 
 namespace EzTabs.ViewModel.MainControlsViewModels
 {
-    public class SearchControlViewModel : BaseViewModel
+    public class SearchControlViewModel : BaseMainControlViewModel
     {
-
-        private UserService _userService;
-        private string _username;
-        public string Username
+        public ICommand GoToCreationOfTabCommand { get; }
+        public SearchControlViewModel() : base()
         {
-            get => _username;
-            set
-            {
-                _username = value;
-                OnPropertyChanged(nameof(Username));
-            }
+            GoToCreationOfTabCommand = new RelayCommand(GoToCreationOfTab);
         }
-        public SearchControlViewModel()
+
+        private static void GoToCreationOfTab()
         {
-            _userService = new UserService();
-            if(UserService.SavedUser is null) throw new ArgumentNullException(nameof(UserService.SavedUser));
-            Username = UserService.SavedUser.Name;
+            NavigationService.Instance.NavigateTo(new TabCreationControlViewModel());
         }
     }
 }

@@ -7,10 +7,10 @@ namespace EzTabs.Services.NavigationServices
         private static NavigationService? _instance;
         public static NavigationService Instance => _instance ??= new NavigationService();
 
-        public event Action CurrentViewModelChanged;
+        public event Action? CurrentViewModelChanged;
 
-        private object _currentViewModel;
-        public object CurrentViewModel
+        private object? _currentViewModel;
+        public object? CurrentViewModel
         {
             get => _currentViewModel;
             set

@@ -9,7 +9,7 @@ namespace EzTabs.Services.ModelServices
 {
     public class UserService
     {
-        private RepoImplementation<User> _userRepository;
+        private RepoImplementation<User>? _userRepository;
         public static User? SavedUser { get; private set; } 
 
         public UserService()
@@ -24,6 +24,7 @@ namespace EzTabs.Services.ModelServices
 
         public async Task<List<string>> RegisterUser(string name, string email, string password, string verificationCode)
         {
+            if (_userRepository is null) throw new ArgumentNullException(nameof(_userRepository));
             List<string> errors = new();
             User newUser = new()
             {

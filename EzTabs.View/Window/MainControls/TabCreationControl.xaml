@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.View.Window.MainControls"
+             xmlns:bmc="clr-namespace:EzTabs.View.Window.MainControls.BaseMainControls"
              xmlns:vm="clr-namespace:EzTabs.ViewModel.MainControlsViewModels;assembly=EzTabs.ViewModel"
              mc:Ignorable="d" 
              FontFamily="Inter"
@@ -13,19 +14,31 @@
     <UserControl.DataContext>
         <vm:TabCreationControlViewModel/>
     </UserControl.DataContext>
-    
+
     <Grid>
-        <TextBlock x:Name="TitleTextBlock"
-                   Text="Title"/>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="25*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="TitleTextBlock" Margin="0,0,100,0"
+                   Text="Title" Grid.RowSpan="2"/>
+
         <TextBlock x:Name="BandTextBlock"
-                   Text="Band"/>
+                   Text="Band" Grid.RowSpan="2"/>
         <TextBlock x:Name="GenreTextBlock"
-                   Text="Genre"/>
+                   Text="Genre" Grid.RowSpan="2"/>
         <TextBlock x:Name="KeyTextBlock"
-                   Text="Key"/>
+                   Text="Key" Grid.RowSpan="2"/>
         <TextBlock x:Name="BitsPerMinuteTextBlock"
-                   Text="Bits per minute (BPM)"/>
+                   Text="Bits per minute (BPM)" Grid.RowSpan="2"/>
+        <Grid Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="43*"/>
+                <ColumnDefinition Width="21*"/>
+            </Grid.ColumnDefinitions>
+            <Grid/>
+            <Grid Grid.Column="1"/>
+        </Grid>
 
     </Grid>
 </UserControl>

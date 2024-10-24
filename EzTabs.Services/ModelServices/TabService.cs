@@ -12,7 +12,7 @@ namespace EzTabs.Services.ModelServices
 {
     public class TabService
     {
-        private RepoImplementation<Tab> _tabRepository;
+        private RepoImplementation<Tab>? _tabRepository;
         public static Tab? SavedTab { get; private set; }
 
         public TabService()
@@ -27,6 +27,7 @@ namespace EzTabs.Services.ModelServices
 
         public async Task<bool> CreateTab(Guid authorId, string title, string band, string genre, string key, int bpm, string description, List<Tuning> tunings)
         {
+            if (_tabRepository is null) throw new ArgumentNullException(nameof(_tabRepository));
             var allTabs = await _tabRepository.GetAll();
             if (allTabs.FirstOrDefault(t => t.AuthorId == authorId && t.Title == title && t.Band == band) != null) return false;
             var newTab = new Tab

@@ -6,61 +6,64 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace EzTabs.ViewModel.BaseViewModels;
-public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
+namespace EzTabs.ViewModel.BaseViewModels
 {
-    private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
+    public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
+    {
+        private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
-    public bool HasErrors => _errors.Count > 0;
+        public bool HasErrors => _errors.Count > 0;
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-    public event Action<string, string>? ShowMessage;
-    public event Action<string, string>? ShowOkCancelMessage;
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+        public event Action<string, string>? ShowMessage;
+        public event Action<string, string>? ShowOkCancelMessage;
 
-    protected void OnShowMessage(string title, string message)
-    {
-        ShowMessage?.Invoke(title, message);
-    } 
-    protected void OnShowOkCancelMessage(string title, string message)
-    {
-        ShowOkCancelMessage?.Invoke(title, message);
-    }
-    protected void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-    protected void Validate()
-    {
-        _errors = ValidationService.Validate(this);
-        foreach (var error in _errors)
+        public void OnShowMessage(string title, string message)
         {
-            OnErrorsChanged(error.Key);
+            ShowMessage?.Invoke(title, message);
         }
-
-        if (HasErrors)
+        public void OnShowOkCancelMessage(string title, string message)
         {
-            var errorMessage = new StringBuilder("Please correct the following errors:\n");
+            ShowOkCancelMessage?.Invoke(title, message);
+        }
+        public void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        public void Validate()
+        {
+            _errors = ValidationService.Validate(this);
             foreach (var error in _errors)
             {
-                errorMessage.AppendLine($"{error.Key}: {string.Join(", ", error.Value)}");
+                OnErrorsChanged(error.Key);
             }
 
-            OnShowMessage("Validation Error", errorMessage.ToString());
-        }
-    }
+            if (HasErrors)
+            {
+                var errorMessage = new StringBuilder("Please correct the following errors:\n");
+                foreach (var error in _errors)
+                {
+                    errorMessage.AppendLine($"{error.Key}: {string.Join(", ", error.Value)}");
+                }
 
-    public IEnumerable GetErrors(string? propertyName)
-    {
-        if (!string.IsNullOrEmpty(propertyName) && _errors.TryGetValue(propertyName, out List<string>? value))
+                OnShowMessage("Validation Error", errorMessage.ToString());
+            }
+        }
+
+        public IEnumerable GetErrors(string? propertyName)
         {
-            return value;
+            if (!string.IsNullOrEmpty(propertyName) && _errors.TryGetValue(propertyName, out List<string>? value))
+            {
+                return value;
+            }
+            return null;
         }
-        return null;
-    }
 
-    protected void OnErrorsChanged(string propertyName)
-    {
-        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        public void OnErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
     }
 }
+

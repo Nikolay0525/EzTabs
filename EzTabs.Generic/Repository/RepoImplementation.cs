@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EzTabs.Data.Repository
+namespace EzTabs.Generic.Repository
 {
     public class RepoImplementation<T> : IRepo<T> where T : class 
     {
@@ -18,9 +13,9 @@ namespace EzTabs.Data.Repository
             _dbSet = context.Set<T>();
         }
 
-        public static async Task<RepoImplementation<T>> CreateRepoAsync()
+        public static async Task<RepoImplementation<T>> CreateRepoAsync<YourDbContext>() where YourDbContext : DbContext, new()
         {
-            var context = new EzTabsContext();
+            var context = new YourDbContext();
             await context.Database.EnsureCreatedAsync();
 
             return new RepoImplementation<T>(context);

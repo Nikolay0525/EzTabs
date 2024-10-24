@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzTabs.View", "EzTabs.View\EzTabs.View.csproj", "{C9A1D184-4EBF-4E70-BD69-F447E5EF61E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EzTabs.View", "EzTabs.View\EzTabs.View.csproj", "{C9A1D184-4EBF-4E70-BD69-F447E5EF61E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzTabs.ViewModel", "EzTabs.ViewModel\EzTabs.ViewModel.csproj", "{EDA0555F-B4CD-4FC6-B270-FA6E430F78ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EzTabs.ViewModel", "EzTabs.ViewModel\EzTabs.ViewModel.csproj", "{EDA0555F-B4CD-4FC6-B270-FA6E430F78ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzTabs.Model", "EzTabs.Model\EzTabs.Model.csproj", "{2336967D-5CE5-4832-ACB8-4B8B6CA21923}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EzTabs.Model", "EzTabs.Model\EzTabs.Model.csproj", "{2336967D-5CE5-4832-ACB8-4B8B6CA21923}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzTabs.Data", "EzTabs.Data\EzTabs.Data.csproj", "{3E18F3D9-B104-4DA5-909D-FECE9AC55882}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EzTabs.Data", "EzTabs.Data\EzTabs.Data.csproj", "{3E18F3D9-B104-4DA5-909D-FECE9AC55882}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzTabs.Services", "EzTabs.Services\EzTabs.Services.csproj", "{C9750203-4C19-46AC-8231-3FE0CDA106BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EzTabs.Services", "EzTabs.Services\EzTabs.Services.csproj", "{C9750203-4C19-46AC-8231-3FE0CDA106BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

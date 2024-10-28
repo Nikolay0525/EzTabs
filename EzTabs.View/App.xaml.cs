@@ -9,6 +9,7 @@ namespace EzTabs.View
     /// </summary>
     public partial class App : Application
     {
+
     }
 
 }

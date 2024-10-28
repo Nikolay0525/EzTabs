@@ -29,33 +29,25 @@
                    Margin="0,0,0,125"/>
 
 
-        <TextBox x:Name="VerificationCodeTextBox"
+        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="VerificationCodeTextBox"
                  Text="{Binding VerificationCode, UpdateSourceTrigger=PropertyChanged}"
                  Width="270" 
-                 BorderBrush="Black"
-                 BorderThickness="2"
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
                  Margin="0,0,0,0"/>
 
-        <Button x:Name="SendVerificationCodeButton"
+        <Button Style="{DynamicResource CommonButton}" x:Name="SendVerificationCodeButton"
                 Command="{Binding TryToVerificateCommand}"
                 Width="270"
                 Content="Verificate account"
-                Background="White"
-                BorderBrush="Black"
-                BorderThickness="2"
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center"
                 Margin="0,100,0,0"/>
         
-        <Button x:Name="SignUpButton"
+        <Button Style="{DynamicResource CommonButton}" x:Name="SignUpButton"
                 Command="{Binding GoToRegistrationCommand}"
                 Width="270"
                 Content="Go back"
-                Background="White"
-                BorderBrush="Black"
-                BorderThickness="2"
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center"
                 Margin="0,200,0,0"/>

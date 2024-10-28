@@ -3,42 +3,164 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:local="clr-namespace:EzTabs.View.Window.MainControls"
-             xmlns:bmc="clr-namespace:EzTabs.View.Window.MainControls.BaseMainControls"
+             xmlns:bmc="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls"
              xmlns:vm="clr-namespace:EzTabs.ViewModel.MainControlsViewModels;assembly=EzTabs.ViewModel"
              mc:Ignorable="d" 
              FontFamily="Inter"
              FontSize="24"
              d:DesignHeight="540" d:DesignWidth="960"
              Background="#93B5C6">
+    <UserControl.Resources>
+
+    </UserControl.Resources>
     <UserControl.DataContext>
         <vm:TabCreationControlViewModel/>
     </UserControl.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="25*"/>
+            <RowDefinition Height="31*"/>
+            <RowDefinition Height="509*"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="TitleTextBlock" Margin="0,0,100,0"
-                   Text="Title" Grid.RowSpan="2"/>
-
-        <TextBlock x:Name="BandTextBlock"
-                   Text="Band" Grid.RowSpan="2"/>
-        <TextBlock x:Name="GenreTextBlock"
-                   Text="Genre" Grid.RowSpan="2"/>
-        <TextBlock x:Name="KeyTextBlock"
-                   Text="Key" Grid.RowSpan="2"/>
-        <TextBlock x:Name="BitsPerMinuteTextBlock"
-                   Text="Bits per minute (BPM)" Grid.RowSpan="2"/>
         <Grid Background="White">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="43*"/>
-                <ColumnDefinition Width="21*"/>
+                <ColumnDefinition Width="257*"/>
+                <ColumnDefinition Width="364*"/>
+                <ColumnDefinition Width="339*"/>
             </Grid.ColumnDefinitions>
-            <Grid/>
+            <Grid>
+                <Button Style="{DynamicResource CommonButton}" x:Name="GoToSearchButton" 
+                        Content="Return to searching" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center"/>
+            </Grid>
             <Grid Grid.Column="1"/>
+            <Grid Grid.Column="2">
+                <bmc:MainControlBar/>
+            </Grid>
         </Grid>
 
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="43*"/>
+                <ColumnDefinition Width="37*"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <TextBlock x:Name="TitleTextBlock"
+                           Text="Title" Grid.RowSpan="2"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Margin="0,0,0,425"/>
+
+                <TextBox Style="{DynamicResource CommonTextBox}" x:Name="TitleTextBox"
+                         Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Margin="0,0,0,350"
+                         Width="200"/>
+
+                <TextBlock x:Name="BandTextBlock"
+                           Text="Band" Grid.RowSpan="2"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Margin="0,0,0,275"/>
+
+                <TextBox Style="{DynamicResource CommonTextBox}" x:Name="BandTextBox"
+                         Text="{Binding Band, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Margin="0,0,0,200"
+                         Width="200"/>
+
+                <TextBlock x:Name="GenreTextBlock"
+                           Text="Genre" Grid.RowSpan="2"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Margin="0,0,0,125"/>
+
+                <TextBox Style="{DynamicResource CommonTextBox}" x:Name="GenreTextBox"
+                         Text="{Binding Genre, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Margin="0,0,0,50"
+                         Width="200"/>
+
+                <TextBlock x:Name="KeyTextBlock"
+                           Text="Key" Grid.RowSpan="2"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Margin="0,25,0,0"/>
+
+                <TextBox Style="{DynamicResource CommonTextBox}" x:Name="KeyTextBox"
+                         Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Margin="0,100,0,0"
+                         Width="200"/>
+
+                <TextBlock x:Name="BitsPerMinuteTextBlock"
+                           Text="Bits per minute (BPM)" Grid.RowSpan="2"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Margin="0,175,0,0"/>
+
+                <xctk:IntegerUpDown Style="{DynamicResource CommonIntegerUpDown}" x:Name="BpmIntegerUpDown"
+                                    Text="{Binding BitsPerMinute, UpdateSourceTrigger=PropertyChanged}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" 
+                                    Margin="0,250,0,0"
+                                    Height="32">
+
+                </xctk:IntegerUpDown>
+
+                <Button Style="{DynamicResource CommonButton}" x:Name="CreateButton"
+                        Command="{Binding}"
+                        Content="Create Tablature"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,400,0,0"
+                        Width="300"
+                        Height="75">
+                </Button>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="107*"/>
+                    <RowDefinition Height="267*"/>
+                    <RowDefinition Height="135*"/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <TextBlock x:Name="TuningsListTextBlock"
+                               Text="Tuning of strings"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <ListBox Style="{DynamicResource CommonListBox}" 
+                             d:ItemsSource="{Binding ListOfTunings, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"/>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Button Style="{DynamicResource CommonButton}" x:Name="CreateTuningButton"
+                            Command="{Binding}"
+                            Content="Add string tuning"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0,0,0,50"/>
+
+                    <Button Style="{DynamicResource CommonButton}" x:Name="RemoveTuningButton"
+                            Command="{Binding}"
+                            Content="Remove string tuning"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0,50,0,0"/>
+                </Grid>
+
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

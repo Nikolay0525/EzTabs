@@ -21,12 +21,10 @@
 
     <Grid>
 
-        <TextBox x:Name="UsernameTextBox" 
+        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="UsernameTextBox" 
                  Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                  FontSize="24"
                  Width="270" 
-                 BorderBrush="Black"
-                 BorderThickness="2"
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
                  Margin="0,0,0,100"/>
@@ -41,12 +39,10 @@
                    VerticalAlignment="Center"
                    Margin="0,0,0,200"/>
 
-        <TextBox x:Name="PasswordTextBox" 
+        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="PasswordTextBox" 
                  Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                  FontSize="24"
                  Width="270" 
-                 BorderBrush="Black"
-                 BorderThickness="2"
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
                  Margin="0,0,0,-100"/>
@@ -61,24 +57,18 @@
                    VerticalAlignment="Center"
                    Margin="0,0,0,0"/>
 
-        <Button x:Name="LoginButton" 
+        <Button Style="{DynamicResource CommonButton}" x:Name="LoginButton" 
                 Command="{Binding LoginCommand}"
-                Background="White"
                 Width="270"
                 Content="Login"
-                BorderBrush="Black"
-                BorderThickness="2"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Margin="0,0,0,-200"/>
-        
-        <Button x:Name="SignUpButton"
+
+        <Button Style="{DynamicResource CommonButton}" x:Name="SignUpButton"
                 Command="{Binding GoToRegistrationCommand}"
-                Background="White"
                 Width="270"
                 Content="Sign Up"
-                BorderBrush="Black"
-                BorderThickness="2"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Margin="0,0,0,-300"/>

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace EzTabs.View.Window.MainControls.BaseMainControls
 {
     /// <summary>
-    /// Interaction logic for MainControlBar.xaml
+    /// Interaction logic for TabDescriptionControl.xaml
     /// </summary>
-    public partial class MainControlBar : UserControl
+    public partial class TabDescriptionControl : UserControl
     {
-        public MainControlBar()
+        public TabDescriptionControl()
         {
             InitializeComponent();
         }

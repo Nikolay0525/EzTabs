@@ -4,6 +4,14 @@
              xmlns:local="clr-namespace:EzTabs.View"
              StartupUri="Window/MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="Resources/Styles/TextBoxStyles.xaml"/>
+                <ResourceDictionary Source="Resources/Styles/TextBlockStyles.xaml"/>
+                <ResourceDictionary Source="Resources/Styles/ListBoxStyles.xaml"/>
+                <ResourceDictionary Source="Resources/Styles/IntegerUpDownStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

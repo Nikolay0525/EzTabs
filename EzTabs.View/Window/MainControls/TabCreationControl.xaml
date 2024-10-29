@@ -33,8 +33,8 @@
             <Grid>
                 <Button Style="{DynamicResource CommonButton}" x:Name="GoToSearchButton" 
                         Content="Return to searching" 
-                        HorizontalAlignment="Center" 
-                        VerticalAlignment="Center"/>
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch"/>
             </Grid>
             <Grid Grid.Column="1"/>
             <Grid Grid.Column="2">

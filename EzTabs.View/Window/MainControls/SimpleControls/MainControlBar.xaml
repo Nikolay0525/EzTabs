@@ -12,7 +12,7 @@
                 <ColumnDefinition Width="254*"/>
                 <ColumnDefinition Width="24"/>
             </Grid.ColumnDefinitions>
-            <Border Grid.ColumnSpan="3">
+            <Border BorderBrush="Black" BorderThickness="1" Grid.ColumnSpan="3">
                 <TextBlock x:Name="UsernameTextBlock"
                            Foreground="Black"
                            TextAlignment="Center"

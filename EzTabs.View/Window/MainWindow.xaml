@@ -14,7 +14,7 @@
         mc:Ignorable="d"
         FontFamily="Inter"
         FontSize="24"
-        Title="EzTabs" MinHeight="540" Height="540" MinWidth="540" Width="540"
+        Title="EzTabs" MinHeight="540" Height="540" MinWidth="960" Width="960"
         Background="#93B5C6">
 
     <Window.Resources>

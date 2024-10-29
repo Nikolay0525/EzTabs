@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EzTabs.View.Window.MainControls.BaseMainControls
+namespace EzTabs.View.Window.MainControls.SimpleControls
 {
     /// <summary>
-    /// Interaction logic for TabDescriptionControl.xaml
+    /// Interaction logic for IntegerUpDown.xaml
     /// </summary>
-    public partial class TabDescriptionControl : UserControl
+    public partial class IntegerUpDown : UserControl
     {
-        public TabDescriptionControl()
+        public IntegerUpDown()
         {
             InitializeComponent();
         }

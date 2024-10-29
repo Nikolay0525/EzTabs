@@ -14,9 +14,28 @@ namespace EzTabs.ViewModel.MainControlsViewModels
         private string _key;
         private int _bpm;
         private string _description;
-        private Dictionary<int, string> _tunings;
+        private int _stringNumber;
+        private string _stringNote;
+        private Dictionary<int, string> _tunings = new()
+        {
+            {1,"e"},
+            {2,"B"},
+            {3,"G"},
+            {4,"D"},
+            {5,"A"},
+            {6,"E"}
+        };
 
-        private List<string> _listOfTunings;
+        private List<string> _listOfTunings = new()
+        {
+            {"1: e"},
+            {"2: B"},
+            {"3: G"},
+            {"4: D"},
+            {"5: A"},
+            {"6: E"}
+        };
+
         private string _selectedItem;
         public string SelectedItem
         {
@@ -82,6 +101,27 @@ namespace EzTabs.ViewModel.MainControlsViewModels
                 OnPropertyChanged(nameof(Description));
             }
         }
+        
+        public int StringOrder
+        {
+            get => _stringNumber;
+            set
+            {
+                _stringNumber = value;
+                OnPropertyChanged(nameof(StringOrder));
+            }
+        }
+        
+        public string StringNote
+        {
+            get => _stringNote;
+            set
+            {
+                _stringNote = value;
+                OnPropertyChanged(nameof(StringNote));
+            }
+        }
+        
         public List<string> ListOfTunings
         {
             get => _listOfTunings;

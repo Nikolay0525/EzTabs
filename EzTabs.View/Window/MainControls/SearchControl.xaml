@@ -8,7 +8,7 @@
              xmlns:vm="clr-namespace:EzTabs.ViewModel.MainControlsViewModels;assembly=EzTabs.ViewModel"
              mc:Ignorable="d" 
              FontFamily="Inter"
-             FontSize="24"
+             FontSize="{DynamicResource TextCommonFontSize}"
              d:DesignHeight="540" d:DesignWidth="960"
              Background="#93B5C6">
     <UserControl.Resources>
@@ -22,62 +22,69 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="31"/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column ="0" Grid.Row="1" Background="Transparent">
-            <ListBox Style="{DynamicResource CommonListBox}" x:Name="TabList"
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch"
-                     Background="White"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ListBox Grid.Column="1" Grid.Row="1" Style="{DynamicResource RoundListBox}" x:Name="TabList"
+                     Background="White" Grid.RowSpan="2"/>
         </Grid>
         <Grid Grid.Column="1" Grid.Row="1" Background="Transparent">
-            
-            <Button Style="{DynamicResource CommonButton}" x:Name="CreateTabButton"
+
+            <Button Style="{DynamicResource RoundButton}" x:Name="CreateTabButton"
                     Width="250"
                     Height="50"
                     Content="Create Tab"
                     Command="{Binding GoToCreationOfTabCommand}"
-                    FontSize="36"
+                    FontSize="{DynamicResource BigTextCommonFontSize}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Margin="0,0,0,100"/>
-            
-            <Button Style="{DynamicResource CommonButton}" x:Name="LoadTabButton"
+
+            <Button Style="{DynamicResource RoundButton}" x:Name="LoadTabButton"
                     Width="250"
                     Height="50"
                     Content="Edit Tab"
-                    FontSize="36"
+                    FontSize="{DynamicResource BigTextCommonFontSize}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Margin="0,100,0,0"/>
         </Grid>
-        <Grid Background="Transparent">
+        <Grid Grid.Row="0" Grid.Column="0" Background="Transparent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid Background="Transparent">
                 <Button Style="{DynamicResource CommonButton}" x:Name="FilterButton"
-                    Content="Filter"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    BorderThickness="1"/>
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Content="Filter"
+                        VerticalContentAlignment="Top"
+                        BorderThickness="1"/>
             </Grid>
             <Grid Grid.Column="1" Background="Transparent">
                 <TextBox Style="{DynamicResource CommonTextBox}" x:Name="SearchTextBox" 
                          Background="White"
-                         Text="Search..." 
                          VerticalAlignment="Stretch"
                          HorizontalAlignment="Stretch"
                          BorderThickness="1"/>
             </Grid>
         </Grid>
-        <Grid Grid.Column="1" Background="Transparent">
+        <Grid Grid.Row="0" Grid.Column="1" Background="Transparent">
             <bmc:MainControlBar/>
         </Grid>
     </Grid>

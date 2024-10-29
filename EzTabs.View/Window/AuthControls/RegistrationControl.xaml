@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:EzTabs.View.Window.AuthControls"
              xmlns:vm="clr-namespace:EzTabs.ViewModel.AuthControlsViewModels;assembly=EzTabs.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="540" d:DesignWidth="540"
+             d:DesignHeight="540" d:DesignWidth="960"
              FontFamily="Inter"
              FontSize="24"
              Background="#93B5C6">
@@ -28,7 +28,7 @@
                    VerticalAlignment="Center"
                    Margin="0,0,0,400"/>
 
-        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="UsernameTextBox"
+        <TextBox Style="{DynamicResource RoundTextBox}" x:Name="UsernameTextBox"
                  Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                  Width="270" 
                  HorizontalAlignment="Center" 
@@ -43,7 +43,7 @@
                    VerticalAlignment="Center"
                    Margin="0,0,0,250"/>
         
-        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="EmailTextBox" 
+        <TextBox Style="{DynamicResource RoundTextBox}" x:Name="EmailTextBox" 
                  Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                  Width="270" 
                  HorizontalAlignment="Center" 
@@ -58,7 +58,7 @@
                    VerticalAlignment="Center"
                    Margin="0,0,0,100"/>
 
-        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="PasswordTextBox" 
+        <TextBox Style="{DynamicResource RoundTextBox}" x:Name="PasswordTextBox" 
                  Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                  Width="270" 
                  HorizontalAlignment="Center" 
@@ -73,14 +73,14 @@
                    VerticalAlignment="Center"
                    Margin="0,0,0,-50"/>
 
-        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="ConfirmPasswordTextBox" 
+        <TextBox Style="{DynamicResource RoundTextBox}" x:Name="ConfirmPasswordTextBox" 
                  Text="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged}"
                  Width="270" 
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
                  Margin="0,0,0,-125"/>
 
-        <Button Style="{DynamicResource CommonButton}" x:Name="RegisterButton" 
+        <Button Style="{DynamicResource RoundButton}" x:Name="RegisterButton" 
                 Command="{Binding RegisterCommand}"
                 Width="270"
                 Content="Register"
@@ -88,7 +88,7 @@
                 VerticalAlignment="Center"
                 Margin="0,0,0,-225" />
 
-        <Button Style="{DynamicResource CommonButton}" x:Name="SignInButton" 
+        <Button Style="{DynamicResource RoundButton}" x:Name="SignInButton" 
                 Command="{Binding GoToLoginCommand}"
                 Width="270"
                 Content="Sign in"

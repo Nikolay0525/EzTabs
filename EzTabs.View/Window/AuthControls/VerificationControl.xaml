@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:EzTabs.View.Window.AuthControls"
              xmlns:vm="clr-namespace:EzTabs.ViewModel.AuthControlsViewModels;assembly=EzTabs.ViewModel" 
              mc:Ignorable="d" 
-             d:DesignHeight="540" d:DesignWidth="540"
+             d:DesignHeight="540" d:DesignWidth="960"
              FontFamily="Inter"
              FontSize="24"
              Background="#93B5C6">
@@ -20,7 +20,7 @@
 
     <Grid>
         <TextBlock x:Name="VerificationCodeTextBlock"
-                   Text="Write your verification code sended to your email"
+                   Text="Write down your verification code sended on your email"
                    TextWrapping="Wrap"
                    Width="400" 
                    TextAlignment="Center"
@@ -29,24 +29,24 @@
                    Margin="0,0,0,125"/>
 
 
-        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="VerificationCodeTextBox"
+        <TextBox Style="{DynamicResource RoundTextBox}" x:Name="VerificationCodeTextBox"
                  Text="{Binding VerificationCode, UpdateSourceTrigger=PropertyChanged}"
-                 Width="270" 
+                 Width="500" 
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
                  Margin="0,0,0,0"/>
 
-        <Button Style="{DynamicResource CommonButton}" x:Name="SendVerificationCodeButton"
+        <Button Style="{DynamicResource RoundButton}" x:Name="SendVerificationCodeButton"
                 Command="{Binding TryToVerificateCommand}"
-                Width="270"
+                Width="250"
                 Content="Verificate account"
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center"
                 Margin="0,100,0,0"/>
         
-        <Button Style="{DynamicResource CommonButton}" x:Name="SignUpButton"
+        <Button Style="{DynamicResource RoundButton}" x:Name="SignUpButton"
                 Command="{Binding GoToRegistrationCommand}"
-                Width="270"
+                Width="250"
                 Content="Go back"
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center"

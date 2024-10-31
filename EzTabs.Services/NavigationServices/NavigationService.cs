@@ -20,26 +20,6 @@ namespace EzTabs.Services.NavigationServices
             }
         }
 
-        public void NavigateTo<T>(T view) where T : Enum
-        {
-            string viewNamespace;
-            if (view is AuthViews)
-            {
-                viewNamespace = "AuthControlsViewModels";
-            }
-            else if (view is MainViews)
-            {
-                viewNamespace = "MainControlsViewModels";
-            }
-            else throw new ArgumentNullException(nameof(viewNamespace));
-            string viewString = view.ToString();
-            if (viewString is null) throw new ArgumentNullException(nameof(viewString));
-            Assembly assembly = Assembly.Load("EzTabs.ViewModel");
-            if (assembly is null) throw new ArgumentNullException(nameof(assembly));
-            Type? type = assembly.GetType($"EzTabs.ViewModel.{viewNamespace}.{viewString}");
-            if (type is null) throw new ArgumentNullException(nameof(type));
-            CurrentViewModel = Activator.CreateInstance(type);
-        }
         public void NavigateTo(object viewModel)
         {
             CurrentViewModel = viewModel;

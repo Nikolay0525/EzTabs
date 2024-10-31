@@ -7,10 +7,11 @@
              xmlns:bmc="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls"
              xmlns:vm="clr-namespace:EzTabs.ViewModel.MainControlsViewModels;assembly=EzTabs.ViewModel"
              mc:Ignorable="d" 
-             FontFamily="Inter"
-             FontSize="{DynamicResource TextCommonFontSize}"
+             FontFamily="{DynamicResource CommonFontFamily}"
+             FontSize="{DynamicResource CommonFontSize}"
+             FontWeight="{DynamicResource CommonFontWeight}"
              d:DesignHeight="540" d:DesignWidth="960"
-             Background="#93B5C6">
+             Background="#2e2e2e">
     <UserControl.Resources>
 
     </UserControl.Resources>
@@ -21,16 +22,57 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="31"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="38"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column ="0" Grid.Row="1" Background="Transparent">
+        <Grid Grid.Column="0" Grid.Row="1" Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1" Background="Transparent">
+                <Border Padding="2">
+                    <Viewbox  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Path Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" 
+                              Fill="White" 
+                              Stretch="Uniform" 
+                              Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                              Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=StackPanel}}"
+                              />
+                    </Viewbox>
+                </Border>
+            </Grid>
+            <Grid Grid.Column="3" Background="Transparent">
+                <TextBox Style="{DynamicResource CommonTextBox}" x:Name="SearchTextBox" 
+                         Background="White"
+                         Text="Search"
+                         VerticalAlignment="Stretch"
+                         HorizontalAlignment="Stretch"
+                         Padding="2,5,2,5"/>
+            </Grid>
+            <Grid Grid.Column="5" Background="Transparent">
+                
+                <Button Style="{DynamicResource CommonButton}" x:Name="FilterButton"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Content="Filter"
+                        VerticalContentAlignment="Top"/>
+            </Grid>
+        </Grid>
+        <Grid Grid.Column ="0" Grid.Row="2" Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="*"/>
@@ -38,54 +80,30 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
-            <ListBox Grid.Column="1" Grid.Row="1" Style="{DynamicResource RoundListBox}" x:Name="TabList"
-                     Background="White" Grid.RowSpan="2"/>
+            <ListBox Grid.Column="1" Grid.Row="1" Style="{DynamicResource CommonListBox}" x:Name="TabList"
+                     Background="White"/>
         </Grid>
-        <Grid Grid.Column="1" Grid.Row="1" Background="Transparent">
+        <Grid Grid.Column="1" Grid.Row="1"  Background="Transparent">
+            <bmc:MainControlBar/>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="2" Background="Transparent">
 
-            <Button Style="{DynamicResource RoundButton}" x:Name="CreateTabButton"
-                    Width="250"
-                    Height="50"
+            <Button Style="{DynamicResource CommonButton}" x:Name="CreateTabButton"
                     Content="Create Tab"
                     Command="{Binding GoToCreationOfTabCommand}"
-                    FontSize="{DynamicResource BigTextCommonFontSize}"
+                    Width="250"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Margin="0,0,0,100"/>
 
-            <Button Style="{DynamicResource RoundButton}" x:Name="LoadTabButton"
+            <Button Style="{DynamicResource CommonButton}" x:Name="LoadTabButton"
                     Width="250"
-                    Height="50"
                     Content="Edit Tab"
-                    FontSize="{DynamicResource BigTextCommonFontSize}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Margin="0,100,0,0"/>
-        </Grid>
-        <Grid Grid.Row="0" Grid.Column="0" Background="Transparent">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="60"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid Background="Transparent">
-                <Button Style="{DynamicResource CommonButton}" x:Name="FilterButton"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Content="Filter"
-                        VerticalContentAlignment="Top"
-                        BorderThickness="1"/>
-            </Grid>
-            <Grid Grid.Column="1" Background="Transparent">
-                <TextBox Style="{DynamicResource CommonTextBox}" x:Name="SearchTextBox" 
-                         Background="White"
-                         VerticalAlignment="Stretch"
-                         HorizontalAlignment="Stretch"
-                         BorderThickness="1"/>
-            </Grid>
-        </Grid>
-        <Grid Grid.Row="0" Grid.Column="1" Background="Transparent">
-            <bmc:MainControlBar/>
         </Grid>
     </Grid>
 </UserControl>

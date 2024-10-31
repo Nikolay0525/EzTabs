@@ -7,9 +7,11 @@
              xmlns:vm="clr-namespace:EzTabs.ViewModel.AuthControlsViewModels;assembly=EzTabs.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="540" d:DesignWidth="960"
-             FontFamily="Inter"
-             FontSize="24"
-             Background="#93B5C6">
+             Foreground="White"
+             FontFamily="{DynamicResource CommonFontFamily}"
+             FontWeight="{DynamicResource CommonFontWeight}"
+             FontSize="{DynamicResource CommonFontSize}"
+             Background="#2e2e2e">
     <UserControl.Resources>
 
     </UserControl.Resources>
@@ -21,76 +23,80 @@
     <Grid>
 
         <TextBlock x:Name="UsernameTextBlock"
+                   FontSize="{DynamicResource SmallerFontSize}"
                    Text="Username"
-                   TextAlignment="Center"
-                   Width="270"
+                   TextAlignment="Left"
+                   Width="350"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Margin="0,0,0,400"/>
 
-        <TextBox Style="{DynamicResource RoundTextBox}" x:Name="UsernameTextBox"
+        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="UsernameTextBox"
                  Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                 Width="270" 
+                 Width="350" 
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
                  Margin="0,0,0,325"/>
 
         <TextBlock x:Name="EmailTextBlock"
+                   FontSize="{DynamicResource SmallerFontSize}"
                    Text="Email"
-                   TextAlignment="Center"
-                   Width="200"
+                   TextAlignment="Left"
+                   Width="350"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Margin="0,0,0,250"/>
         
-        <TextBox Style="{DynamicResource RoundTextBox}" x:Name="EmailTextBox" 
+        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="EmailTextBox" 
                  Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
-                 Width="270" 
+                 Width="350" 
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
                  Margin="0,0,0,175"/>
 
         <TextBlock x:Name="PasswordTextBlock"
+                   FontSize="{DynamicResource SmallerFontSize}"
                    Text="Password"
-                   TextAlignment="Center"
-                   Width="150"
+                   TextAlignment="Left"
+                   Width="350"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Margin="0,0,0,100"/>
 
-        <TextBox Style="{DynamicResource RoundTextBox}" x:Name="PasswordTextBox" 
+        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="PasswordTextBox" 
                  Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
-                 Width="270" 
+                 Width="350" 
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
                  Margin="0,0,0,25"/>
 
         <TextBlock x:Name="ConfirmPasswordTextBlock"
+                   FontSize="{DynamicResource SmallerFontSize}"
                    Text="Confirm password"
-                   TextAlignment="Center"
-                   Width="270"
+                   TextAlignment="Left"
+                   Width="350"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Margin="0,0,0,-50"/>
 
-        <TextBox Style="{DynamicResource RoundTextBox}" x:Name="ConfirmPasswordTextBox" 
+        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="ConfirmPasswordTextBox" 
                  Text="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged}"
-                 Width="270" 
+                 Width="350" 
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
                  Margin="0,0,0,-125"/>
 
-        <Button Style="{DynamicResource RoundButton}" x:Name="RegisterButton" 
+        <Button Style="{DynamicResource CommonButton}" x:Name="RegisterButton" 
                 Command="{Binding RegisterCommand}"
-                Width="270"
+                Width="350"
                 Content="Register"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Margin="0,0,0,-225" />
 
-        <Button Style="{DynamicResource RoundButton}" x:Name="SignInButton" 
+        <Button Style="{DynamicResource CommonButton}" x:Name="SignInButton" 
                 Command="{Binding GoToLoginCommand}"
-                Width="270"
+                Width="350"
                 Content="Sign in"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

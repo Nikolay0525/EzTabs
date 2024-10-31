@@ -69,7 +69,7 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
 
         private void GoToRegistration()
         {
-            NavigationService.Instance.NavigateTo(AuthViews.RegistrationControlViewModel);
+            NavigationService.Instance.NavigateTo(new RegistrationControlViewModel());
         }
     }
 }

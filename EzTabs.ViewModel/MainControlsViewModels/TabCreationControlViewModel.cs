@@ -92,6 +92,17 @@ namespace EzTabs.ViewModel.MainControlsViewModels
                 OnPropertyChanged(nameof(BitsPerMinute));
             }
         }
+
+        public string BitsPerMinuteText
+        {
+            get
+            {
+                var bpmString = _bpm.ToString();
+                if (bpmString is null) throw new ArgumentNullException(bpmString);
+                return "BPM " + bpmString;
+            }
+        }
+
         public string Description
         {
             get => _description;

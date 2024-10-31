@@ -2,7 +2,7 @@
 {
     public interface INavigationService
     {
-        void NavigateTo<T>(T viewModel) where T : Enum;
+        void NavigateTo(object viewModel);
         object? CurrentViewModel { get; set; }
         event Action? CurrentViewModelChanged;
     }

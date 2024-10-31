@@ -7,9 +7,11 @@
              xmlns:vm="clr-namespace:EzTabs.ViewModel.AuthControlsViewModels;assembly=EzTabs.ViewModel" 
              mc:Ignorable="d" 
              d:DesignHeight="540" d:DesignWidth="960"
-             FontFamily="Inter"
-             FontSize="24"
-             Background="#93B5C6">
+             Foreground="White"
+             FontFamily="{DynamicResource CommonFontFamily}"
+             FontWeight="{DynamicResource CommonFontWeight}"
+             FontSize="{DynamicResource CommonFontSize}"
+             Background="#2e2e2e">
 
     <UserControl.Resources>
 
@@ -20,57 +22,54 @@
     </UserControl.DataContext>
     <Grid>
 
-        <TextBox Style="{DynamicResource RoundTextBox}" x:Name="UsernameTextBox" 
+        <TextBlock x:Name="UsernameTextBlock"
+                   FontSize="{DynamicResource SmallerFontSize}"
+                   Width="270"
+                   Text="Username"
+                   TextAlignment="Left"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="0,0,0,175"/>
+
+        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="UsernameTextBox" 
                  Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                 FontSize="24"
                  Width="270" 
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
                  Margin="0,0,0,100"/>
 
-        <TextBlock x:Name="UsernameTextBlock"
-                   Text="Username"
-                   FontFamily="Inter"
-                   FontSize="24"
-                   TextAlignment="Center"
+        <TextBlock x:Name="PasswordTextBlock"
+                   FontSize="{DynamicResource SmallerFontSize}"
                    Width="270"
+                   Text="Password"
+                   TextAlignment="Left"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Margin="0,0,0,200"/>
+                   Margin="0,0,0,25"/>
 
-        <TextBox Style="{DynamicResource RoundTextBox}" x:Name="PasswordTextBox" 
+        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="PasswordTextBox" 
                  Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
-                 FontSize="24"
                  Width="270" 
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
-                 Margin="0,0,0,-100"/>
+                 Margin="0,0,0,-50"/>
 
-        <TextBlock x:Name="PasswordTextBlock"
-                   Text="Password"
-                   FontFamily="Inter"
-                   FontSize="24"
-                   TextAlignment="Center"
-                   Width="270"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Margin="0,0,0,0"/>
-
-        <Button Style="{DynamicResource RoundButton}" x:Name="LoginButton" 
+        <Button Style="{DynamicResource CommonButton}" x:Name="LoginButton" 
                 Command="{Binding LoginCommand}"
+                Height="39.5"
                 Width="270"
                 Content="Login"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Margin="0,0,0,-200"/>
+                Margin="0,0,0,-150"/>
 
-        <Button Style="{DynamicResource RoundButton}" x:Name="SignUpButton"
+        <Button Style="{DynamicResource CommonButton}" x:Name="SignUpButton"
                 Command="{Binding GoToRegistrationCommand}"
                 Width="270"
                 Content="Sign Up"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Margin="0,0,0,-300"/>
+                Margin="0,0,0,-250"/>
 
     </Grid>
 </UserControl>

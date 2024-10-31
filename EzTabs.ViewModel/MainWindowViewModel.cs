@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using EzTabs.Services.NavigationServices;
 using EzTabs.ViewModel.AuthControlsViewModels;
+using EzTabs.ViewModel.MainControlsViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,7 +22,7 @@ namespace EzTabs.ViewModel
         {
             _navigationService = NavigationService.Instance;
 
-            _navigationService.NavigateTo(new LoginControlViewModel());
+            _navigationService.NavigateTo(new SearchControlViewModel());
 
             _navigationService.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }

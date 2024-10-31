@@ -7,9 +7,11 @@
              xmlns:vm="clr-namespace:EzTabs.ViewModel.AuthControlsViewModels;assembly=EzTabs.ViewModel" 
              mc:Ignorable="d" 
              d:DesignHeight="540" d:DesignWidth="960"
-             FontFamily="Inter"
-             FontSize="24"
-             Background="#93B5C6">
+             Foreground="White"
+             FontWeight="{DynamicResource CommonFontWeight}"
+             FontFamily="{DynamicResource CommonFontFamily}"
+             FontSize="{DynamicResource CommonFontSize}"
+             Background="#2e2e2e">
     <UserControl.Resources>
 
     </UserControl.Resources>
@@ -20,33 +22,34 @@
 
     <Grid>
         <TextBlock x:Name="VerificationCodeTextBlock"
+                   FontSize="{DynamicResource SmallerFontSize}"
                    Text="Write down your verification code sended on your email"
                    TextWrapping="Wrap"
-                   Width="400" 
-                   TextAlignment="Center"
+                   Width="525" 
+                   TextAlignment="Left"
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Center" 
                    Margin="0,0,0,125"/>
 
 
-        <TextBox Style="{DynamicResource RoundTextBox}" x:Name="VerificationCodeTextBox"
+        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="VerificationCodeTextBox"
                  Text="{Binding VerificationCode, UpdateSourceTrigger=PropertyChanged}"
-                 Width="500" 
+                 Width="525" 
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center" 
-                 Margin="0,0,0,0"/>
+                 Margin="0,0,0,25"/>
 
-        <Button Style="{DynamicResource RoundButton}" x:Name="SendVerificationCodeButton"
+        <Button Style="{DynamicResource CommonButton}" x:Name="SendVerificationCodeButton"
                 Command="{Binding TryToVerificateCommand}"
-                Width="250"
+                Width="525"
                 Content="Verificate account"
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center"
                 Margin="0,100,0,0"/>
         
-        <Button Style="{DynamicResource RoundButton}" x:Name="SignUpButton"
+        <Button Style="{DynamicResource CommonButton}" x:Name="SignUpButton"
                 Command="{Binding GoToRegistrationCommand}"
-                Width="250"
+                Width="525"
                 Content="Go back"
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center"

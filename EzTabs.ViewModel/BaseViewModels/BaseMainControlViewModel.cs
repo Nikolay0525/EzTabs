@@ -23,8 +23,8 @@ namespace EzTabs.ViewModel.BaseViewModels
         protected BaseMainControlViewModel()
         {
             _userService = new UserService();
-            if (UserService.SavedUser is null) throw new ArgumentNullException(nameof(UserService.SavedUser));
-            Username = UserService.SavedUser.Name;
+            //if (UserService.SavedUser is null) throw new ArgumentNullException(nameof(UserService.SavedUser));
+            //Username = UserService.SavedUser.Name;
         }
     }
 }

@@ -90,18 +90,10 @@ namespace EzTabs.ViewModel.MainControlsViewModels
             {
                 _bpm = value;
                 OnPropertyChanged(nameof(BitsPerMinute));
+                OnPropertyChanged(nameof(BitsPerMinuteText));
             }
         }
-
-        public string BitsPerMinuteText
-        {
-            get
-            {
-                var bpmString = _bpm.ToString();
-                if (bpmString is null) throw new ArgumentNullException(bpmString);
-                return "BPM " + bpmString;
-            }
-        }
+        public string BitsPerMinuteText => $"{BitsPerMinute} BPM";
 
         public string Description
         {

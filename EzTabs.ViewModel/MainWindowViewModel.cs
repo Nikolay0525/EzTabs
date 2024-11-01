@@ -22,7 +22,7 @@ namespace EzTabs.ViewModel
         {
             _navigationService = NavigationService.Instance;
 
-            _navigationService.NavigateTo(new SearchControlViewModel());
+            _navigationService.NavigateTo(new TabCreationControlViewModel());
 
             _navigationService.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }

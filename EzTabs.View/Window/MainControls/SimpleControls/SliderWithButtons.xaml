@@ -5,60 +5,54 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls"
              mc:Ignorable="d" 
-             x:Name="rootControl">
-    <Grid>
+             x:Name="rootControl"
+             FontSize="24">
+    <Grid VerticalAlignment="Stretch">
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="40*"/>
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Button Style="{DynamicResource CommonButton}" 
-                    x:Name="BpmMinusButton"
-                    Padding="0,0,0,3"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Height="30"
-                    Width="30"
-                    Click="OnMinusButtonClick">
-                
-                <Viewbox Stretch="Uniform">
-                    <TextBlock Text="-" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </Viewbox>
-            </Button>
-        </Grid>
-
-        <Grid Grid.Column="2">
-            <Button Style="{DynamicResource CommonButton}" 
-                    x:Name="BpmPlusButton"
-                    Padding="0,0,0,3"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Height="30"
-                    Width="30"
-                    Click="OnPlusButtonClick">
-                    
-                <Viewbox Stretch="Uniform">
-                    <TextBlock Text="+" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </Viewbox>
-            </Button>
-        </Grid>
+        <Button Style="{DynamicResource CommonButton}" 
+                x:Name="BpmMinusButton"
+                Padding="0,0,0,8"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="-"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Height="30"
+                Width="30"
+                Click="OnMinusButtonClick">
+        </Button>
 
         <Grid Grid.Column="1">
-            <TextBlock FontSize="{DynamicResource SmallerFontSize}" x:Name="BitsPerMinuteTextBlock"
-                       Foreground="White"
-                       Text="1"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Margin="0,0,0,75"/>
 
             <Slider x:Name="BpmSlider"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     Minimum="{Binding Minimum, ElementName=rootControl}"
                     Maximum="{Binding Maximum, ElementName=rootControl}"
-                    Value="{Binding Value, ElementName=rootControl, Mode=TwoWay}"/>
+                    Value="{Binding CurrentValue, ElementName=rootControl, Mode=TwoWay}"
+                    IsSnapToTickEnabled="True"
+                    TickFrequency="1"/>
+        </Grid>
+
+        <Grid Grid.Column="2">
+            <Button Style="{DynamicResource CommonButton}" 
+                    x:Name="BpmPlusButton"
+                    Padding="0,0,0,0"
+                    Content="+"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Height="30"
+                    Width="30"
+                    Click="OnPlusButtonClick">
+            </Button>
         </Grid>
     </Grid>
 </UserControl>

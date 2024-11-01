@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls"
+             xmlns:ct="clr-namespace:EzTabs.View.Resources.Styles.CustomTypes"
              mc:Ignorable="d"
              Height="38">
     <Grid>
@@ -17,17 +18,15 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0" Background="Transparent">
-                <Button Style="{DynamicResource CommonButton}" x:Name="NotificationButton"
+                <ct:ImageButton Style="{DynamicResource ImageButton}" x:Name="NotificationButton"
                         Background="Transparent"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        Padding="3">
-                    <Path Data="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901" 
-                          Fill="White" 
-                          Stretch="Uniform"
-                          Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=StackPanel}}"
-                          Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=StackPanel}}"/>
-                </Button>
+                        Padding="3"
+                        PathData="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901">
+                </ct:ImageButton>
+                
+                
             </Grid>
             <Grid Grid.Column="2">
                 <Border CornerRadius="5" Background="White">
@@ -47,8 +46,8 @@
                         VerticalAlignment="Stretch"
                         Padding="3">
                     <Path Data="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" 
-                          Fill="White" 
                           Stretch="Uniform"
+                          Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
                           Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=StackPanel}}"
                           Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=StackPanel}}"/>
                 </Button>

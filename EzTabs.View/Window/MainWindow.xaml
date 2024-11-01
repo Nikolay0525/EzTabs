@@ -35,6 +35,10 @@
         <DataTemplate DataType="{x:Type vmmc:SearchControlViewModel}">
             <localmc:SearchControl />
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vmmc:TabCreationControlViewModel}">
+            <localmc:TabCreationControl />
+        </DataTemplate>
     </Window.Resources>
 
     <Window.DataContext>

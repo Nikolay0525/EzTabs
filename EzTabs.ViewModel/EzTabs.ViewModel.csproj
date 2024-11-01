@@ -15,4 +15,8 @@
     <ProjectReference Include="..\EzTabs.Services\EzTabs.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SimpleControlsViewModels\" />
+  </ItemGroup>
+
 </Project>

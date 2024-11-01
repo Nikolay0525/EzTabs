@@ -25,7 +25,6 @@ namespace EzTabs.View.Window.MainControls.SimpleControls
             InitializeComponent();
         }
 
-        // Dependency Properties for binding
         public static readonly DependencyProperty MinimumProperty =
             DependencyProperty.Register("Minimum", typeof(double), typeof(SliderWithButtons), new PropertyMetadata(0.0));
 
@@ -34,6 +33,9 @@ namespace EzTabs.View.Window.MainControls.SimpleControls
 
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(double), typeof(SliderWithButtons), new PropertyMetadata(50.0));
+
+        public static readonly DependencyPropertyKey TextProperty =
+            DependencyProperty.RegisterReadOnly("Text", typeof(string), typeof(SliderWithButtons),new PropertyMetadata("50 BPM"));
 
         public double Minimum
         {
@@ -53,7 +55,16 @@ namespace EzTabs.View.Window.MainControls.SimpleControls
             set => SetValue(ValueProperty, value);
         }
 
-        // Event handlers for the buttons
+        public string Text
+        {
+            get
+            {
+                string valueText = (string)GetValue(ValueProperty);
+                if (valueText is null) throw new ArgumentNullException(nameof(valueText));
+                return "BPM " + valueText;
+            }
+        }
+
         private void OnMinusButtonClick(object sender, RoutedEventArgs e)
         {
             if (Value > Minimum)

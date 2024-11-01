@@ -5,44 +5,60 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             Background="#2e2e2e">
+             x:Name="rootControl">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="40"/>
+        </Grid.ColumnDefinitions>
 
-        <TextBlock FontSize="{DynamicResource SmallerFontSize}" x:Name="BitsPerMinuteTextBlock"
-                   Text="{Binding BitsPerMinuteText, UpdateSourceTrigger=PropertyChanged}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Top"
-                   Margin="0,2,0,0" Grid.Column="1" Height="22" Width="60"/>
+        <Grid Grid.Column="0">
+            <Button Style="{DynamicResource CommonButton}" 
+                    x:Name="BpmMinusButton"
+                    Padding="0,0,0,3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Height="30"
+                    Width="30"
+                    Click="OnMinusButtonClick">
+                
+                <Viewbox Stretch="Uniform">
+                    <TextBlock Text="-" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Viewbox>
+            </Button>
+        </Grid>
 
-        <Button Style="{DynamicResource CommonButton}" x:Name="BpmMinusButton"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Height="30"
-                Width="30"
-                Margin="89,0,0,0" Grid.Column="1">
-            <Viewbox>
-                <TextBlock Text="-"/>
-            </Viewbox>
-        </Button>
+        <Grid Grid.Column="2">
+            <Button Style="{DynamicResource CommonButton}" 
+                    x:Name="BpmPlusButton"
+                    Padding="0,0,0,3"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Height="30"
+                    Width="30"
+                    Click="OnPlusButtonClick">
+                    
+                <Viewbox Stretch="Uniform">
+                    <TextBlock Text="+" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Viewbox>
+            </Button>
+        </Grid>
 
-        <Button Style="{DynamicResource CommonButton}" x:Name="BpmPlusButton"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Height="30"
-                            Width="30"
-                            Margin="339,0,0,0" Grid.Column="1">
-            <Viewbox>
-                <TextBlock Text="+"/>
-            </Viewbox>
-        </Button>
+        <Grid Grid.Column="1">
+            <TextBlock FontSize="{DynamicResource SmallerFontSize}" x:Name="BitsPerMinuteTextBlock"
+                       Foreground="White"
+                       Text="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0,0,0,75"/>
 
-        <Slider x:Name="BpmSlider"
-                            Value="{Binding BitsPerMinute, UpdateSourceTrigger=PropertyChanged}"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Width="200"
-                            Minimum="0"
-                            Maximum="480" Grid.Column="1" Height="18"/>
+            <Slider x:Name="BpmSlider"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Minimum="{Binding Minimum, ElementName=rootControl}"
+                    Maximum="{Binding Maximum, ElementName=rootControl}"
+                    Value="{Binding Value, ElementName=rootControl, Mode=TwoWay}"/>
+        </Grid>
     </Grid>
 </UserControl>

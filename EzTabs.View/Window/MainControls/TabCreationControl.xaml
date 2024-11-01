@@ -26,9 +26,8 @@
             <RowDefinition Height="5"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="5"/>
-            <RowDefinition Height="324"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition/>
+            <RowDefinition Height="300"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="1">
@@ -60,112 +59,113 @@
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
-            <Grid>
-                <TextBlock x:Name="TitleTextBlock"
-                           FontSize="{DynamicResource SmallerFontSize}"
-                           Text="Title"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Margin="0,0,0,250"
-                           Width="350"/>
-
-                <TextBox Style="{DynamicResource CommonTextBox}" 
-                         x:Name="TitleTextBox"
-                         Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Margin="0,0,0,175"
-                         Width="350"/>
-
-                <TextBlock x:Name="BandTextBlock"
-                           Text="Band"
-                           TextAlignment="Left"
-                           FontSize="{DynamicResource SmallerFontSize}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Margin="0,0,0,100"
-                           Width="350"/>
-
-                <TextBox Style="{DynamicResource CommonTextBox}" 
-                         x:Name="BandTextBox"
-                         Text="{Binding Band, UpdateSourceTrigger=PropertyChanged}"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Margin="0,0,0,25"
-                         Width="350"/>
-
-                <TextBlock x:Name="GenreTextBlock"
-                           Text="Genre"
-                           FontSize="{DynamicResource SmallerFontSize}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Margin="0,50,200,0"
-                           Width="150"/>
-
-                <TextBox Style="{DynamicResource CommonTextBox}" x:Name="GenreTextBox"
-                         Text="{Binding Genre, UpdateSourceTrigger=PropertyChanged}"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Margin="0,125,0,0"
-                         Width="350"/>
-
-                <TextBlock x:Name="KeyTextBlock"
-                           Text="Key"
-                           TextAlignment="Left"
-                           FontSize="{DynamicResource SmallerFontSize}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Margin="0,200,200,0"
-                           Width="150"/>
-
-                <TextBox Style="{DynamicResource CommonTextBox}" x:Name="KeyTextBox"
-                         Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Margin="0,275,300,0"
-                         Width="50"/>
-
-                <TextBlock FontSize="{DynamicResource SmallerFontSize}" x:Name="BitsPerMinuteTextBlock"
-                           Text="{Binding BitsPerMinuteText, UpdateSourceTrigger=PropertyChanged}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Margin="75,275,0,0"/>
-
-                <Button Style="{DynamicResource CommonButton}" x:Name="BpmMinusButton"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Height="30"
-                        Width="30"
-                        Margin="0,275,180,0">
-                    <Viewbox>
-                        <TextBlock Text="-"/>
-                    </Viewbox>
-                </Button>
-
-                <Button Style="{DynamicResource CommonButton}" x:Name="BpmPlusButton"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Height="30"
-                        Width="30"
-                        Margin="320,275,0,0">
-                    <Viewbox>
-                        <TextBlock Text="+"/>
-                    </Viewbox>
-                </Button>
-
-                <Slider x:Name="BpmSlider"
-                        Value="{Binding BitsPerMinute, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Margin="70,275,0,0"
-                        Width="200"
-                        Minimum="0"
-                        Maximum="480"/>
-            </Grid>
             <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="225*"/>
+                    <RowDefinition Height="75*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <TextBlock x:Name="TitleTextBlock"
+                               FontSize="{DynamicResource SmallerFontSize}"
+                               Text="Title"
+                               VerticalAlignment="Top"
+                               Margin="0,2,0,0"/>
+
+                    <TextBox Style="{DynamicResource CommonTextBox}" 
+                             x:Name="TitleTextBox"
+                             Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Top"
+                             Margin="0,31,0,0"/>
+
+                    <TextBlock x:Name="BandTextBlock"
+                               Text="Band"
+                               TextAlignment="Left"
+                               FontSize="{DynamicResource SmallerFontSize}"
+                               VerticalAlignment="Top"
+                               Margin="0,77,0,0"/>
+
+                    <TextBox Style="{DynamicResource CommonTextBox}" 
+                             x:Name="BandTextBox"
+                             Text="{Binding Band, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Top"
+                             Margin="0,106,0,0"/>
+
+                    <TextBlock x:Name="GenreTextBlock"
+                               Text="Genre"
+                               FontSize="{DynamicResource SmallerFontSize}"
+                               VerticalAlignment="Top"
+                               Margin="0,152,200,0"/>
+
+                    <TextBox Style="{DynamicResource CommonTextBox}" x:Name="GenreTextBox"
+                             Text="{Binding Genre, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Top"
+                             Margin="0,181,0,0"/>
+                </Grid>
+                <Grid Grid.Column="1" Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="94*"/>
+                        <ColumnDefinition Width="451*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="KeyTextBlock"
+                               Text="Key"
+                               TextAlignment="Left"
+                               FontSize="{DynamicResource SmallerFontSize}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Top"
+                               Margin="0,2,0,0"
+                               Width="150" Height="22"/>
+
+                    <TextBox Style="{DynamicResource CommonTextBox}" x:Name="KeyTextBox"
+                             Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Top"
+                             Margin="0,31,0,0"
+                             Width="50" Height="37"/>
+
+                    <TextBlock FontSize="{DynamicResource SmallerFontSize}" x:Name="BitsPerMinuteTextBlock"
+                               Text="{Binding BitsPerMinuteText, UpdateSourceTrigger=PropertyChanged}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Top"
+                               Margin="0,2,0,0" Grid.Column="1" Height="22" Width="60"/>
+
+                    <Button Style="{DynamicResource CommonButton}" x:Name="BpmMinusButton"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Height="30"
+                            Width="30"
+                            Margin="89,0,0,0" Grid.Column="1">
+                        <Viewbox>
+                            <TextBlock Text="-"/>
+                        </Viewbox>
+                    </Button>
+
+                    <Button Style="{DynamicResource CommonButton}" x:Name="BpmPlusButton"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Height="30"
+                            Width="30"
+                            Margin="339,0,0,0" Grid.Column="1">
+                        <Viewbox>
+                            <TextBlock Text="+"/>
+                        </Viewbox>
+                    </Button>
+
+                    <Slider x:Name="BpmSlider"
+                            Value="{Binding BitsPerMinute, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="200"
+                            Minimum="0"
+                            Maximum="480" Grid.Column="1" Height="18"/>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="3">
                 <Grid>
                     <TextBlock x:Name="TuningsListTextBlock"
                                FontSize="{DynamicResource SmallerFontSize}"
@@ -198,12 +198,12 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Grid Grid.Row="5">
+        <Grid Grid.Row="4">
             <Grid.RowDefinitions>
-                <RowDefinition Height="80*"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
                 <RowDefinition Height="5"/>
-                <RowDefinition Height="43"/>
-                <RowDefinition Height="5"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5"/>
@@ -212,23 +212,26 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="1" Grid.Row="0">
                 <TextBlock x:Name="DescriptionTextBlock"
+                           FontSize="{DynamicResource SmallerFontSize}"
                            Text="Description"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Top" Margin="0,70,0,0" Height="29" Width="140"/>
-
-                <TextBox x:Name="DescriptionTextBox"
-                         FontSize="{DynamicResource CommonFontSize}"
-                         Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Grid.RowSpan="2"/>
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Center"
+                           Margin="0,0,0,0"
+                           Foreground="White"/>
+            </Grid>
+            <Grid Grid.Column="1" Grid.Row="1">
+                <TextBox Style="{DynamicResource CommonTextBox}" x:Name="DescriptionTextBox"
+                         Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
+                         TextWrapping="Wrap"/>
 
             </Grid>
-            <Grid Grid.Column="1" Grid.Row="2">
+            <Grid Grid.Column="1" Grid.Row="3">
                 <Button Style="{DynamicResource CommonButton}" x:Name="CreateButton"
                         Command="{Binding}"
                         Content="Create Tablature"
-                        HorizontalAlignment="Center"
+                        HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
-                        Margin="0,0,0,0"
-                        Width="250"/>
+                        Margin="0,0,0,0"/>
             </Grid>
         </Grid>
     </Grid>

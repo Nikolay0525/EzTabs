@@ -33,7 +33,9 @@ namespace EzTabs.ViewModel.MainControlsViewModels
             {"3: G"},
             {"4: D"},
             {"5: A"},
-            {"6: E"}
+            {"6: E"},
+            {"7: B"},
+            {"8: C"}
         };
 
         private string _selectedItem;

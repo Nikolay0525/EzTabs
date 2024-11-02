@@ -77,7 +77,7 @@
                                TextAlignment="Left"
                                HorizontalAlignment="Stretch"
                                VerticalAlignment="Center"
-                               Margin="0,0,0,185"/>
+                               Margin="0,0,0,190"/>
 
                     <TextBox Style="{DynamicResource CommonTextBox}" 
                              x:Name="TitleTextBox"
@@ -163,34 +163,72 @@
             </Grid>
             <Grid Grid.Column="3">
                 <Grid>
-                    <TextBlock x:Name="TuningsListTextBlock"
-                               FontSize="{DynamicResource SmallerFontSize}"
-                               Text="Tuning of strings"
-                               TextAlignment="Left"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Margin="0,0,0,0"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="36"/>
+                        <RowDefinition Height="64*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <TextBlock x:Name="TuningsListTextBlock"
+                                   FontSize="{DynamicResource SmallerFontSize}"
+                                   Text="Tuning of strings"
+                                   TextAlignment="Left"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
 
-                    <ListBox Style="{DynamicResource CommonListBox}" 
-                             d:ItemsSource="{Binding ListOfTunings, UpdateSourceTrigger=PropertyChanged}"
-                             HorizontalAlignment="Center"
-                             VerticalAlignment="Top"
-                             HorizontalContentAlignment="Center"
-                             Margin="0,0,100,0"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20*"/>
+                            <ColumnDefinition Width="73*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <ListBox Style="{DynamicResource CommonListBox}" 
+                                     d:ItemsSource="{Binding ListOfTunings, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="23"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Top"
+                                     HorizontalContentAlignment="Center"/>
+                        </Grid>
+                        <Grid Grid.Column="1">
 
-                    <Button Style="{DynamicResource CommonButton}" x:Name="EditTuningButton"
-                            Command="{Binding}"
-                            Content="Add/Edit tuning"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"
-                            Margin="0,50,0,0"/>
+                            <bmc:UpDownTextBlock CurrentValue="{Binding StringOrder, UpdateSourceTrigger=PropertyChanged}"
+                                                 FontSize="{DynamicResource SmallerFontSize}"
+                                                 Minimum="1"
+                                                 Maximum="8"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,150,100"/>
 
-                    <Button Style="{DynamicResource CommonButton}" x:Name="RemoveTuningButton"
-                            Command="{Binding}"
-                            Content="Remove tuning"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"
-                            Margin="0,125,0,0"/>
+                            <TextBlock x:Name="NoteTextBlock"
+                                       FontSize="{DynamicResource SmallerFontSize}"
+                                       Text="String Note"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="150,0,0,175"/>
+
+                            <TextBox Style="{DynamicResource CommonTextBox}"
+                                     x:Name="NoteTextBox"
+                                     FontSize="{DynamicResource SmallerFontSize}"
+                                     Text="{Binding StringNote, UpdateSourceTrigger=PropertyChanged}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Width="100"
+                                     Margin="150,0,0,100"/>
+
+                            <Button Style="{DynamicResource CommonButton}" x:Name="EditTuningButton"
+                                    Command="{Binding}"
+                                    Content="Add/Edit Tuning"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,0,0"/>
+
+                            <Button Style="{DynamicResource CommonButton}" x:Name="RemoveTuningButton"
+                                    Command="{Binding}"
+                                    Content="Remove Tuning"
+                                    VerticalAlignment="Center"
+                                    Margin="0,100,0,0"/>
+                            
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace EzTabs.ViewModel.MainControlsViewModels
 {
-    public class SearchControlViewModel : BaseMainControlViewModel
+    public class SearchControlViewModel : BaseViewModel
     {
         public ICommand GoToCreationOfTabCommand { get; }
         public SearchControlViewModel() : base()

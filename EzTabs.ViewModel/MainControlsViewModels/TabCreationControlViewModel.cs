@@ -1,5 +1,8 @@
-﻿using EzTabs.Services.ModelServices;
+﻿using CommunityToolkit.Mvvm.Input;
+using EzTabs.Services.ModelServices;
 using EzTabs.ViewModel.BaseViewModels;
+using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace EzTabs.ViewModel.MainControlsViewModels
 {
@@ -8,38 +11,20 @@ namespace EzTabs.ViewModel.MainControlsViewModels
         private UserService _userService;
         private TabService _tabService;
 
-        private string _title;
-        private string _band;
-        private string _genre;
-        private string _key;
+        private string? _title;
+        private string? _band;
+        private string? _genre;
+        private string? _key;
         private int _bpm;
-        private string _description;
-        private int _stringNumber;
-        private string _stringNote;
-        private Dictionary<int, string> _tunings = new()
-        {
-            {1,"e"},
-            {2,"B"},
-            {3,"G"},
-            {4,"D"},
-            {5,"A"},
-            {6,"E"}
-        };
+        private string? _description;
+        private int _stringOrder;
+        private string? _stringNote;
+        private Dictionary<int, string> _tunings = new();
 
-        private List<string> _listOfTunings = new()
-        {
-            {"1: e"},
-            {"2: B"},
-            {"3: G"},
-            {"4: D"},
-            {"5: A"},
-            {"6: E"},
-            {"7: B"},
-            {"8: C"}
-        };
+        private ObservableCollection<string> _listOfTunings = new();
 
-        private string _selectedItem;
-        public string SelectedItem
+        private string? _selectedItem;
+        public string? SelectedItem
         {
             get => _selectedItem;
             set
@@ -49,7 +34,7 @@ namespace EzTabs.ViewModel.MainControlsViewModels
             }
         }
 
-        public string Title
+        public string? Title
         {
             get => _title;
             set
@@ -58,7 +43,7 @@ namespace EzTabs.ViewModel.MainControlsViewModels
                 OnPropertyChanged(nameof(Title));
             }
         }
-        public string Band
+        public string? Band
         {
             get => _band;
             set
@@ -67,7 +52,7 @@ namespace EzTabs.ViewModel.MainControlsViewModels
                 OnPropertyChanged(nameof(Band));
             }
         }
-        public string Genre
+        public string? Genre
         {
             get => _genre;
             set
@@ -76,7 +61,7 @@ namespace EzTabs.ViewModel.MainControlsViewModels
                 OnPropertyChanged(nameof(Genre));
             }
         }
-        public string Key
+        public string? Key
         {
             get => _key;
             set
@@ -97,7 +82,7 @@ namespace EzTabs.ViewModel.MainControlsViewModels
         }
         public string BitsPerMinuteText => $"{BitsPerMinute} BPM";
 
-        public string Description
+        public string? Description
         {
             get => _description;
             set
@@ -109,15 +94,15 @@ namespace EzTabs.ViewModel.MainControlsViewModels
         
         public int StringOrder
         {
-            get => _stringNumber;
+            get => _stringOrder;
             set
             {
-                _stringNumber = value;
+                _stringOrder = value;
                 OnPropertyChanged(nameof(StringOrder));
             }
         }
         
-        public string StringNote
+        public string? StringNote
         {
             get => _stringNote;
             set
@@ -126,46 +111,87 @@ namespace EzTabs.ViewModel.MainControlsViewModels
                 OnPropertyChanged(nameof(StringNote));
             }
         }
-        
-        public List<string> ListOfTunings
+
+        public ObservableCollection<string> ListOfTunings
         {
             get => _listOfTunings;
-            private set
-            {
-                _listOfTunings = value;
-                OnPropertyChanged(nameof(ListOfTunings));
-            }
+            set => _listOfTunings = value;
         }
 
+        public ICommand AddTuningCommand { get; }
+        public ICommand EditTuningCommand { get; }
+        public ICommand RemoveTuningCommand { get; }
+
         public TabCreationControlViewModel() 
-        { 
+        {
+            AddTuningCommand = new RelayCommand(AddTuning);
+            EditTuningCommand = new RelayCommand(EditTuning);
+            RemoveTuningCommand = new RelayCommand(RemoveTuning);
             _userService = new UserService();
             _tabService = new TabService();
         }
 
-        public void AddTuning(int stringOrder, string stringNote)
+        private void OnSelecting()
         {
-            _tunings.Add(stringOrder, stringNote);
+            if(SelectedItem is null) throw new ArgumentNullException(nameof(SelectedItem));
+            var selectedItem = SelectedItem.Split(":");
+            if(int.TryParse(selectedItem[0], out int result) != default)
+            {
+                StringOrder = result;
+                StringNote = selectedItem[1];
+            }
+            else { throw new ArgumentException(nameof(result) + "is default"); }
+        }
+
+        private void AddTuning()
+        {
+            if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
+            if (ListOfTunings is null) throw new ArgumentNullException(nameof(_tunings));
+            if (StringNote is null) throw new ArgumentNullException(nameof(StringNote));
+
+            if (_tunings.ContainsKey(StringOrder))
+            {
+                // add message
+                return;
+            }
+            _tunings.Add(StringOrder, StringNote);
             ListOfTunings.Clear();
             foreach (var tuning in _tunings)
             {
                 ListOfTunings.Add($"{tuning.Key}: {tuning.Value}");
+                OnPropertyChanged(nameof(ListOfTunings));
             }
         }
-        public void RemoveTuning()
+
+        private void EditTuning()
         {
-            string stringKey = SelectedItem.Split(":")[0];
-            int key;
-            if (int.TryParse(stringKey, out int result))
+            if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
+            if (ListOfTunings is null) throw new ArgumentNullException(nameof(_tunings));
+            if (StringNote is null) throw new ArgumentNullException(nameof(StringNote));
+
+            if (_tunings.ContainsKey(StringOrder))
             {
-                key = result;
-            }
-            else throw new ArgumentException("Failed to convert string to int while converting selectedItem");
-            _tunings.Remove(key);
+                _tunings[StringOrder] = StringNote;
+                ListOfTunings.Clear();
+                foreach (var tuning in _tunings)
+                {
+                    ListOfTunings.Add($"{tuning.Key}: {tuning.Value}");
+                    OnPropertyChanged(nameof(ListOfTunings));
+                }
+            } 
+        }
+
+        private void RemoveTuning()
+        {
+            if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
+            if (ListOfTunings is null) throw new ArgumentNullException(nameof(_tunings));
+
+            _tunings.Remove(StringOrder);
             ListOfTunings.Clear();
             foreach (var tuning in _tunings)
             {
                 ListOfTunings.Add($"{tuning.Key}: {tuning.Value}");
+                OnPropertyChanged(nameof(ListOfTunings));
             }
         }
     }

@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Input;
-using System.Windows.Input;
-using EzTabs.Services.NavigationServices;
+﻿using CommunityToolkit.Mvvm.Input;
 using EzTabs.Model;
 using EzTabs.Services.ModelServices;
-using EzTabs.Services.RepoServices;
+using EzTabs.Services.NavigationServices;
 using EzTabs.ViewModel.BaseViewModels;
 using EzTabs.ViewModel.MainControlsViewModels;
+using System.Windows.Input;
 
 namespace EzTabs.ViewModel.AuthControlsViewModels
 {

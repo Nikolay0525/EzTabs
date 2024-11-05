@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.View.Window.MainControls"
-             xmlns:bmc="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls"
+             xmlns:cbp="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls.ControlBarParts"
+             xmlns:sc="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls"
              xmlns:vm="clr-namespace:EzTabs.ViewModel.MainControlsViewModels;assembly=EzTabs.ViewModel"
              mc:Ignorable="d" 
              FontFamily="{DynamicResource CommonFontFamily}"
@@ -86,7 +87,7 @@
                      Background="White"/>
         </Grid>
         <Grid Grid.Column="1" Grid.Row="1"  Background="Transparent">
-            <bmc:MainControlBar/>
+            <cbp:ControlBar/>
         </Grid>
         <Grid Grid.Column="1" Grid.Row="2" Background="Transparent">
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EzTabs.ViewModel.MainControlsViewModels.SimpleControlsViewModels
 {
-    public class MainControlBarViewModel : BaseViewModel
+    public class ControlBarViewModel : BaseViewModel
     {
         protected UserService? _userService;
         private string? _username;
@@ -21,7 +21,7 @@ namespace EzTabs.ViewModel.MainControlsViewModels.SimpleControlsViewModels
                 OnPropertyChanged(nameof(Username));
             }
         }
-        protected MainControlBarViewModel()
+        protected ControlBarViewModel()
         {
             _userService = new UserService();
             if (UserService.SavedUser is null) throw new ArgumentNullException(nameof(UserService.SavedUser));

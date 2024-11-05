@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.View.Window.MainControls"
-             xmlns:bmc="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls"
+             xmlns:sc="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls"
+             xmlns:cbp="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls.ControlBarParts"
              xmlns:vm="clr-namespace:EzTabs.ViewModel.MainControlsViewModels;assembly=EzTabs.ViewModel" 
              mc:Ignorable="d"
              Foreground="White"
@@ -53,7 +54,7 @@
                            />
             </Grid>
             <Grid Grid.Column="3">
-                <bmc:MainControlBar/>
+                <cbp:ControlBar/>
             </Grid>
         </Grid>
 
@@ -155,7 +156,7 @@
                                        HorizontalAlignment="Center"/>
                         </Grid>
                         <Grid Grid.Row="1">
-                            <bmc:SliderWithButtons CurrentValue="{Binding BitsPerMinute, Mode=TwoWay}"
+                            <sc:SliderWithButtons CurrentValue="{Binding BitsPerMinute, Mode=TwoWay}"
                                                    Minimum="0"
                                                    Maximum="480"/>
                         </Grid>
@@ -184,6 +185,7 @@
                     <Grid Grid.Column="0" Grid.Row="1">
                         <ListBox Style="{DynamicResource CommonListBox}" 
                                  ItemsSource="{Binding ListOfTunings, UpdateSourceTrigger=PropertyChanged}"
+                                 SelectedItem="{Binding SelectedItem}"
                                  Width="90"
                                  FontSize="23"
                                  HorizontalAlignment="Center"
@@ -199,7 +201,7 @@
                                    VerticalAlignment="Center"
                                    Margin="0,0,150,200"/>
 
-                        <bmc:UpDownTextBlock FontSize="{DynamicResource SmallerFontSize}"
+                        <sc:UpDownTextBlock FontSize="{DynamicResource SmallerFontSize}"
                                              CurrentValue="{Binding StringOrder, Mode=TwoWay}"
                                              Minimum="1"
                                              Maximum="8"

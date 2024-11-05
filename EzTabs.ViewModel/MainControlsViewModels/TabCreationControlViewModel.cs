@@ -31,6 +31,7 @@ namespace EzTabs.ViewModel.MainControlsViewModels
             {
                 _selectedItem = value;
                 OnPropertyChanged(nameof(SelectedItem));
+                OnSelecting();
             }
         }
 
@@ -133,7 +134,7 @@ namespace EzTabs.ViewModel.MainControlsViewModels
 
         private void OnSelecting()
         {
-            if(SelectedItem is null) throw new ArgumentNullException(nameof(SelectedItem));
+            if(SelectedItem is null) return;
             var selectedItem = SelectedItem.Split(":");
             if(int.TryParse(selectedItem[0], out int result) != default)
             {

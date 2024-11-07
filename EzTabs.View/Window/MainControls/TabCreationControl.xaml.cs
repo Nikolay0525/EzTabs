@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using EzTabs.ViewModel.MainControlsViewModels;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace EzTabs.View.Window.MainControls
 {
@@ -10,6 +12,13 @@ namespace EzTabs.View.Window.MainControls
         public TabCreationControl()
         {
             InitializeComponent();
+            var viewModel = new TabCreationControlViewModel();
+            viewModel.ShowMessage += (title, message) =>
+            {
+                MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
+            };
+
+            DataContext = viewModel;
         }
     }
 }

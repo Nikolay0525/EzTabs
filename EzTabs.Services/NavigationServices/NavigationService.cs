@@ -9,8 +9,8 @@ namespace EzTabs.Services.NavigationServices
 
         public event Action? CurrentViewModelChanged;
 
-        private object? _currentViewModel;
-        public object? CurrentViewModel
+        private object _currentViewModel;
+        public object CurrentViewModel
         {
             get => _currentViewModel;
             set
@@ -19,7 +19,6 @@ namespace EzTabs.Services.NavigationServices
                 CurrentViewModelChanged?.Invoke();
             }
         }
-
         public void NavigateTo(object viewModel)
         {
             CurrentViewModel = viewModel;

@@ -14,20 +14,35 @@ namespace EzTabs.Services.ModelServices
     {
         private RepoImplementation<Tab>? _tabRepository;
         public static Tab? SavedTab { get; private set; }
+        private Task _initializeTask;
 
         public TabService()
         {
-            Task.Run(InitializeAsync);
+            _initializeTask = Task.Run(InitializeAsync);
         }
 
         public async Task InitializeAsync()
         {
             _tabRepository = await RepoInitializeService.InitializeRepoAsync<Tab>();
         }
+        private async Task EnsureRepositoryInitialized()
+        {
+            if (_initializeTask != null)
+            {
+                await _initializeTask;
+            }
+
+            if (_tabRepository == null)
+            {
+                throw new InvalidOperationException("Repository is not initialized.");
+            }
+        }
 
         public async Task<bool> CreateTab(Guid authorId, string title, string band, string genre, string key, int bpm, string description, List<Tuning> tunings)
         {
-            if (_tabRepository is null) throw new ArgumentNullException(nameof(_tabRepository));
+            await EnsureRepositoryInitialized();
+
+            if (_tabRepository is null) throw new ArgumentNullException(nameof(_tabRepository) + "Haven't loaded in time");
             var allTabs = await _tabRepository.GetAll();
             if (allTabs.FirstOrDefault(t => t.AuthorId == authorId && t.Title == title && t.Band == band) != null) return false;
             var newTab = new Tab

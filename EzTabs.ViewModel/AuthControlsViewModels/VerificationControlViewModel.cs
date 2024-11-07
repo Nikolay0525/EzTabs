@@ -16,7 +16,6 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
         private bool _userConfirm = false;
 
         [Required(ErrorMessage = "Verification code is required")]
-        [MaxLength(36, ErrorMessage ="Wrong type of code")]
         [MinLength(36, ErrorMessage ="Wrong type of code")]
         public string? VerificationCode
         {
@@ -63,7 +62,7 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
 
         private void GoToRegistration()
         {
-            OnShowOkCancelMessage("Warning", "If you go to registration page your account will be deleted, are you sure?");
+            OnShowOkCancelMessage("Warning", "If you not verify your account will be deleted, are you sure?");
             if(_userConfirm)
             {
                 NavigationService.Instance.NavigateTo(new RegistrationControlViewModel());

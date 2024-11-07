@@ -21,8 +21,15 @@ namespace EzTabs.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string projectDirectory = Directory.GetCurrentDirectory();
-            var json = File.ReadAllText(projectDirectory + "/ConnectionString.json");
+            string currentDirectory = Directory.GetCurrentDirectory();
+
+            while (!File.Exists(Path.Combine(currentDirectory, "EzTabs.View.sln")))
+            {
+                currentDirectory = Directory.GetParent(currentDirectory)?.FullName;
+                if (currentDirectory == null) break;
+            }
+
+            var json = File.ReadAllText(currentDirectory + "/ConnectionString.json");
             var jsonConverted = JsonConvert.DeserializeObject<Connection>(json);
             optionsBuilder.UseMySql(jsonConverted.ConnectionString, new MySqlServerVersion(jsonConverted.Version));
             optionsBuilder.LogTo(message => Debug.WriteLine(message));

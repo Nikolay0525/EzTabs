@@ -5,7 +5,6 @@ using EzTabs.ViewModel.BaseViewModels;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using EzTabs.Services.ValidationServices.CustomAttributes;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Text;
 
 namespace EzTabs.ViewModel.AuthControlsViewModels
@@ -20,7 +19,6 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
         private string? _confirmPassword;
 
         [Required(ErrorMessage = "Username is required")]
-        [MaxLength(20, ErrorMessage = "Username length can't be more than 20 characters")]
         [MinLength(2, ErrorMessage = "Username length can't be less than 2 charecters")]
         public string? Username
         {
@@ -45,7 +43,6 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
         }
 
         [Required(ErrorMessage = "Password is required")]
-        [MaxLength(20, ErrorMessage = "Password length can't be more than 20 characters")]
         [MinLength(4, ErrorMessage = "Password length can't be less than 4 characters")]
         public string? Password
         {

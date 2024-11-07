@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:EzTabs.View.Window.MainControls"
              xmlns:sc="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls"
              xmlns:cbp="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls.ControlBarParts"
+             xmlns:dc="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls.ControlBarParts.DropControls"
              xmlns:vm="clr-namespace:EzTabs.ViewModel.MainControlsViewModels;assembly=EzTabs.ViewModel" 
              mc:Ignorable="d"
              Foreground="White"
@@ -40,7 +41,9 @@
                 <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="1">
-                <Button Style="{DynamicResource CommonButton}" x:Name="GoToSearchButton" 
+                <Button Style="{DynamicResource CommonButton}" 
+                        x:Name="GoToSearchButton" 
+                        Command="{Binding GoToSearchControlCommand}"
                         Content="Return to searching" 
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
@@ -157,8 +160,8 @@
                         </Grid>
                         <Grid Grid.Row="1">
                             <sc:SliderWithButtons CurrentValue="{Binding BitsPerMinute, Mode=TwoWay}"
-                                                   Minimum="0"
-                                                   Maximum="480"/>
+                                                  Minimum="0"
+                                                  Maximum="480"/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -228,6 +231,7 @@
                         <Button Style="{DynamicResource CommonButton}" 
                                 x:Name="AddTuningButton"
                                 Command="{Binding AddTuningCommand}"
+                                IsEnabled="{Binding AddVisibilitySwitch, UpdateSourceTrigger=PropertyChanged}"
                                 Content="Add Tuning"
                                 VerticalAlignment="Center"
                                 Margin="0,0,0,0"/>
@@ -235,6 +239,7 @@
                         <Button Style="{DynamicResource CommonButton}" 
                                 x:Name="EditTuningButton"
                                 Command="{Binding EditTuningCommand}"
+                                IsEnabled="{Binding EditRemoveVisibilitySwitch, UpdateSourceTrigger=PropertyChanged}"
                                 Content="Edit Tuning"
                                 VerticalAlignment="Center"
                                 Margin="0,100,0,0"/>
@@ -242,6 +247,7 @@
                         <Button Style="{DynamicResource CommonButton}" 
                                 x:Name="RemoveTuningButton"
                                 Command="{Binding RemoveTuningCommand}"
+                                IsEnabled="{Binding EditRemoveVisibilitySwitch, UpdateSourceTrigger=PropertyChanged}"
                                 Content="Remove Tuning"
                                 VerticalAlignment="Center"
                                 Margin="0,200,0,0"/>
@@ -279,7 +285,7 @@
             </Grid>
             <Grid Grid.Column="1" Grid.Row="3">
                 <Button Style="{DynamicResource CommonButton}" x:Name="CreateButton"
-                        Command="{Binding}"
+                        Command="{Binding CreateTabCommand}"
                         Content="Create Tablature"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"

@@ -4,26 +4,43 @@ using EzTabs.Model;
 using EzTabs.Data;
 using EzTabs.Services.RepoServices;
 using EzTabs.Model.Enums;
+using EzTabs.Services.NavigationServices;
 
 namespace EzTabs.Services.ModelServices
 {
     public class UserService
     {
         private RepoImplementation<User>? _userRepository;
-        public static User? SavedUser { get; private set; } 
+        private Task _initializeTask;
+
+        public static User SavedUser { get; private set; } = new User();
 
         public UserService()
         {
-            Task.Run(InitializeAsync);
+            _initializeTask = InitializeAsync(); 
         }
 
         private async Task InitializeAsync()
         {
-            _userRepository =  await RepoInitializeService.InitializeRepoAsync<User>();
+            _userRepository = await RepoInitializeService.InitializeRepoAsync<User>();
+        }
+
+        private async Task EnsureRepositoryInitialized()
+        {
+            if (_initializeTask != null)
+            {
+                await _initializeTask; 
+            }
+
+            if (_userRepository == null)
+            {
+                throw new InvalidOperationException("Repository is not initialized.");
+            }
         }
 
         public async Task<List<string>> RegisterUser(string name, string email, string password, string verificationCode)
         {
+            await EnsureRepositoryInitialized();
             if (_userRepository is null) throw new ArgumentNullException(nameof(_userRepository));
             List<string> errors = new();
             User newUser = new()
@@ -60,14 +77,16 @@ namespace EzTabs.Services.ModelServices
             if (SavedUser.VerificationCode == verificationCode)
             {
                 SavedUser.IsEmailVerified = true;
+                if (_userRepository is null) throw new ArgumentNullException(nameof(_userRepository));
                 await _userRepository.Update(SavedUser);
-                SavedUser = null;
                 return true;
             }
             return false;
         }
         public async Task<bool> LoginUser(User userToLogin)
         {
+            await EnsureRepositoryInitialized();
+            if (_userRepository is null) throw new ArgumentNullException(nameof(_userRepository));
             var allUsers = await _userRepository.GetAll();
             var foundedUser = allUsers.FirstOrDefault(u => u.Name == userToLogin.Name);
             if (foundedUser != null && foundedUser.Password == userToLogin.Password)

@@ -1,5 +1,5 @@
 ﻿using EzTabs.Services.NavigationServices;
-using EzTabs.ViewModel.MainControlsViewModels;
+using EzTabs.ViewModel.AuthControlsViewModels;
 using System.ComponentModel;
 
 namespace EzTabs.ViewModel
@@ -14,7 +14,7 @@ namespace EzTabs.ViewModel
         {
             _navigationService = NavigationService.Instance;
 
-            _navigationService.NavigateTo(new TabCreationControlViewModel());
+            _navigationService.NavigateTo(new LoginControlViewModel());
 
             _navigationService.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }

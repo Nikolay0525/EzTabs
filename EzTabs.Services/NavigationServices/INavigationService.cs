@@ -3,7 +3,7 @@
     public interface INavigationService
     {
         void NavigateTo(object viewModel);
-        object? CurrentViewModel { get; set; }
+        object CurrentViewModel { get; set; }
         event Action? CurrentViewModelChanged;
     }
 }

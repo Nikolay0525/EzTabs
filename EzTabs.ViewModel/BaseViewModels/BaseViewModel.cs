@@ -31,9 +31,9 @@ namespace EzTabs.ViewModel.BaseViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public void Validate()
+        public void Validate(IEnumerable<string>? SpecificProperties = null)
         {
-            _errors = ValidationService.Validate(this);
+            _errors = ValidationService.ValidateProperties(this, SpecificProperties);
             foreach (var error in _errors)
             {
                 OnErrorsChanged(error.Key);

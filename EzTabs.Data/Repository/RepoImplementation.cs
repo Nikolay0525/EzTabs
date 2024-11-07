@@ -25,6 +25,13 @@ namespace EzTabs.Data.Repository
 
             return new RepoImplementation<T>(context);
         }
+        
+        public static RepoImplementation<T> CreateRepoSync()
+        {
+            var context = new EzTabsContext();
+
+            return new RepoImplementation<T>(context);
+        }
 
         public async Task<IEnumerable<T>> GetAll()
         {

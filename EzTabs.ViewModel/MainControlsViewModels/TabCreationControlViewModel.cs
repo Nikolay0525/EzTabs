@@ -3,6 +3,10 @@ using EzTabs.Services.ModelServices;
 using EzTabs.ViewModel.BaseViewModels;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
+using EzTabs.Services.NavigationServices;
+using EzTabs.Model;
+using System.ComponentModel.DataAnnotations;
+using EzTabs.Services.ValidationServices.CustomAttributes;
 
 namespace EzTabs.ViewModel.MainControlsViewModels
 {
@@ -11,19 +15,38 @@ namespace EzTabs.ViewModel.MainControlsViewModels
         private UserService _userService;
         private TabService _tabService;
 
+        private bool _addVisibilitySwitch = true;
+        private bool _editRemoveVisibilitySwitch = false;
+        private string? _selectedItem;
         private string? _title;
         private string? _band;
         private string? _genre;
         private string? _key;
-        private int _bpm;
+        private int _bpm = 120;
         private string? _description;
-        private int _stringOrder;
-        private string? _stringNote;
-        private Dictionary<int, string> _tunings = new();
-
+        private int _stringOrder = 1;
+        private string? _stringNote = "e";
+        private ObservableCollection<Tuning> _tunings = new();
         private ObservableCollection<string> _listOfTunings = new();
+        public bool AddVisibilitySwitch
+        {
+            get => _addVisibilitySwitch;
+            set
+            {
+                _addVisibilitySwitch = value;
+                OnPropertyChanged(nameof(AddVisibilitySwitch));
+            }
+        }
+        public bool EditRemoveVisibilitySwitch
+        {
+            get => _editRemoveVisibilitySwitch;
+            set
+            {
+                _editRemoveVisibilitySwitch = value;
+                OnPropertyChanged(nameof(EditRemoveVisibilitySwitch));
+            }
+        }
 
-        private string? _selectedItem;
         public string? SelectedItem
         {
             get => _selectedItem;
@@ -35,6 +58,7 @@ namespace EzTabs.ViewModel.MainControlsViewModels
             }
         }
 
+        [Required(ErrorMessage = "Title is required")]
         public string? Title
         {
             get => _title;
@@ -44,6 +68,7 @@ namespace EzTabs.ViewModel.MainControlsViewModels
                 OnPropertyChanged(nameof(Title));
             }
         }
+        [Required(ErrorMessage = "Band is required")]
         public string? Band
         {
             get => _band;
@@ -53,6 +78,8 @@ namespace EzTabs.ViewModel.MainControlsViewModels
                 OnPropertyChanged(nameof(Band));
             }
         }
+        [Required(ErrorMessage = "Genre is required")]
+        [AllowedCharacters(@"^[a-zA-Z-]+$", ErrorMessage = "Only letters and \"-\" symbol can be written in genre")]
         public string? Genre
         {
             get => _genre;
@@ -62,6 +89,8 @@ namespace EzTabs.ViewModel.MainControlsViewModels
                 OnPropertyChanged(nameof(Genre));
             }
         }
+        [Required(ErrorMessage = "Key is required")]
+        [AllowedCharacters(@"^[a-zA-Z#1-7]+$", ErrorMessage = "Only letters of notes and \"#\" symbol can be written in Key")]
         public string? Key
         {
             get => _key;
@@ -92,7 +121,9 @@ namespace EzTabs.ViewModel.MainControlsViewModels
                 OnPropertyChanged(nameof(Description));
             }
         }
-        
+
+        [Required(ErrorMessage = "String Order is required")]
+        [AllowedCharacters(@"^[1-8]+$", ErrorMessage = "Only number 1-8 can be set as String Order")]
         public int StringOrder
         {
             get => _stringOrder;
@@ -100,9 +131,12 @@ namespace EzTabs.ViewModel.MainControlsViewModels
             {
                 _stringOrder = value;
                 OnPropertyChanged(nameof(StringOrder));
+                ManageButtonAccessibility();
             }
         }
-        
+
+        [Required(ErrorMessage = "String Note is required")]
+        [AllowedCharacters(@"^[cCdDeEfFgGaAbB#]+$", ErrorMessage = "Only notes letters and \"#\" symbol can be written in String Note")]
         public string? StringNote
         {
             get => _stringNote;
@@ -119,17 +153,42 @@ namespace EzTabs.ViewModel.MainControlsViewModels
             set => _listOfTunings = value;
         }
 
+        public ICommand GoToSearchControlCommand { get; }
+        public ICommand CreateTabCommand { get; }
         public ICommand AddTuningCommand { get; }
         public ICommand EditTuningCommand { get; }
         public ICommand RemoveTuningCommand { get; }
 
         public TabCreationControlViewModel() 
         {
+
+            GoToSearchControlCommand = new RelayCommand(GoToSearchControl);
+            CreateTabCommand = new RelayCommand(async () => await CreateTab());
             AddTuningCommand = new RelayCommand(AddTuning);
             EditTuningCommand = new RelayCommand(EditTuning);
             RemoveTuningCommand = new RelayCommand(RemoveTuning);
             _userService = new UserService();
             _tabService = new TabService();
+        }
+
+        private void GoToSearchControl()
+        {
+            NavigationService.Instance.NavigateTo(new SearchControlViewModel());
+        }
+
+        private void ManageButtonAccessibility()
+        {
+            if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
+            if(_tunings.FirstOrDefault(t => t.StringOrder == StringOrder) == null)
+            {
+                AddVisibilitySwitch = true;
+                EditRemoveVisibilitySwitch = false;
+            }
+            else 
+            {
+                AddVisibilitySwitch = false;
+                EditRemoveVisibilitySwitch = true;
+            }
         }
 
         private void OnSelecting()
@@ -146,22 +205,30 @@ namespace EzTabs.ViewModel.MainControlsViewModels
 
         private void AddTuning()
         {
+            List<string> SpecificProperties = new()
+            {
+                nameof(StringOrder),
+                nameof(StringNote)
+            };
+            Validate(SpecificProperties);
+            if (HasErrors) return;
             if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
             if (ListOfTunings is null) throw new ArgumentNullException(nameof(_tunings));
             if (StringNote is null) throw new ArgumentNullException(nameof(StringNote));
 
-            if (_tunings.ContainsKey(StringOrder))
+            if (_tunings.FirstOrDefault(t => t.StringOrder == StringOrder) != null)
             {
                 // add message
                 return;
             }
-            _tunings.Add(StringOrder, StringNote);
-            ListOfTunings.Clear();
-            foreach (var tuning in _tunings)
+            var newTuning = new Tuning
             {
-                ListOfTunings.Add($"{tuning.Key}: {tuning.Value}");
-                OnPropertyChanged(nameof(ListOfTunings));
-            }
+                StringOrder = this.StringOrder,
+                StringNote = this.StringNote
+            };
+            _tunings.Add(newTuning);
+            ListUpdater(_tunings);
+            ManageButtonAccessibility();
         }
 
         private void EditTuning()
@@ -170,15 +237,12 @@ namespace EzTabs.ViewModel.MainControlsViewModels
             if (ListOfTunings is null) throw new ArgumentNullException(nameof(_tunings));
             if (StringNote is null) throw new ArgumentNullException(nameof(StringNote));
 
-            if (_tunings.ContainsKey(StringOrder))
+            var editingTuning = _tunings.FirstOrDefault(t => t.StringOrder == StringOrder);
+
+            if (editingTuning != null)
             {
-                _tunings[StringOrder] = StringNote;
-                ListOfTunings.Clear();
-                foreach (var tuning in _tunings)
-                {
-                    ListOfTunings.Add($"{tuning.Key}: {tuning.Value}");
-                    OnPropertyChanged(nameof(ListOfTunings));
-                }
+                editingTuning.StringNote = StringNote;
+                ListUpdater(_tunings);
             } 
         }
 
@@ -187,11 +251,32 @@ namespace EzTabs.ViewModel.MainControlsViewModels
             if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
             if (ListOfTunings is null) throw new ArgumentNullException(nameof(_tunings));
 
-            _tunings.Remove(StringOrder);
-            ListOfTunings.Clear();
-            foreach (var tuning in _tunings)
+            var removingTuning = _tunings.FirstOrDefault(t => t.StringOrder == StringOrder);
+
+            if (removingTuning != null) 
             {
-                ListOfTunings.Add($"{tuning.Key}: {tuning.Value}");
+                _tunings.Remove(removingTuning);
+                ListUpdater(_tunings);
+            }
+            ManageButtonAccessibility();
+        }
+        
+        private async Task CreateTab()
+        {
+            Validate();
+            if (HasErrors) return;
+            if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
+            var _tuningsList = _tunings.ToList();
+            if (Title is null || Band is null || Genre is null || Key is null || Description is null) throw new ArgumentNullException("There are null reference in Title or Band or Genre or Key or Description properties");
+            await _tabService.CreateTab(UserService.SavedUser.Id, Title, Band, Genre, Key, BitsPerMinute, Description, _tuningsList);
+        }
+
+        private void ListUpdater(ObservableCollection<Tuning> tunings)
+        {
+            ListOfTunings.Clear();
+            foreach (var tuning in tunings.OrderBy(t => t.StringOrder))
+            {
+                ListOfTunings.Add($"{tuning.StringOrder}:{tuning.StringNote}");
                 OnPropertyChanged(nameof(ListOfTunings));
             }
         }

@@ -7,18 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+    <Folder Include="DataTests\RepositoryTests\" />
+    <Folder Include="ServicesTests\ValidationServicesTests\" />
+    <Folder Include="ServicesTests\NavigationServicesTests\" />
+    <Folder Include="ServicesTests\RepoServicesTests\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="NUnit" Version="4.2.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EzTabs.Data\EzTabs.Data.csproj" />
     <ProjectReference Include="..\EzTabs.Model\EzTabs.Model.csproj" />
     <ProjectReference Include="..\EzTabs.Services\EzTabs.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="SimpleControlsViewModels\" />
+    <ProjectReference Include="..\EzTabs.ViewModel\EzTabs.ViewModel.csproj" />
   </ItemGroup>
 
 </Project>

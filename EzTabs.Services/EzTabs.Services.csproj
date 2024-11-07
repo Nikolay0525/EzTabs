@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NUnit" Version="4.2.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\EzTabs.Data\EzTabs.Data.csproj" />
     <ProjectReference Include="..\EzTabs.Model\EzTabs.Model.csproj" />
   </ItemGroup>

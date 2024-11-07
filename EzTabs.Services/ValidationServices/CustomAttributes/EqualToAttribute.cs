@@ -23,14 +23,9 @@ namespace EzTabs.Services.ValidationServices.CustomAttributes
                 return ValidationResult.Success;
             }
 
-            if (value == null || comparisonValue == null)
+            if (value == null || comparisonValue == null || !value.Equals(comparisonValue))
             {
-                return new ValidationResult(ErrorMessage ?? $"{validationContext.DisplayName} must match {_comparisonProperty}.");
-            }
-
-            if (!value.Equals(comparisonValue))
-            {
-                return new ValidationResult(ErrorMessage ?? $"{validationContext.DisplayName} must match {_comparisonProperty}.");
+                return new ValidationResult(ErrorMessage);
             }
 
             return ValidationResult.Success;

@@ -22,54 +22,60 @@
     </UserControl.DataContext>
     <Grid>
 
-        <TextBlock x:Name="UsernameTextBlock"
-                   FontSize="{DynamicResource SmallerFontSize}"
-                   Width="270"
-                   Text="Username"
-                   TextAlignment="Left"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Margin="0,0,0,175"/>
+        <TextBlock 
+            x:Name="UsernameTextBlock"
+            FontSize="{DynamicResource SmallerFontSize}"
+            Width="270"
+            Text="Username"
+            TextAlignment="Left"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Margin="0,0,0,225"/>
 
-        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="UsernameTextBox" 
-                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                 Width="270" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center" 
-                 Margin="0,0,0,100"/>
+        <TextBox 
+            Style="{DynamicResource CommonTextBox}" x:Name="UsernameTextBox" 
+            Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+            Width="270" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center" 
+            Margin="0,0,0,150"/>
 
-        <TextBlock x:Name="PasswordTextBlock"
-                   FontSize="{DynamicResource SmallerFontSize}"
-                   Width="270"
-                   Text="Password"
-                   TextAlignment="Left"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Margin="0,0,0,25"/>
+        <TextBlock 
+            x:Name="PasswordTextBlock"
+            FontSize="{DynamicResource SmallerFontSize}"
+            Width="270"
+            Text="Password"
+            TextAlignment="Left"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Margin="0,0,0,75"/>
 
-        <TextBox Style="{DynamicResource CommonTextBox}" x:Name="PasswordTextBox" 
-                 Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
-                 Width="270" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center" 
-                 Margin="0,0,0,-50"/>
+        <TextBox 
+            Style="{DynamicResource CommonTextBox}" x:Name="PasswordTextBox" 
+            Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+            Width="270" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center" 
+            Margin="0,0,0,0"/>
 
-        <Button Style="{DynamicResource CommonButton}" x:Name="LoginButton" 
-                Command="{Binding LoginCommand}"
-                Height="39.5"
-                Width="270"
-                Content="Login"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Margin="0,0,0,-150"/>
+        <Button 
+            Style="{DynamicResource CommonButton}" x:Name="LoginButton" 
+            Command="{Binding LoginCommand}"
+            Height="39.5"
+            Width="270"
+            Content="Login"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Margin="0,125,0,0"/>
 
-        <Button Style="{DynamicResource CommonButton}" x:Name="SignUpButton"
-                Command="{Binding GoToRegistrationCommand}"
-                Width="270"
-                Content="Sign Up"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Margin="0,0,0,-250"/>
+        <Button 
+            Style="{DynamicResource CommonButton}" x:Name="SignUpButton"
+            Command="{Binding GoToRegistrationCommand}"
+            Width="270"
+            Content="Sign Up"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Margin="0,225,0,0"/>
 
     </Grid>
 </UserControl>

@@ -5,6 +5,8 @@ using EzTabs.Services.NavigationServices;
 using EzTabs.ViewModel.BaseViewModels;
 using EzTabs.ViewModel.MainControlsViewModels;
 using System.Windows.Input;
+using System.ComponentModel.DataAnnotations;
+using EzTabs.Services.ValidationServices.CustomAttributes;
 
 namespace EzTabs.ViewModel.AuthControlsViewModels
 {
@@ -12,10 +14,12 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
     {
         public UserService _userService;
 
-        private string? _username;
-        private string? _password;
+        private string _username;
+        private string _password;
 
-        public string? Username
+        [Required(ErrorMessage ="Username is required")]
+        [MinLength(2,ErrorMessage ="Username is too short, username is atleast 2 symbols length")]
+        public string Username
         {
             get => _username;
             set
@@ -25,7 +29,9 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             }
         }
 
-        public string? Password
+        [Required(ErrorMessage = "Password is required")]
+        [MinLength(2, ErrorMessage = "Password is too short, username is atleast 4 symbols length")]
+        public string Password
         {
             get => _password;
             set
@@ -47,6 +53,8 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
 
         private async Task Login()
         {
+            Validate();
+            if (HasErrors) return;
             var userToLogin = new User
             {
                 Name = Username,

@@ -1,5 +1,6 @@
 ﻿using EzTabs.Data.Repository;
 using EzTabs.Model;
+using EzTabs.Services.ModelServices.BaseServices;
 using EzTabs.Services.RepoServices;
 using System;
 using System.Collections.Generic;
@@ -10,33 +11,19 @@ using System.Threading.Tasks;
 
 namespace EzTabs.Services.ModelServices
 {
-    public class TabService
+    public class TabService : BaseService
     {
         private RepoImplementation<Tab>? _tabRepository;
         public static Tab? SavedTab { get; private set; }
-        private Task _initializeTask;
 
         public TabService()
         {
-            _initializeTask = Task.Run(InitializeAsync);
+            _initializeTask = Task.Run(async () =>
+            {
+                _tabRepository = await InitializeRepoAsync<Tab>();
+            });
         }
 
-        public async Task InitializeAsync()
-        {
-            _tabRepository = await RepoInitializeService.InitializeRepoAsync<Tab>();
-        }
-        private async Task EnsureRepositoryInitialized()
-        {
-            if (_initializeTask != null)
-            {
-                await _initializeTask;
-            }
-
-            if (_tabRepository == null)
-            {
-                throw new InvalidOperationException("Repository is not initialized.");
-            }
-        }
 
         public async Task<bool> CreateTab(Guid authorId, string title, string band, string genre, string key, int bpm, string description, List<Tuning> tunings)
         {

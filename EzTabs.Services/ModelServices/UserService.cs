@@ -5,37 +5,22 @@ using EzTabs.Data;
 using EzTabs.Services.RepoServices;
 using EzTabs.Model.Enums;
 using EzTabs.Services.NavigationServices;
+using EzTabs.Services.ModelServices.BaseServices;
 
 namespace EzTabs.Services.ModelServices
 {
-    public class UserService
+    public class UserService : BaseService
     {
         private RepoImplementation<User>? _userRepository;
-        private Task _initializeTask;
 
         public static User SavedUser { get; private set; } = new User();
 
         public UserService()
         {
-            _initializeTask = InitializeAsync(); 
-        }
-
-        private async Task InitializeAsync()
-        {
-            _userRepository = await RepoInitializeService.InitializeRepoAsync<User>();
-        }
-
-        private async Task EnsureRepositoryInitialized()
-        {
-            if (_initializeTask != null)
+            _initializeTask = Task.Run(async () =>
             {
-                await _initializeTask; 
-            }
-
-            if (_userRepository == null)
-            {
-                throw new InvalidOperationException("Repository is not initialized.");
-            }
+                _userRepository = await InitializeRepoAsync<User>();
+            });
         }
 
         public async Task<List<string>> RegisterUser(string name, string email, string password, string verificationCode)
@@ -70,6 +55,7 @@ namespace EzTabs.Services.ModelServices
 
         public async Task<bool> VerificateUser(string verificationCode)
         {
+            await EnsureRepositoryInitialized();
             if (SavedUser == null || verificationCode == null) 
             {
                 throw new NullReferenceException();

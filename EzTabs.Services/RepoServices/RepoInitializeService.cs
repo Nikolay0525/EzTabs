@@ -10,10 +10,9 @@ namespace EzTabs.Services.RepoServices
 {
     public static class RepoInitializeService
     {
-        public static async Task<RepoImplementation<T>> InitializeRepoAsync<T>(RepoImplementation<T>? userRepository = null) where T : class
+        public static async Task<RepoImplementation<T>> InitializeRepoAsync<T>() where T : class
         {
-            if (userRepository is null) return await RepoImplementation<T>.CreateRepoAsync();
-            else return userRepository;
+            return await RepoImplementation<T>.CreateRepoAsync();
         }
     }
 }

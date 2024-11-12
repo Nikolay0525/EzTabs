@@ -1,37 +1,25 @@
 ﻿using EzTabs.Data.Repository;
 using EzTabs.Model;
 using EzTabs.Services.ModelServices.BaseServices;
-using EzTabs.Services.RepoServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EzTabs.Services.ModelServices
 {
-    public class TabService : BaseService
+    public class TabService : BaseService<Tab>
     {
-        private RepoImplementation<Tab>? _tabRepository;
         public static Tab? SavedTab { get; private set; }
 
         public TabService()
         {
-            _initializeTask = Task.Run(async () =>
-            {
-                _tabRepository = await InitializeRepoAsync<Tab>();
-            });
+            _initializeTask = Task.Run(InitializeRepoAsync);
         }
 
-
-        public async Task<bool> CreateTab(Guid authorId, string title, string band, string genre, string key, int bpm, string description, List<Tuning> tunings)
+        public async Task<Tab?> CreateTab(Guid authorId, string title, string band, string genre, string key, int bpm, string description)
         {
             await EnsureRepositoryInitialized();
 
-            if (_tabRepository is null) throw new ArgumentNullException(nameof(_tabRepository) + "Haven't loaded in time");
-            var allTabs = await _tabRepository.GetAll();
-            if (allTabs.FirstOrDefault(t => t.AuthorId == authorId && t.Title == title && t.Band == band) != null) return false;
+            if (_repository is null) throw new ArgumentNullException(nameof(_repository) + "Haven't loaded in time");
+            var allTabs = await _repository.GetAll();
+            if (allTabs.FirstOrDefault(t => t.AuthorId == authorId && t.Title == title && t.Band == band && t.Genre == genre) != null) return null;
             var newTab = new Tab
             {
                 AuthorId = authorId,
@@ -42,10 +30,9 @@ namespace EzTabs.Services.ModelServices
                 BitsPerMinute = bpm,
                 Description = description
             };
-
-
-            await _tabRepository.Add(newTab);
-            return true;
+            await _repository.Add(newTab);
+            SavedTab = newTab;
+            return newTab;
         }
     }
 }

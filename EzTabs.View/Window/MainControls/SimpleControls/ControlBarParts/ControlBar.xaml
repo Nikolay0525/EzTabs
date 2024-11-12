@@ -37,6 +37,7 @@
                 <Border CornerRadius="5" Background="White">
                     <TextBlock Style="{DynamicResource CommonTextBlock}"
                                x:Name="UsernameTextBlock"
+                               FontSize="{DynamicResource CommonFontSize}"
                                Foreground="Black"
                                TextAlignment="Center"
                                Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"

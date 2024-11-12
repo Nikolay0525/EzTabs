@@ -1,32 +1,24 @@
-﻿using EzTabs.Services.EmailServices;
-using EzTabs.Data.Repository;
+﻿using EzTabs.Data.Repository;
 using EzTabs.Model;
-using EzTabs.Data;
-using EzTabs.Services.RepoServices;
-using EzTabs.Model.Enums;
-using EzTabs.Services.NavigationServices;
+using EzTabs.Services.EmailServices;
 using EzTabs.Services.ModelServices.BaseServices;
 
 namespace EzTabs.Services.ModelServices
 {
-    public class UserService : BaseService
+    public class UserService : BaseService<User>
     {
-        private RepoImplementation<User>? _userRepository;
-
         public static User SavedUser { get; private set; } = new User();
 
         public UserService()
         {
-            _initializeTask = Task.Run(async () =>
-            {
-                _userRepository = await InitializeRepoAsync<User>();
-            });
+            _initializeTask = Task.Run(InitializeRepoAsync);
         }
 
         public async Task<List<string>> RegisterUser(string name, string email, string password, string verificationCode)
         {
             await EnsureRepositoryInitialized();
-            if (_userRepository is null) throw new ArgumentNullException(nameof(_userRepository));
+
+            if (_repository is null) throw new ArgumentNullException(nameof(_repository));
             List<string> errors = new();
             User newUser = new()
             {
@@ -36,7 +28,7 @@ namespace EzTabs.Services.ModelServices
                 VerificationCode = verificationCode
             };
             if (name is null || email is null || password is null) throw new NullReferenceException("Some of user data is missing");
-            var users = await _userRepository.GetAll();
+            var users = await _repository.GetAll();
             if (users.FirstOrDefault(u => u.Name == newUser.Name) != null) 
             {
                 errors.Add("Username: Such name already used");
@@ -47,15 +39,16 @@ namespace EzTabs.Services.ModelServices
             }
             if (errors.Count != 0) return errors;
             newUser.Role = users.Any() ? Model.Enums.UserRole.Admin : Model.Enums.UserRole.User;
-            await _userRepository.Add(newUser);
+            await _repository.Add(newUser);
             SavedUser = newUser;
-            EmailService.SendVerificationEmail(email, verificationCode);
+            await Task.Run(() => EmailService.SendVerificationEmail(email, verificationCode));
             return errors;
         }
 
         public async Task<bool> VerificateUser(string verificationCode)
         {
             await EnsureRepositoryInitialized();
+
             if (SavedUser == null || verificationCode == null) 
             {
                 throw new NullReferenceException();
@@ -63,8 +56,8 @@ namespace EzTabs.Services.ModelServices
             if (SavedUser.VerificationCode == verificationCode)
             {
                 SavedUser.IsEmailVerified = true;
-                if (_userRepository is null) throw new ArgumentNullException(nameof(_userRepository));
-                await _userRepository.Update(SavedUser);
+                if (_repository is null) throw new ArgumentNullException(nameof(_repository));
+                await _repository.Update(SavedUser);
                 return true;
             }
             return false;
@@ -72,8 +65,9 @@ namespace EzTabs.Services.ModelServices
         public async Task<bool> LoginUser(User userToLogin)
         {
             await EnsureRepositoryInitialized();
-            if (_userRepository is null) throw new ArgumentNullException(nameof(_userRepository));
-            var allUsers = await _userRepository.GetAll();
+
+            if (_repository is null) throw new ArgumentNullException(nameof(_repository));
+            var allUsers = await _repository.GetAll();
             var foundedUser = allUsers.FirstOrDefault(u => u.Name == userToLogin.Name);
             if (foundedUser != null && foundedUser.Password == userToLogin.Password)
             {

@@ -1,14 +1,15 @@
 ﻿using EzTabs.Services.NavigationServices;
+using EzTabs.Services.WindowServices;
 using EzTabs.ViewModel.AuthControlsViewModels;
-using System.ComponentModel;
+using EzTabs.ViewModel.BaseViewModels;
 
 namespace EzTabs.ViewModel
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : BaseViewModel
     {
         private readonly NavigationService _navigationService;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
+        private readonly WindowService _windowService;
+        private double _blurRadius = 0;
 
         public MainWindowViewModel()
         {
@@ -17,18 +18,36 @@ namespace EzTabs.ViewModel
             _navigationService.NavigateTo(new LoginControlViewModel());
 
             _navigationService.CurrentViewModelChanged += OnCurrentViewModelChanged;
+
+            _windowService = WindowService.Instance;
+
+            _windowService.SomethingLoadingChanged += OnSomethingLoadingChanged;
         }
 
         public object CurrentViewModel => _navigationService.CurrentViewModel;
+
+        public bool SomethingLoading => _windowService.SomethingLoading;
+
+        public double BlurRadius
+        {
+            get => _blurRadius;
+            set
+            {
+                _blurRadius = value;
+                OnPropertyChanged(nameof(BlurRadius));
+            }
+        }
+
 
         private void OnCurrentViewModelChanged()
         {
             OnPropertyChanged(nameof(CurrentViewModel));
         }
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        private void OnSomethingLoadingChanged()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            OnPropertyChanged(nameof(SomethingLoading));
+            BlurRadius = SomethingLoading ? 40 : 0;
         }
     }
 }

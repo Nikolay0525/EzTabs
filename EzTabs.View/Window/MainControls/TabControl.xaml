@@ -7,8 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="540" d:DesignWidth="960">
     <Grid>
-        <Popup Height="100" Width="100" IsOpen="True">
-            <TextBox Text="12141234"/>
-        </Popup>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
     </Grid>
 </UserControl>

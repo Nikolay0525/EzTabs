@@ -37,7 +37,7 @@
             Style="{DynamicResource CommonTextBox}" x:Name="VerificationCodeTextBox"
             Text="{Binding VerificationCode, UpdateSourceTrigger=PropertyChanged}"
             Width="525" 
-            MaxLength="32"
+            MaxLength="36"
             HorizontalAlignment="Center" 
             VerticalAlignment="Center" 
             Margin="0,0,0,25"/>

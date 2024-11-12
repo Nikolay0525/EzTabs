@@ -11,11 +11,13 @@
         xmlns:vmmc="clr-namespace:EzTabs.ViewModel.MainControlsViewModels;assembly=EzTabs.ViewModel"
         xmlns:conv="clr-namespace:EzTabs.View.Converters"
         xmlns:services="clr-namespace:EzTabs.Services.NavigationServices;assembly=EzTabs.Services"
+        xmlns:sc="clr-namespace:EzTabs.View.Window.MainControls.SimpleControls"
+        xmlns:ct="clr-namespace:EzTabs.View.Resources.Styles.CustomTypes"
         mc:Ignorable="d"
         FontFamily="Inter"
-        FontSize="{DynamicResource TextCommonFontSize}"
+        FontSize="{DynamicResource CommonFontSize}"
         MinHeight="540" Height="540" MinWidth="960" Width="960"
-        Background="#93B5C6">
+        Background="Transparent">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type vmac:LoginControlViewModel}">
@@ -34,8 +36,16 @@
             <localmc:SearchControl />
         </DataTemplate>
         
+        <DataTemplate DataType="{x:Type vmmc:TabControlViewModel}">
+            <localmc:TabControl />
+        </DataTemplate>
+        
         <DataTemplate DataType="{x:Type vmmc:TabCreationControlViewModel}">
             <localmc:TabCreationControl />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmmc:TabEditingControlViewModel}">
+            <localmc:TabEditingControl />
         </DataTemplate>
     </Window.Resources>
 
@@ -43,6 +53,14 @@
         <vm:MainWindowViewModel />
     </Window.DataContext>
     <Grid>
-        <ContentControl x:Name="ViewContentControl" Content="{Binding CurrentViewModel}" />
+        <Grid>
+            <Grid.Effect>
+                <BlurEffect Radius="{Binding BlurRadius, UpdateSourceTrigger=PropertyChanged}" KernelType="Gaussian"/>
+            </Grid.Effect>
+            <ContentControl x:Name="ViewContentControl" Content="{Binding CurrentViewModel}" />
+        </Grid>
+        <Grid>
+            <ct:LoadingCircle Style="{DynamicResource LoadingControlStyle}" IsLoading="{Binding SomethingLoading, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
     </Grid>
 </Window>

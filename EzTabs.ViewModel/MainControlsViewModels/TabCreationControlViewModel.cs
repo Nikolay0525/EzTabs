@@ -14,6 +14,7 @@ namespace EzTabs.ViewModel.MainControlsViewModels
     {
         private UserService _userService;
         private TabService _tabService;
+        private TuningService _tuningService;
 
         private bool _addVisibilitySwitch = true;
         private bool _editRemoveVisibilitySwitch = false;
@@ -159,16 +160,15 @@ namespace EzTabs.ViewModel.MainControlsViewModels
         public ICommand EditTuningCommand { get; }
         public ICommand RemoveTuningCommand { get; }
 
+
+
         public TabCreationControlViewModel() 
         {
-
             GoToSearchControlCommand = new RelayCommand(GoToSearchControl);
             CreateTabCommand = new RelayCommand(async () => await CreateTab());
             AddTuningCommand = new RelayCommand(AddTuning);
             EditTuningCommand = new RelayCommand(EditTuning);
             RemoveTuningCommand = new RelayCommand(RemoveTuning);
-            _userService = new UserService();
-            _tabService = new TabService();
         }
 
         private void GoToSearchControl()
@@ -260,16 +260,6 @@ namespace EzTabs.ViewModel.MainControlsViewModels
             }
             ManageButtonAccessibility();
         }
-        
-        private async Task CreateTab()
-        {
-            Validate();
-            if (HasErrors) return;
-            if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
-            var _tuningsList = _tunings.ToList();
-            if (Title is null || Band is null || Genre is null || Key is null || Description is null) throw new ArgumentNullException("There are null reference in Title or Band or Genre or Key or Description properties");
-            await _tabService.CreateTab(UserService.SavedUser.Id, Title, Band, Genre, Key, BitsPerMinute, Description, _tuningsList);
-        }
 
         private void ListUpdater(ObservableCollection<Tuning> tunings)
         {
@@ -279,6 +269,24 @@ namespace EzTabs.ViewModel.MainControlsViewModels
                 ListOfTunings.Add($"{tuning.StringOrder}:{tuning.StringNote}");
                 OnPropertyChanged(nameof(ListOfTunings));
             }
+        }
+        
+        private async Task CreateTab()
+        {
+            Validate();
+            if (HasErrors) return;
+            if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
+            var tuningsList = _tunings.ToList();
+            if (Title is null || Band is null || Genre is null || Key is null || Description is null) throw new ArgumentNullException("There are null reference in Title or Band or Genre or Key or Description properties");
+            Tab? createdTab = await _tabService.CreateTab(UserService.SavedUser.Id, Title, Band, Genre, Key, BitsPerMinute, Description);
+            #region validation
+            if (createdTab is null)
+            {
+                OnShowMessage("Validation Error", "You can't create your own two absolute same tablature, change Title, Band, or Genre");
+                return;
+            }
+            #endregion
+            await _tuningService.CreateTuning(createdTab, tuningsList);
         }
     }
 }

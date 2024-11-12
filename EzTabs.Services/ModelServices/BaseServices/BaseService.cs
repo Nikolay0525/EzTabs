@@ -1,24 +1,15 @@
 ﻿using EzTabs.Data.Repository;
-using EzTabs.Model;
-using EzTabs.Services.RepoServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EzTabs.Services.ModelServices.BaseServices
 {
-    public abstract class BaseService
+    public abstract class BaseService<T> where T : class
     {
         protected Task _initializeTask;
-        protected object? _repository;
+        protected RepoImplementation<T>? _repository;
         protected BaseService(){}
-
-        protected async Task<RepoImplementation<T>> InitializeRepoAsync<T>() where T : class
+        protected async Task InitializeRepoAsync()
         {
-            _repository = await RepoInitializeService.InitializeRepoAsync<T>();
-            return await RepoInitializeService.InitializeRepoAsync<T>();
+            _repository = await RepoImplementation<T>.CreateRepoAsync();
         }
 
         protected async Task EnsureRepositoryInitialized()

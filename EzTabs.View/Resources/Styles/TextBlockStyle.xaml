@@ -5,5 +5,8 @@
         <Setter Property="TextWrapping" Value="NoWrap"/>
         <Setter Property="TextTrimming" Value="None"/>
         <Setter Property="Padding" Value="4"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontFamily" Value="{DynamicResource CommonFontFamily}"/>
+        <Setter Property="FontSize" Value="{DynamicResource SmallerFontSize}"/>
     </Style>
 </ResourceDictionary>

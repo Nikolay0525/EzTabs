@@ -7,6 +7,7 @@ using EzTabs.ViewModel.MainControlsViewModels;
 using System.Windows.Input;
 using System.ComponentModel.DataAnnotations;
 using EzTabs.Services.ValidationServices.CustomAttributes;
+using EzTabs.Services.WindowServices;
 
 namespace EzTabs.ViewModel.AuthControlsViewModels
 {
@@ -49,12 +50,14 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             LoginCommand = new RelayCommand(async () => await Login());
             GoToRegistrationCommand = new RelayCommand(GoToRegistration);
             _userService = new UserService();
+
         }
 
         private async Task Login()
         {
             Validate();
             if (HasErrors) return;
+            WindowService.Instance.SomethingLoading = true;
             var userToLogin = new User
             {
                 Name = Username,
@@ -64,8 +67,11 @@ namespace EzTabs.ViewModel.AuthControlsViewModels
             if (await _userService.LoginUser(userToLogin))
             {
                 NavigationService.Instance.NavigateTo(new SearchControlViewModel());
+                WindowService.Instance.SomethingLoading = false;
+                return;
             }
-            else { OnShowMessage("Validation error", "User with such name and password not found"); }
+            WindowService.Instance.SomethingLoading = false;
+            OnShowMessage("Validation error", "User with such name and password not found");
         }
 
         private void GoToRegistration()

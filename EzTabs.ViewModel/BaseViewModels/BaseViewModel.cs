@@ -11,9 +11,8 @@ namespace EzTabs.ViewModel.BaseViewModels
     public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
         private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
-
         public bool HasErrors => _errors.Count > 0;
-
+        
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
         public event Action<string, string>? ShowMessage;

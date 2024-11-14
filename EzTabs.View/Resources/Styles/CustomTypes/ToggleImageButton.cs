@@ -2,7 +2,7 @@
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
-namespace EzTabs.View.Resources.Styles.CustomTypes
+namespace EzTabs.Presentation.Resources.Styles.CustomTypes
 {
     public class ToggleImageButton : ToggleButton
     {

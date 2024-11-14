@@ -1,4 +1,4 @@
-﻿using EzTabs.View.Window.MainControls.SimpleControls;
+﻿using EzTabs.Presentation.Views.MainControls.SimpleControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace EzTabs.View.Resources.Styles.CustomTypes
+namespace EzTabs.Presentation.Resources.Styles.CustomTypes
 {
     public class LoadingCircle : Control
     {

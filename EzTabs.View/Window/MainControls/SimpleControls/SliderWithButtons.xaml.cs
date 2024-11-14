@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EzTabs.View.Window.MainControls.SimpleControls
+namespace EzTabs.Presentation.Views.MainControls.SimpleControls
 {
     public partial class SliderWithButtons : UserControl
     {

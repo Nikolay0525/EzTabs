@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EzTabs.View.Window.MainControls
+namespace EzTabs.Presentation.Views.MainControls
 {
     /// <summary>
     /// Interaction logic for TabEditingControl.xaml

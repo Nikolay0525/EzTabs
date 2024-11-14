@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows;
 
-namespace EzTabs.View.Window.MainControls
+namespace EzTabs.Presentation.Views.MainControls
 {
     /// <summary>
     /// Interaction logic for TabCreationControl.xaml

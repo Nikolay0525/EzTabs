@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace EzTabs.View.Window.MainControls.SimpleControls.ControlBarParts.DropControls
+namespace EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls
 {
     /// <summary>
     /// Interaction logic for MenuDropControl.xaml

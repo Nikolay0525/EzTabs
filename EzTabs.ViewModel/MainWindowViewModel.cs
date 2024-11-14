@@ -1,4 +1,4 @@
-﻿using EzTabs.Services.NavigationServices;
+﻿using EzTabs.NavigationServices;
 using EzTabs.Services.WindowServices;
 using EzTabs.ViewModel.AuthControlsViewModels;
 using EzTabs.ViewModel.BaseViewModels;

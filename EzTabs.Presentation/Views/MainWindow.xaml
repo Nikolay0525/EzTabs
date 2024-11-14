@@ -1,0 +1,61 @@
+﻿<Window 
+    x:Class="EzTabs.Presentation.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:EzTabs.Presentation.Views" 
+    xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels"
+    xmlns:vac="clr-namespace:EzTabs.Presentation.Views.AuthControls" 
+    xmlns:vmc="clr-namespace:EzTabs.Presentation.Views.MainControls" 
+    xmlns:vmac="clr-namespace:EzTabs.Presentation.ViewModels.AuthControlsViewModels"
+    xmlns:vmmc="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels"
+    xmlns:ct="clr-namespace:EzTabs.Presentation.Resources.Styles.CustomTypes" 
+    d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
+    mc:Ignorable="d"
+    Title="EzTabs"
+    MinHeight="540" Height="540" MinWidth="960" Width="960"
+    Background="Transparent">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vmac:LoginControlViewModel}">
+            <vac:LoginControl />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmac:RegistrationControlViewModel}">
+            <vac:RegistrationControl/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmac:VerificationControlViewModel}">
+            <vac:VerificationControl />
+        </DataTemplate>
+
+
+        <DataTemplate DataType="{x:Type vmmc:SearchControlViewModel}">
+            <vmc:SearchControl />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmmc:TabControlViewModel}">
+            <vmc:TabControl />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmmc:TabCreationControlViewModel}">
+            <vmc:TabCreationControl />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmmc:TabEditingControlViewModel}">
+            <vmc:TabEditingControl />
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid>
+            <Grid.Effect>
+                <BlurEffect Radius="{Binding BlurRadius, UpdateSourceTrigger=PropertyChanged}" KernelType="Gaussian"/>
+            </Grid.Effect>
+            <ContentControl x:Name="ViewContentControl" Content="{Binding CurrentViewModel}" />
+        </Grid>
+        <Grid>
+            <ct:LoadingCircle Style="{DynamicResource LoadingControlStyle}" IsLoading="{Binding SomethingLoading, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+    </Grid>
+</Window>

@@ -21,9 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EzTabs.Data\EzTabs.Data.csproj" />
-    <ProjectReference Include="..\EzTabs.Model\EzTabs.Model.csproj" />
-    <ProjectReference Include="..\EzTabs.Services\EzTabs.Services.csproj" />
-    <ProjectReference Include="..\EzTabs.ViewModel\EzTabs.ViewModel.csproj" />
   </ItemGroup>
 
 </Project>

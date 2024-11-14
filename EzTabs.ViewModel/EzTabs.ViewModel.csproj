@@ -13,11 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EzTabs.Model\EzTabs.Model.csproj" />
-    <ProjectReference Include="..\EzTabs.Services\EzTabs.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="SimpleControlsViewModels\" />
   </ItemGroup>
 

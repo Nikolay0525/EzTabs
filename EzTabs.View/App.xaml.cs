@@ -1,7 +1,7 @@
 ﻿using EzTabs.Services.ModelServices;
 using EzTabs.Services.NavigationServices;
-using EzTabs.View.Window;
-using EzTabs.View.Window.AuthControls;
+using EzTabs.Presentation.Window;
+using EzTabs.Presentation.Views.AuthControls;
 using EzTabs.ViewModel.AuthControlsViewModels;
 using EzTabs.ViewModel.ViewModelHelper;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Windows;
 
-namespace EzTabs.View;
+namespace EzTabs.Presentation;
 
 public partial class App : Application
 {
@@ -34,7 +34,7 @@ public partial class App : Application
     {
         await AppHost!.StartAsync();
 
-        var startupForm = AppHost.Services.GetRequiredService<EzTabs.View.Window.MainWindow>();
+        var startupForm = AppHost.Services.GetRequiredService<EzTabs.Presentation.Views.MainWindow>();
         startupForm.Show();
 
         base.OnStartup(e);

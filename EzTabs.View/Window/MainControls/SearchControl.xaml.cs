@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using EzTabs.ViewModel.MainControlsViewModels;
 
-namespace EzTabs.View.Window.MainControls
+namespace EzTabs.Presentation.Views.MainControls
 {
     /// <summary>
     /// Interaction logic for SearchControl.xaml

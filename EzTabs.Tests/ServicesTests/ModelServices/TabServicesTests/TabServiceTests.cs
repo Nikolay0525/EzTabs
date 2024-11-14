@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using EzTabs.Data.Repository;
 using EzTabs.Services.RepoServices;
+using EzTabs.Data.Domain;
 
 namespace EzTabs.Tests
 {

@@ -1,4 +1,5 @@
-﻿using EzTabs.Data.Repository;
+﻿using EzTabs.Data.Domain;
+using EzTabs.Data.Repository;
 using EzTabs.Model;
 using EzTabs.Services.EmailServices;
 using EzTabs.Services.ModelServices.BaseServices;

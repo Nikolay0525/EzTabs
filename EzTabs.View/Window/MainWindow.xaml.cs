@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 using EzTabs.Services.NavigationServices;
 using EzTabs.ViewModel.MainControlsViewModels;
 
-namespace EzTabs.View.Window
+namespace EzTabs.Presentation.Window
 {
     public partial class MainWindow : System.Windows.Window
     {

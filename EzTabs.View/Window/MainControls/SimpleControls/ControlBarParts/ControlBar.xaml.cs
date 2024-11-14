@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace EzTabs.View.Window.MainControls.SimpleControls.ControlBarParts
+namespace EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts
 {
     public partial class ControlBar : UserControl
     {

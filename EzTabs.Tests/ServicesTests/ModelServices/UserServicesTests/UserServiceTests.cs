@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
+using EzTabs.Data.Domain;
 
 namespace EzTabs.Tests
 {

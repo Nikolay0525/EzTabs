@@ -1,0 +1,315 @@
+﻿<UserControl 
+    x:Class="EzTabs.Presentation.Views.MainControls.TabCreationControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls"
+    xmlns:sc="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls"
+    xmlns:cbp="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts"
+    xmlns:dc="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls"
+    xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels" 
+    mc:Ignorable="d"
+    Foreground="White"
+    FontFamily="{DynamicResource CommonFontFamily}"
+    FontWeight="{DynamicResource CommonFontWeight}"
+    FontSize="{DynamicResource CommonFontSize}"
+    d:DesignHeight="540" d:DesignWidth="960"
+    Background="#2e2e2e">
+
+    <UserControl.Resources>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="300"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1">
+                <Button 
+                    Style="{DynamicResource CommonButton}" 
+                    x:Name="GoToSearchButton" 
+                    Command="{Binding GoToSearchControlCommand}"
+                    Content="Return to searching" 
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                        />
+            </Grid>
+            <Grid Grid.Column="2">
+                <TextBlock x:Name="TabCreationTextBlock"
+                           Text="Tab Creation"
+                           TextAlignment="Center"
+                           VerticalAlignment="Center"
+                           />
+            </Grid>
+            <Grid Grid.Column="3">
+                <cbp:ControlBar/>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="225*"/>
+                    <RowDefinition Height="75*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+
+                    <TextBlock 
+                        x:Name="TitleTextBlock"
+                        FontSize="{DynamicResource SmallerFontSize}"
+                        Text="Title"
+                        TextAlignment="Left"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Margin="0,0,0,190"/>
+
+                    <TextBox 
+                        Style="{DynamicResource CommonTextBox}" 
+                        x:Name="TitleTextBox"
+                        Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Margin="0,0,0,115"/>
+
+                    <TextBlock 
+                        x:Name="BandTextBlock"
+                        Text="Band"
+                        FontSize="{DynamicResource SmallerFontSize}"
+                        TextAlignment="Left"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Margin="0,0,0,40"/>
+
+                    <TextBox 
+                        Style="{DynamicResource CommonTextBox}" 
+                        x:Name="BandTextBox"
+                        Text="{Binding Band, UpdateSourceTrigger=PropertyChanged}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Margin="0,35,0,0"/>
+
+                    <TextBlock 
+                        x:Name="GenreTextBlock"
+                        Text="Genre"
+                        FontSize="{DynamicResource SmallerFontSize}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Margin="0,110,0,0"/>
+
+                    <TextBox 
+                        Style="{DynamicResource CommonTextBox}" 
+                        x:Name="GenreTextBox"
+                        Text="{Binding Genre, UpdateSourceTrigger=PropertyChanged}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Margin="0,185,0,0"/>
+                </Grid>
+
+                <Grid Grid.Column="1" Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+
+
+                    <Grid Grid.Column="0">
+                        <TextBlock 
+                            x:Name="KeyTextBlock"
+                            Text="Key"
+                            FontSize="{DynamicResource SmallerFontSize}"
+                            TextAlignment="Left"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Margin="0,0,0,40"/>
+
+                        <TextBox 
+                            Style="{DynamicResource CommonTextBox}" x:Name="KeyTextBox"
+                            Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Margin="0,35,0,0"
+                            Width="75"/>
+                    </Grid>
+
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <TextBlock 
+                                x:Name="SliderValueTextBlock"
+                                FontSize="{DynamicResource SmallerFontSize}"
+                                Text="{Binding BitsPerMinuteText}"
+                                TextAlignment="Center"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"/>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <sc:SliderWithButtons 
+                                CurrentValue="{Binding BitsPerMinute, Mode=TwoWay}"
+                                Minimum="0"
+                                Maximum="480"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="3">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="36"/>
+                        <RowDefinition Height="64*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="73*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="2" Grid.Row="0">
+                        <TextBlock 
+                            x:Name="TuningsListTextBlock"
+                            FontSize="{DynamicResource SmallerFontSize}"
+                            Text="Tuning of strings"
+                            TextAlignment="Left"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid Grid.Column="0" Grid.Row="1">
+                        <ListBox 
+                            Style="{DynamicResource CommonListBox}" 
+                            ItemsSource="{Binding ListOfTunings, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedItem}"
+                            Width="90"
+                            FontSize="23"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Left"/>
+                    </Grid>
+                    <Grid Grid.Column="2" Grid.Row="1">
+
+                        <TextBlock 
+                            x:Name="StringOrderTextBlock"
+                            FontSize="{DynamicResource SmallerFontSize}"
+                            Text="String Order"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0,0,150,200"/>
+
+                        <sc:UpDownTextBlock 
+                            FontSize="{DynamicResource SmallerFontSize}"
+                            CurrentValue="{Binding StringOrder, Mode=TwoWay}"
+                            Minimum="1"
+                            Maximum="8"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0,0,150,125"/>
+
+                        <TextBlock 
+                            x:Name="NoteTextBlock"
+                            FontSize="{DynamicResource SmallerFontSize}"
+                            Text="String Note"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="150,0,0,200"/>
+
+                        <TextBox 
+                            Style="{DynamicResource CommonTextBox}"
+                            x:Name="NoteTextBox"
+                            FontSize="{DynamicResource SmallerFontSize}"
+                            Text="{Binding StringNote, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="100"
+                            Margin="150,0,0,125"/>
+
+                        <Button
+                            Style="{DynamicResource CommonButton}" 
+                            x:Name="AddTuningButton"
+                            Command="{Binding AddTuningCommand}"
+                            IsEnabled="{Binding AddVisibilitySwitch, UpdateSourceTrigger=PropertyChanged}"
+                            Content="Add Tuning"
+                            VerticalAlignment="Center"
+                            Margin="0,0,0,0"/>
+
+                        <Button 
+                            Style="{DynamicResource CommonButton}" 
+                            x:Name="EditTuningButton"
+                            Command="{Binding EditTuningCommand}"
+                            IsEnabled="{Binding EditRemoveVisibilitySwitch, UpdateSourceTrigger=PropertyChanged}"
+                            Content="Edit Tuning"
+                            VerticalAlignment="Center"
+                            Margin="0,100,0,0"/>
+
+                        <Button 
+                            Style="{DynamicResource CommonButton}" 
+                            x:Name="RemoveTuningButton"
+                            Command="{Binding RemoveTuningCommand}"
+                            IsEnabled="{Binding EditRemoveVisibilitySwitch, UpdateSourceTrigger=PropertyChanged}"
+                            Content="Remove Tuning"
+                            VerticalAlignment="Center"
+                            Margin="0,200,0,0"/>
+
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1" Grid.Row="0">
+                <TextBlock x:Name="DescriptionTextBlock"
+                           FontSize="{DynamicResource SmallerFontSize}"
+                           Text="Description"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Center"
+                           Margin="0,0,0,0"
+                           Foreground="White"/>
+            </Grid>
+            <Grid Grid.Column="1" Grid.Row="1">
+                <TextBox Style="{DynamicResource CommonTextBox}" x:Name="DescriptionTextBox"
+                         Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
+                         TextWrapping="Wrap"/>
+
+            </Grid>
+            <Grid Grid.Column="1" Grid.Row="3">
+                <Button Style="{DynamicResource CommonButton}" x:Name="CreateButton"
+                        Command="{Binding CreateTabCommand}"
+                        Content="Create Tablature"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        Margin="0,0,0,0"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

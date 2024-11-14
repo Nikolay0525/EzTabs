@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace EzTabs.View.Window.AuthControls
+namespace EzTabs.Presentation.Views.AuthControls
 {
     /// <summary>
     /// Interaction logic for LoginControl.xaml

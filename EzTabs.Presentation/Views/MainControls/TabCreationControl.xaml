@@ -9,6 +9,7 @@
     xmlns:cbp="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts"
     xmlns:dc="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls"
     xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels" 
+    d:DataContext="{d:DesignInstance Type=vm:TabCreationControlViewModel}"
     mc:Ignorable="d"
     Foreground="White"
     FontFamily="{DynamicResource CommonFontFamily}"
@@ -52,11 +53,10 @@
                 <TextBlock x:Name="TabCreationTextBlock"
                            Text="Tab Creation"
                            TextAlignment="Center"
-                           VerticalAlignment="Center"
-                           />
+                           VerticalAlignment="Center"/>
             </Grid>
             <Grid Grid.Column="3">
-                <cbp:ControlBar/>
+                <ContentControl x:Name="ControlBar" Content="{Binding ControlBarViewModel}"/>
             </Grid>
         </Grid>
 

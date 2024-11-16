@@ -62,7 +62,7 @@
                        HorizontalOffset="-50" 
                        StaysOpen="True"
                        IsOpen="{Binding IsMenuOpen, UpdateSourceTrigger=PropertyChanged}">
-                    <dc:MenuDropControl/>
+                    <ContentControl x:Name="PopupControl" Content="{Binding MenuDropControlViewModel}"/>
                 </Popup>
             </Grid>
         </Grid>

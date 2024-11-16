@@ -1,8 +1,9 @@
-﻿namespace EzTabs.Presentation.Services.NavigationServices;
+﻿using EzTabs.Presentation.ViewModels.BaseViewModels;
+
+namespace EzTabs.Presentation.Services.NavigationServices;
 
 public interface INavigationService
 {
-    void NavigateTo(object viewModel);
-    object CurrentViewModel { get; set; }
-    event Action? CurrentViewModelChanged;
+    void NavigateTo<T>() where T : BaseViewModel;
+    BaseViewModel CurrentViewModel { get; }
 }

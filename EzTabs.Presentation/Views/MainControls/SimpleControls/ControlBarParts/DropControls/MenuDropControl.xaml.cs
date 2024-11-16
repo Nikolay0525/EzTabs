@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs.DropControlVMs;
+using System.Windows.Controls;
 
 namespace EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls
 {
@@ -8,6 +9,5 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.
         {
             InitializeComponent();
         }
-
     }
 }

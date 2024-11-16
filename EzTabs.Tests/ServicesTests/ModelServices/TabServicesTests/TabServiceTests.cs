@@ -1,11 +1,6 @@
-﻿using NUnit.Framework;
-using EzTabs.Model;
-using EzTabs.Services.ModelServices;
-using System;
-using System.Collections.Generic;
+﻿using EzTabs.Data.Domain;
 using EzTabs.Data.Repository;
-using EzTabs.Services.RepoServices;
-using EzTabs.Data.Domain;
+using NUnit.Framework;
 
 namespace EzTabs.Tests
 {

@@ -2,7 +2,7 @@
 
 namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 
-public class TabEditingControlViewModel : BaseViewModel
+public class TabEditingControlViewModel
 {
 
 }

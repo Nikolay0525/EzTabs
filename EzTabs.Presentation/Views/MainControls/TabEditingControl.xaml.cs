@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using EzTabs.Presentation.ViewModels.MainControlsViewModels;
+using System.Windows.Controls;
 
 namespace EzTabs.Presentation.Views.MainControls;
 

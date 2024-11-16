@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls"
              xmlns:cbp="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts"
+             xmlns:vmcbp="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs"
              xmlns:sc="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls"
              xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels" 
              d:DataContext="{d:DesignInstance Type=vm:SearchControlViewModel}"
@@ -80,7 +81,7 @@
                      Background="White"/>
         </Grid>
         <Grid Grid.Column="1" Grid.Row="1"  Background="Transparent">
-            <cbp:ControlBar/>
+            <ContentControl x:Name="ControlBar" Content="{Binding ControlBarViewModel}"/>
         </Grid>
         <Grid Grid.Column="1" Grid.Row="2" Background="Transparent">
 

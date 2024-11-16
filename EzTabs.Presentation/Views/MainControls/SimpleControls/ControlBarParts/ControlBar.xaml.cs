@@ -13,7 +13,7 @@ public partial class ControlBar : UserControl
 
     void ControlBar_Loaded(object sender, RoutedEventArgs e)
     {
-        var w = System.Windows.Window.GetWindow(MenuButton);
+        var w = Window.GetWindow(MenuButton);
         w.Deactivated += new EventHandler(ControlBarPopUpCloser_Loaded);
         if (w != null)
         {

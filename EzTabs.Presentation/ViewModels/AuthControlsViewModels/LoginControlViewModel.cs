@@ -2,7 +2,7 @@
 using EzTabs.Data.Domain;
 using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
-using EzTabs.Presentation.Services.WindowServices;
+using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +12,7 @@ namespace EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 
 public class LoginControlViewModel : BaseViewModel
 {
-    public UserService _userService;
+    private UserService _userService;
 
     private string _username;
     private string _password;
@@ -44,19 +44,18 @@ public class LoginControlViewModel : BaseViewModel
     public ICommand? LoginCommand { get; }
     public ICommand? GoToRegistrationCommand { get; }
 
-    public LoginControlViewModel()
+    public LoginControlViewModel(INavigationService navigationService, IViewModelService viewModelService, UserService userService) : base(viewModelService, navigationService)
     {
-        LoginCommand = new RelayCommand(async () => await Login());
+        _userService = userService;
+        LoginCommand = new AsyncRelayCommand(Login);
         GoToRegistrationCommand = new RelayCommand(GoToRegistration);
-        _userService = new UserService();
-
     }
 
     private async Task Login()
     {
         Validate();
         if (HasErrors) return;
-        WindowService.Instance.SomethingLoading = true;
+        ViewModelService.SomethingLoading = true;
         var userToLogin = new User
         {
             Name = Username,
@@ -65,16 +64,16 @@ public class LoginControlViewModel : BaseViewModel
         if (userToLogin is null) throw new ArgumentNullException(nameof(userToLogin));
         if (await _userService.LoginUser(userToLogin))
         {
-            NavigationService.Instance.NavigateTo(new SearchControlViewModel());
-            WindowService.Instance.SomethingLoading = false;
+            NavigationService.NavigateTo<SearchControlViewModel>();
+            ViewModelService.SomethingLoading = false;
             return;
         }
-        WindowService.Instance.SomethingLoading = false;
-        OnShowMessage("Validation error", "User with such name and password not found");
+        ViewModelService.SomethingLoading = false;
+        ShowMessage("Validation error", "User with such name and password not found");
     }
 
     private void GoToRegistration()
     {
-        NavigationService.Instance.NavigateTo(new RegistrationControlViewModel());
+        NavigationService.NavigateTo<RegistrationControlViewModel>();
     }
 }

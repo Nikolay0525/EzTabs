@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
+using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
@@ -37,14 +38,14 @@ namespace EzTabs.Presentation.ViewModels.AuthControlsViewModels
             }
         }
 
-        public ICommand TryToVerificateCommand { get; }
+        public ICommand VerificateCommand { get; }
         public ICommand GoToRegistrationCommand { get; }
 
-        public VerificationControlViewModel()
+        public VerificationControlViewModel(INavigationService navigationService, IViewModelService viewModelService, UserService userService) : base(viewModelService, navigationService)
         {
-            TryToVerificateCommand = new RelayCommand(async () => await TryToVerificate());
+            VerificateCommand = new AsyncRelayCommand(TryToVerificate);
             GoToRegistrationCommand = new RelayCommand(GoToRegistration);
-            _userService = new UserService();
+            _userService = userService;
         }
 
         private async Task TryToVerificate()
@@ -55,17 +56,17 @@ namespace EzTabs.Presentation.ViewModels.AuthControlsViewModels
             var isVerificated = await _userService.VerificateUser(_verificationCode);
             if (isVerificated)
             {
-                NavigationService.Instance.NavigateTo(new LoginControlViewModel());
+                //NavigationService.Instance.NavigateTo(new LoginControlViewModel());
             }
-            else { OnShowMessage("Validation", "Wrong verification code"); }
+            else { ShowMessage("Validation", "Wrong verification code"); }
         }
 
         private void GoToRegistration()
         {
-            OnShowOkCancelMessage("Warning", "If you not verify your account will be deleted, are you sure?");
+            ShowOkCancelMessage("Warning", "If you not verify your account will be deleted, are you sure?");
             if (_userConfirm)
             {
-                NavigationService.Instance.NavigateTo(new RegistrationControlViewModel());
+                NavigationService.NavigateTo<RegistrationControlViewModel>();
             }
         }
     }

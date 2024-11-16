@@ -1,4 +1,5 @@
-﻿using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
+﻿using EzTabs.Presentation.Services.ViewModelServices;
+using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,12 +11,12 @@ public partial class LoginControl : UserControl
     {
         InitializeComponent();
 
-        var viewModel = new LoginControlViewModel();
+        /*var viewModel = new LoginControlViewModel();
         viewModel.ShowMessage += (title, message) =>
         {
             MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
         };
 
-        DataContext = viewModel;
+        DataContext = viewModel;*/
     }
 }

@@ -1,4 +1,5 @@
-﻿using EzTabs.Presentation.ViewModels;
+﻿using EzTabs.Presentation.Services.ViewModelServices;
+using EzTabs.Presentation.ViewModels;
 using System.Windows;
 
 namespace EzTabs.Presentation.Views
@@ -8,14 +9,6 @@ namespace EzTabs.Presentation.Views
         public MainWindow()
         {
             InitializeComponent();
-
-            var viewModel = new MainWindowViewModel();
-            viewModel.ShowMessage += (title, message) =>
-            {
-                MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
-            };
-
-            DataContext = viewModel;
         }
     }
 }

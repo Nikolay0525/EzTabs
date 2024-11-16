@@ -6,6 +6,7 @@ using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.ValidationServices.CustomAttributes;
+using EzTabs.Presentation.Services.ViewModelServices;
 
 namespace EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 
@@ -68,14 +69,12 @@ public class RegistrationControlViewModel : BaseViewModel
 
     public ICommand RegisterCommand { get; }
     public ICommand GoToLoginCommand { get; }
-    public ICommand GoToVerificationCommand { get; }
 
-    public RegistrationControlViewModel()
+    public RegistrationControlViewModel(INavigationService navigationService, IViewModelService viewModelService, UserService userService) : base(viewModelService, navigationService)
     {
-        RegisterCommand = new RelayCommand(async () => await Register());
+        _userService = userService;
+        RegisterCommand = new AsyncRelayCommand(Register);
         GoToLoginCommand = new RelayCommand(GoToLogin);
-        GoToVerificationCommand = new RelayCommand(GoToVerification);
-        _userService = new UserService();
     }
 
     private async Task Register()
@@ -96,19 +95,15 @@ public class RegistrationControlViewModel : BaseViewModel
                 errorMessage.AppendLine(error);
             }
 
-            OnShowMessage("Validation Error", errorMessage.ToString());
+            ShowMessage("Validation Error", errorMessage.ToString());
             return;
         }
         #endregion
-        if (GoToVerificationCommand.CanExecute(null)) GoToVerificationCommand.Execute(null);
+        NavigationService.NavigateTo<VerificationControlViewModel>();
     }
 
-    private static void GoToLogin()
+    private void GoToLogin()
     {
-        NavigationService.Instance.NavigateTo(new LoginControlViewModel());
-    }
-    private static void GoToVerification()
-    {
-        NavigationService.Instance.NavigateTo(new VerificationControlViewModel());
+        NavigationService.NavigateTo<LoginControlViewModel>();
     }
 }

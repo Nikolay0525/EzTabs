@@ -1,32 +1,52 @@
-﻿using EzTabs.Presentation.Services.ValidationServices;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using EzTabs.Presentation.Services.NavigationServices;
+using EzTabs.Presentation.Services.ValidationServices;
+using EzTabs.Presentation.Services.ViewModelServices;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Collections;
 using System.ComponentModel;
 using System.Text;
+using System.Windows;
 
 namespace EzTabs.Presentation.ViewModels.BaseViewModels;
 
-public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
+public abstract class BaseViewModel : ObservableObject ,INotifyPropertyChanged, INotifyDataErrorInfo
 {
     private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
     public bool HasErrors => _errors.Count > 0;
 
-    public event PropertyChangedEventHandler? PropertyChanged;
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-    public event Action<string, string>? ShowMessage;
-    public event Action<string, string>? ShowOkCancelMessage;
 
-    public void OnShowMessage(string title, string message)
-    {
-        ShowMessage?.Invoke(title, message);
+    private INavigationService _navigationService;
+    private IViewModelService _viewModelService;
+    public INavigationService NavigationService 
+    { 
+        get => _navigationService; 
+        set
+        {
+            _navigationService = value;
+            OnPropertyChanged();
+        }
     }
-    public void OnShowOkCancelMessage(string title, string message)
-    {
-        ShowOkCancelMessage?.Invoke(title, message);
+    public IViewModelService ViewModelService 
+    { 
+        get => _viewModelService; 
+        set
+        {
+            _viewModelService = value;
+            OnPropertyChanged();
+        }
     }
-    public void OnPropertyChanged(string propertyName)
+
+    public void ShowMessage(string title, string message)
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
     }
+    public void ShowOkCancelMessage(string title, string message)
+    {
+        MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
+    }
+
     public void Validate(IEnumerable<string>? SpecificProperties = null)
     {
         _errors = ValidationService.ValidateProperties(this, SpecificProperties);
@@ -43,7 +63,7 @@ public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorIn
                 errorMessage.AppendLine($"{error.Key}: {string.Join(", ", error.Value)}");
             }
 
-            OnShowMessage("Validation Error", errorMessage.ToString());
+            ShowMessage("Validation Error", errorMessage.ToString());
         }
     }
 
@@ -59,6 +79,12 @@ public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorIn
     public void OnErrorsChanged(string propertyName)
     {
         ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+    }
+
+    public BaseViewModel(IViewModelService viewModelService, INavigationService navigationService)
+    {
+        ViewModelService = viewModelService;
+        NavigationService = navigationService;
     }
 }
 

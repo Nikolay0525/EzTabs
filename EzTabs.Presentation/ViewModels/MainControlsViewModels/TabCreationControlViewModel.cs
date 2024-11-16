@@ -3,15 +3,29 @@ using EzTabs.Data.Domain;
 using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ValidationServices.CustomAttributes;
+using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
+using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
+using System.Windows.Navigation;
 
 namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 
 public class TabCreationControlViewModel : BaseViewModel
 {
+    private BaseViewModel _controlBarViewModel;
+    public BaseViewModel ControlBarViewModel
+    {
+        get => _controlBarViewModel;
+        private set
+        {
+            _controlBarViewModel = value;
+            OnPropertyChanged();
+        }
+    }
+
     private UserService _userService;
     private TabService _tabService;
     private TuningService _tuningService;
@@ -160,12 +174,14 @@ public class TabCreationControlViewModel : BaseViewModel
     public ICommand EditTuningCommand { get; }
     public ICommand RemoveTuningCommand { get; }
 
-
-
-    public TabCreationControlViewModel()
+    public TabCreationControlViewModel(INavigationService navigationService, IViewModelService viewModelService, UserService userService, TabService tabService, TuningService tuningService) : base(viewModelService, navigationService)
     {
+        _userService = userService;
+        _tabService = tabService;
+        _tuningService = tuningService;
+        ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
+        CreateTabCommand = new AsyncRelayCommand(CreateTab);
         GoToSearchControlCommand = new RelayCommand(GoToSearchControl);
-        CreateTabCommand = new RelayCommand(async () => await CreateTab());
         AddTuningCommand = new RelayCommand(AddTuning);
         EditTuningCommand = new RelayCommand(EditTuning);
         RemoveTuningCommand = new RelayCommand(RemoveTuning);
@@ -173,7 +189,7 @@ public class TabCreationControlViewModel : BaseViewModel
 
     private void GoToSearchControl()
     {
-        NavigationService.Instance.NavigateTo(new SearchControlViewModel());
+        NavigationService.NavigateTo<SearchControlViewModel>();
     }
 
     private void ManageButtonAccessibility()
@@ -282,7 +298,7 @@ public class TabCreationControlViewModel : BaseViewModel
         #region validation
         if (createdTab is null)
         {
-            OnShowMessage("Validation Error", "You can't create your own two absolute same tablature, change Title, Band, or Genre");
+            ShowMessage("Validation Error", "You can't create your own two absolute same tablature, change Title, Band, or Genre");
             return;
         }
         #endregion

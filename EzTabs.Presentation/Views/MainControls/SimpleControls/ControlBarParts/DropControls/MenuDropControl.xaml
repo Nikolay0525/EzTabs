@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls"
              xmlns:conv="clr-namespace:EzTabs.Presentation.Converters"
-             xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs.DropWindowVMs" 
-             d:DataContext="{d:DesignInstance Type=vm:MenuDropWindowViewModel}"
+             xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs.DropControlVMs" 
+             d:DataContext="{d:DesignInstance Type=vm:MenuDropControlViewModel}"
              mc:Ignorable="d" 
              Background="#2e2e2e">
 

@@ -1,25 +1,30 @@
-﻿namespace EzTabs.Presentation.Services.NavigationServices;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using EzTabs.Presentation.ViewModels.BaseViewModels;
 
-public class NavigationService : INavigationService
+namespace EzTabs.Presentation.Services.NavigationServices;
+
+public class NavigationService : ObservableObject, INavigationService
 {
-    private static NavigationService? _instance;
-    public static NavigationService Instance => _instance ??= new NavigationService();
-
-    public event Action? CurrentViewModelChanged;
-
-    private object _currentViewModel;
-    public object CurrentViewModel
+    private readonly Func<Type, BaseViewModel> _viewModelFactory;
+    private BaseViewModel _currentViewModel;
+    public BaseViewModel CurrentViewModel
     {
         get => _currentViewModel;
-        set
-        {
+        private set
+        { 
             _currentViewModel = value;
-            CurrentViewModelChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
-    public void NavigateTo(object viewModel)
+
+    public NavigationService(Func<Type, BaseViewModel> viewModelFactory)
     {
-        CurrentViewModel = viewModel;
+        _viewModelFactory = viewModelFactory;
     }
-    private NavigationService() { }
+
+    public void NavigateTo<TViewModel>() where TViewModel : BaseViewModel
+    {
+        BaseViewModel baseViewModel = _viewModelFactory.Invoke(typeof(TViewModel));
+        CurrentViewModel = baseViewModel;
+    }
 }

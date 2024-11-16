@@ -1,38 +1,59 @@
-﻿using EzTabs.Presentation.Views;
+﻿using EzTabs.Presentation.Services.DomainServices;
+using EzTabs.Presentation.Services.NavigationServices;
+using EzTabs.Presentation.Services.ViewModelServices;
+using EzTabs.Presentation.ViewModels;
+using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
+using EzTabs.Presentation.ViewModels.BaseViewModels;
+using EzTabs.Presentation.ViewModels.MainControlsViewModels;
+using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs;
+using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs.DropControlVMs;
+using EzTabs.Presentation.Views;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System.Windows;
 
 namespace EzTabs.Presentation;
 
 public partial class App : Application
 {
-    public static IHost? AppHost { get; private set; }
+    private readonly ServiceProvider _serviceProvider;
 
     public App()
     {
-        AppHost = Host.CreateDefaultBuilder()
-            .ConfigureServices((hostContext, services) =>
-            {
-                services.AddSingleton<MainWindow>();
-            })
-            .Build();
+        IServiceCollection services = new ServiceCollection();
+        services.AddSingleton<MainWindow>(serviceProvider => new Views.MainWindow
+        {
+            DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>()
+        });
+
+        services.AddSingleton<MainWindowViewModel>();
+        services.AddSingleton<LoginControlViewModel>();
+        services.AddSingleton<RegistrationControlViewModel>();
+        services.AddSingleton<VerificationControlViewModel>();
+        services.AddSingleton<SearchControlViewModel>();
+        services.AddSingleton<TabControlViewModel>();
+        services.AddSingleton<TabCreationControlViewModel>();
+        services.AddSingleton<TabEditingControlViewModel>();
+        services.AddSingleton<ControlBarViewModel>();
+        services.AddSingleton<MenuDropControlViewModel>();
+        services.AddSingleton<VerificationControlViewModel>();
+        services.AddTransient<UserService>();
+        services.AddTransient<TabService>();
+        services.AddTransient<TuningService>();
+
+        services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<IViewModelService, ViewModelService>();
+        services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider => viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType)); // ViewModelFactory
+
+        _serviceProvider = services.BuildServiceProvider();
     }
 
     protected override async void OnStartup(StartupEventArgs e)
     {
-        await AppHost!.StartAsync();
-
-        var startupForm = AppHost.Services.GetRequiredService<MainWindow>();
-        startupForm.Show();
+        var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+        if (mainWindow is null) throw new ArgumentNullException(nameof(mainWindow));
+        mainWindow.Show();
 
         base.OnStartup(e);
-    }
-
-    protected override async void OnExit(ExitEventArgs e)
-    {
-        await AppHost!.StopAsync();
-        base.OnExit(e);
     }
 }
 

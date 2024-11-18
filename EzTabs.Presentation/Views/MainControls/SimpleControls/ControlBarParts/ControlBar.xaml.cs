@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using EzTabs.Presentation.Services.ViewModelServices;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts;

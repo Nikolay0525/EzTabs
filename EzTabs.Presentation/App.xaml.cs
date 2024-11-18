@@ -26,16 +26,15 @@ public partial class App : Application
         });
 
         services.AddSingleton<MainWindowViewModel>();
-        services.AddSingleton<LoginControlViewModel>();
-        services.AddSingleton<RegistrationControlViewModel>();
-        services.AddSingleton<VerificationControlViewModel>();
-        services.AddSingleton<SearchControlViewModel>();
-        services.AddSingleton<TabControlViewModel>();
-        services.AddSingleton<TabCreationControlViewModel>();
-        services.AddSingleton<TabEditingControlViewModel>();
-        services.AddSingleton<ControlBarViewModel>();
-        services.AddSingleton<MenuDropControlViewModel>();
-        services.AddSingleton<VerificationControlViewModel>();
+        services.AddTransient<LoginControlViewModel>();
+        services.AddTransient<RegistrationControlViewModel>();
+        services.AddTransient<VerificationControlViewModel>();
+        services.AddTransient<SearchControlViewModel>();
+        services.AddTransient<TabControlViewModel>();
+        services.AddTransient<TabCreationControlViewModel>();
+        services.AddTransient<TabEditingControlViewModel>();
+        services.AddTransient<ControlBarViewModel>();
+        services.AddTransient<VerificationControlViewModel>();
         services.AddTransient<UserService>();
         services.AddTransient<TabService>();
         services.AddTransient<TuningService>();

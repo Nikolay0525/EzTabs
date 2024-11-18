@@ -15,20 +15,11 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 
 public class TabCreationControlViewModel : BaseViewModel
 {
-    private BaseViewModel _controlBarViewModel;
-    public BaseViewModel ControlBarViewModel
-    {
-        get => _controlBarViewModel;
-        private set
-        {
-            _controlBarViewModel = value;
-            OnPropertyChanged();
-        }
-    }
+    private readonly BaseViewModel _controlBarViewModel;
 
-    private UserService _userService;
-    private TabService _tabService;
-    private TuningService _tuningService;
+    private readonly UserService _userService;
+    private readonly TabService _tabService;
+    private readonly TuningService _tuningService;
 
     private bool _addVisibilitySwitch = true;
     private bool _editRemoveVisibilitySwitch = false;
@@ -169,6 +160,7 @@ public class TabCreationControlViewModel : BaseViewModel
     }
 
     public ICommand GoToSearchControlCommand { get; }
+    public ICommand GoToTabEditingControlCommand { get; }
     public ICommand CreateTabCommand { get; }
     public ICommand AddTuningCommand { get; }
     public ICommand EditTuningCommand { get; }
@@ -179,7 +171,7 @@ public class TabCreationControlViewModel : BaseViewModel
         _userService = userService;
         _tabService = tabService;
         _tuningService = tuningService;
-        ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
+        _controlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
         CreateTabCommand = new AsyncRelayCommand(CreateTab);
         GoToSearchControlCommand = new RelayCommand(GoToSearchControl);
         AddTuningCommand = new RelayCommand(AddTuning);
@@ -190,6 +182,10 @@ public class TabCreationControlViewModel : BaseViewModel
     private void GoToSearchControl()
     {
         NavigationService.NavigateTo<SearchControlViewModel>();
+    }
+    private void GoToTabEditingControl()
+    {
+        NavigationService.NavigateTo<TabEditingControlViewModel>();
     }
 
     private void ManageButtonAccessibility()
@@ -303,5 +299,6 @@ public class TabCreationControlViewModel : BaseViewModel
         }
         #endregion
         await _tuningService.CreateTuning(createdTab, tuningsList);
+
     }
 }

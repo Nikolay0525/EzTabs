@@ -1,9 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using EzTabs.Data.Domain.Enums;
 using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ViewModelServices;
+using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
-using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs.DropControlVMs;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Windows.Input;
 
@@ -13,16 +14,8 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsVi
     {
         private bool _isMenuOpen = false;
         private string? _username;
-        private BaseViewModel _menuDropControlViewModel;
-        public BaseViewModel MenuDropControlViewModel
-        {
-            get => _menuDropControlViewModel;
-            set
-            {
-                _menuDropControlViewModel = value;
-                OnPropertyChanged();
-            }
-        }
+        private bool _showModerationButton = true;
+
         public bool IsMenuOpen
         {
             get => _isMenuOpen;
@@ -41,18 +34,35 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsVi
                 OnPropertyChanged(nameof(Username));
             }
         }
+        public bool ShowModerationButton
+        {
+            get => _showModerationButton;
+            set
+            {
+                _showModerationButton = value;
+                OnPropertyChanged(nameof(ShowModerationButton));
+            }
+        }
+
         public ICommand SwitchMenuCommand { get; }
+        public ICommand SignOutCommand { get; }
         public ControlBarViewModel(INavigationService navigationService,IViewModelService viewModelService) : base(viewModelService, navigationService)
         {
-            MenuDropControlViewModel = viewModelService.CreateViewModel<MenuDropControlViewModel>();
             SwitchMenuCommand = new RelayCommand(SwitchMenu);
+            SignOutCommand = new RelayCommand(SignOut);
             if (UserService.SavedUser is null) throw new ArgumentNullException(nameof(UserService.SavedUser));
+            if (UserService.SavedUser.Role == UserRole.User) ShowModerationButton = false;
             Username = UserService.SavedUser.Name;
         }
 
         private void SwitchMenu()
         {
             IsMenuOpen = !IsMenuOpen;
+        }
+
+        private void SignOut()
+        {
+            NavigationService.NavigateTo<LoginControlViewModel>();
         }
     }
 }

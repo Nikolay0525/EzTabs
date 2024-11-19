@@ -11,16 +11,7 @@ public class SearchControlViewModel : BaseViewModel
 {
     public ICommand GoToCreationOfTabCommand { get; }
 
-    private BaseViewModel _controlBarViewModel; 
-    public BaseViewModel ControlBarViewModel
-    {
-        get => _controlBarViewModel;
-        private set
-        {
-            _controlBarViewModel = value;
-            OnPropertyChanged();
-        }
-    }
+    public BaseViewModel ControlBarViewModel { get; private set; }
 
     public SearchControlViewModel(INavigationService navigationService ,IViewModelService viewModelService) : base(viewModelService, navigationService)
     {

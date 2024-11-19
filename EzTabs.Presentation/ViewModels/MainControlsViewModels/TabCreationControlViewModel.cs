@@ -15,7 +15,7 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 
 public class TabCreationControlViewModel : BaseViewModel
 {
-    private readonly BaseViewModel _controlBarViewModel;
+    public BaseViewModel ControlBarViewModel { get; private set; }
 
     private readonly UserService _userService;
     private readonly TabService _tabService;
@@ -171,7 +171,7 @@ public class TabCreationControlViewModel : BaseViewModel
         _userService = userService;
         _tabService = tabService;
         _tuningService = tuningService;
-        _controlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
+        ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
         CreateTabCommand = new AsyncRelayCommand(CreateTab);
         GoToSearchControlCommand = new RelayCommand(GoToSearchControl);
         AddTuningCommand = new RelayCommand(AddTuning);
@@ -299,6 +299,6 @@ public class TabCreationControlViewModel : BaseViewModel
         }
         #endregion
         await _tuningService.CreateTuning(createdTab, tuningsList);
-
+        NavigationService.NavigateTo<TabEditingControlViewModel>();
     }
 }

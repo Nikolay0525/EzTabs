@@ -7,10 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DataTests\RepositoryTests\" />
-    <Folder Include="ServicesTests\ValidationServicesTests\" />
-    <Folder Include="ServicesTests\NavigationServicesTests\" />
-    <Folder Include="ServicesTests\RepoServicesTests\" />
+    <Compile Remove="DataTests\**" />
+    <EmbeddedResource Remove="DataTests\**" />
+    <None Remove="DataTests\**" />
   </ItemGroup>
 
   <ItemGroup>

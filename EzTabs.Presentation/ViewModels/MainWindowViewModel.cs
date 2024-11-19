@@ -2,6 +2,7 @@
 using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
+using EzTabs.Presentation.ViewModels.MainControlsViewModels;
 using EzTabs.Presentation.Views.AuthControls;
 using System.Windows.Controls;
 
@@ -15,7 +16,7 @@ public class MainWindowViewModel : BaseViewModel
     {
         NavigationService = navigationService;
         ViewModelService = viewModelService;
-        NavigationService.NavigateTo<LoginControlViewModel>();
+        NavigationService.NavigateTo<TabEditingControlViewModel>();
         ViewModelService.OnSomethingLoadingChanged += OnSomethingLoadingChanged;
     }
 

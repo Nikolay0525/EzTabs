@@ -8,7 +8,6 @@
              xmlns:vcbp="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts"
              xmlns:vmcbp="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs"
              xmlns:vdc="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls"
-             xmlns:vmdc="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs.DropControlVMs"
              xmlns:vmc="clr-namespace:EzTabs.Presentation.Views.MainControls">
     <Application.Resources>
         <ResourceDictionary>
@@ -40,13 +39,9 @@
             <DataTemplate DataType="{x:Type vmmc:TabEditingControlViewModel}">
                 <vmc:TabEditingControl />
             </DataTemplate>
-            
+
             <DataTemplate DataType="{x:Type vmcbp:ControlBarViewModel}">
                 <vcbp:ControlBar />
-            </DataTemplate>
-
-            <DataTemplate DataType="{x:Type vmdc:MenuDropControlViewModel}">
-                <vdc:MenuDropControl/>
             </DataTemplate>
 
             <ResourceDictionary.MergedDictionaries>

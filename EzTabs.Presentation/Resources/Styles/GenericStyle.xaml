@@ -48,7 +48,7 @@
     <Style x:Key="PlaceHolderTextBox" TargetType="{x:Type ct:PlaceHolderTextBox}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate>
+                <ControlTemplate TargetType="{x:Type ct:PlaceHolderTextBox}">
                     <ControlTemplate.Resources>
                         <bc:BoolToVisibilityConverter x:Key="boolConverter"/>
                     </ControlTemplate.Resources>

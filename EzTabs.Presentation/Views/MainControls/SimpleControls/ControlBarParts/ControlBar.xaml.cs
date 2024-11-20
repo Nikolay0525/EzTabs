@@ -18,7 +18,7 @@ public partial class ControlBar : UserControl
         w.Deactivated += new EventHandler(ControlBarPopUpCloser_Loaded);
         if (w != null)
         {
-            w.LocationChanged += delegate (object? sender2, EventArgs args)
+            w.LocationChanged += (sender2, args) =>
             {
                 if (MenuPopup != null)
                 {
@@ -27,7 +27,7 @@ public partial class ControlBar : UserControl
                     MenuPopup.HorizontalOffset = offset;
                 }
             };
-            w.SizeChanged += delegate (object sender3, SizeChangedEventArgs e2)
+            w.SizeChanged += (sender3, e2) =>
             {
                 if (MenuPopup != null)
                 {

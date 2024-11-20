@@ -17,6 +17,14 @@
     mc:Ignorable="d" 
     d:DesignHeight="540" d:DesignWidth="960"
     Background="#2e2e2e">
+
+    <UserControl.InputBindings>
+        <KeyBinding x:Name="1" Command="{Binding IncrementCurrentStringCommand}" Key="Up"/>
+        <KeyBinding Command="{Binding DecrementCurrentStringCommand}" Key="Down"/>
+        <KeyBinding Command="{Binding IncrementCurrentOrderCommand}" Key="Left"/>
+        <KeyBinding Command="{Binding DecrementCurrentOrderCommand}" Key="Right"/>
+    </UserControl.InputBindings>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>

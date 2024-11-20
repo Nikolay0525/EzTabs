@@ -168,6 +168,7 @@ public class TabCreationControlViewModel : BaseViewModel
 
     public TabCreationControlViewModel(INavigationService navigationService, IViewModelService viewModelService, UserService userService, TabService tabService, TuningService tuningService) : base(viewModelService, navigationService)
     {
+        
         _userService = userService;
         _tabService = tabService;
         _tuningService = tuningService;

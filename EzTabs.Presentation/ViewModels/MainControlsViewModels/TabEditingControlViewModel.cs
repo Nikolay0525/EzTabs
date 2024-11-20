@@ -19,6 +19,8 @@ public class TabEditingControlViewModel : BaseViewModel
     private bool _sixteenthNoteToggle = false;
     private bool _thirtySecondNoteToggle = false;
     private string _currentFret;
+    private int _currentOrder;
+    private int _currentString;
 
     public bool WholeNoteToggle
     {
@@ -90,9 +92,58 @@ public class TabEditingControlViewModel : BaseViewModel
         }
     }
 
+    public int CurrentOrder
+    {
+        get => _currentOrder;
+        set
+        {
+            _currentOrder = value;
+            OnPropertyChanged();
+        }
+    }
+    
+    public int CurrentString
+    {
+        get => _currentString;
+        set
+        {
+            _currentString = value;
+            OnPropertyChanged();
+        }
+    }
+
+
+
+    public ICommand IncrementCurrentStringCommand { get; }
+    public ICommand DecrementCurrentStringCommand { get; }
+    public ICommand IncrementCurrentOrderCommand { get; }
+    public ICommand DecrementCurrentOrderCommand { get; }
+
     public TabEditingControlViewModel(IViewModelService viewModelService, INavigationService navigationService) : base(viewModelService, navigationService)
     {
         ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
+        IncrementCurrentStringCommand = new RelayCommand(IncrementCurrentOrder);
+        DecrementCurrentStringCommand = new RelayCommand(DecrementCurrentString);
+        IncrementCurrentOrderCommand = new RelayCommand(IncrementCurrentOrder);
+        DecrementCurrentOrderCommand = new RelayCommand(DecrementCurrentOrder);
+    }
+
+    private void IncrementCurrentOrder()
+    {
+        CurrentOrder++;
+    }
+    private void DecrementCurrentOrder()
+    {
+        CurrentOrder--;
+    }
+    private void IncrementCurrentString()
+    {
+        CurrentString++;
+    }
+    
+    private void DecrementCurrentString()
+    {
+        CurrentString--;
     }
 
 }

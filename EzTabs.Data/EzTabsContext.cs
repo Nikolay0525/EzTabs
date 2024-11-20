@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace EzTabs.Data;
 
-public class EzTabsContext : DbContext
+public class EzTabsContext : DbContext, IApplicationDbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Tab> Tabs { get; set; }

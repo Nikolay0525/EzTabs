@@ -1,4 +1,6 @@
-﻿using EzTabs.Data.Repository;
+﻿using EzTabs.Data;
+using EzTabs.Data.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace EzTabs.Presentation.Services.DomainServices.BaseServices
 {
@@ -6,23 +8,14 @@ namespace EzTabs.Presentation.Services.DomainServices.BaseServices
     {
         protected Task _initializeTask;
         protected RepoImplementation<T>? _repository;
-        protected BaseService() { }
-        protected async Task InitializeRepoAsync()
+        protected BaseService(EzTabsContext context) 
         {
-            _repository = await RepoImplementation<T>.CreateRepoAsync();
+            _repository = new RepoImplementation<T>(context);
         }
 
-        protected async Task EnsureRepositoryInitialized()
+        protected void EnsureRepositoryInitialized()
         {
-            if (_initializeTask != null)
-            {
-                await _initializeTask;
-            }
-
-            if (_repository == null)
-            {
-                throw new InvalidOperationException("Repository is not initialized.");
-            }
+            if (_repository == null) throw new InvalidOperationException("Repository is not initialized.");
         }
     }
 }

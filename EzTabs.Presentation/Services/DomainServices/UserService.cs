@@ -1,4 +1,5 @@
-﻿using EzTabs.Data.Domain;
+﻿using EzTabs.Data;
+using EzTabs.Data.Domain;
 using EzTabs.Data.Domain.Enums;
 using EzTabs.Presentation.Services.DomainServices.BaseServices;
 using EzTabs.Presentation.Services.EmailServices;
@@ -9,14 +10,14 @@ public class UserService : BaseService<User>
 {
     public static User SavedUser { get; private set; } = new User();
 
-    public UserService()
+    public UserService(EzTabsContext context) : base(context)
     {
-        _initializeTask = Task.Run(InitializeRepoAsync);
+
     }
 
     public async Task<List<string>> RegisterUser(string name, string email, string password, string verificationCode)
     {
-        await EnsureRepositoryInitialized();
+        //await EnsureRepositoryInitialized();
 
         if (_repository is null) throw new ArgumentNullException(nameof(_repository));
         List<string> errors = new();
@@ -47,7 +48,7 @@ public class UserService : BaseService<User>
 
     public async Task<bool> VerificateUser(string verificationCode)
     {
-        await EnsureRepositoryInitialized();
+        //await EnsureRepositoryInitialized();
 
         if (SavedUser == null || verificationCode == null)
         {
@@ -64,7 +65,7 @@ public class UserService : BaseService<User>
     }
     public async Task<bool> LoginUser(User userToLogin)
     {
-        await EnsureRepositoryInitialized();
+        //await EnsureRepositoryInitialized();
 
         if (_repository is null) throw new ArgumentNullException(nameof(_repository));
         var allUsers = await _repository.GetAll();

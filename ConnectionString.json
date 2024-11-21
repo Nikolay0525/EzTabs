@@ -1,1 +1,4 @@
-{"Version":"8.3.0","ConnectionString":"server=localhost;user=root;password=1111;database=EzTabs"}
+{
+  "Version": "8.3.0",
+  "ConnectionString": "server=26.72.25.220;user=admin;password=1111111111111111;database=EzTabs"
+}

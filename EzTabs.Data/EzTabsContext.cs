@@ -5,14 +5,14 @@ using System.Diagnostics;
 
 namespace EzTabs.Data;
 
-public class EzTabsContext : DbContext, IApplicationDbContext
+public class EzTabsContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Tab> Tabs { get; set; }
-    public DbSet<Note> Notes { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Notification> Notifications { get; set; }
     public EzTabsContext() { }
+
     public struct Connection
     {
         public Version Version { get; set; }
@@ -21,7 +21,7 @@ public class EzTabsContext : DbContext, IApplicationDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        string currentDirectory = Directory.GetCurrentDirectory();
+        string? currentDirectory = Directory.GetCurrentDirectory();
 
         while (!File.Exists(Path.Combine(currentDirectory, "EzTabsApp.sln")))
         {

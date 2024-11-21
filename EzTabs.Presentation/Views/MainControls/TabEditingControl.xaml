@@ -10,19 +10,23 @@
     xmlns:dc="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls"
     xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels" 
     xmlns:ct="clr-namespace:EzTabs.Presentation.Resources.Styles.CustomTypes" 
+    xmlns:vs="clr-namespace:EzTabs.Presentation.Services.ViewServices" 
     d:DataContext="{d:DesignInstance Type=vm:TabEditingControlViewModel}"
     FontFamily="{DynamicResource CommonFontFamily}"
     FontWeight="{DynamicResource CommonFontWeight}"
     FontSize="{DynamicResource CommonFontSize}"
     mc:Ignorable="d" 
     d:DesignHeight="540" d:DesignWidth="960"
-    Background="#2e2e2e">
+    Background="#2e2e2e"
+    vs:ViewKeyReaderService.KeyCommand="{Binding HandleKeyCommand}"
+    Focusable="True">
 
     <UserControl.InputBindings>
-        <KeyBinding x:Name="1" Command="{Binding IncrementCurrentStringCommand}" Key="Up"/>
-        <KeyBinding Command="{Binding DecrementCurrentStringCommand}" Key="Down"/>
-        <KeyBinding Command="{Binding IncrementCurrentOrderCommand}" Key="Left"/>
-        <KeyBinding Command="{Binding DecrementCurrentOrderCommand}" Key="Right"/>
+        <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Up" Key="Up"/>
+        <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Down" Key="Down"/>
+        <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Left" Key="Left"/>
+        <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Right" Key="Right"/>
+        <KeyBinding Command="{Binding RemoveSymbolCommand}" Key="Backspace"/>
     </UserControl.InputBindings>
     
     <Grid>
@@ -71,81 +75,36 @@
         </Grid>
         <Grid Grid.Row="3" Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="60"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
-                <ToggleButton
-                    Style="{DynamicResource ToggleCommonButton}"
-                    x:Name="WholeButton"
-                    Content="1"
-                    IsChecked="{Binding WholeNoteToggle, UpdateSourceTrigger=PropertyChanged}"
-                    />
-            </Grid>
-            <Grid Grid.Column="2">
-                <ToggleButton
-                    Style="{DynamicResource ToggleCommonButton}"
-                    x:Name="HalfButton"
-                    Content="1/2"
-                    IsChecked="{Binding HalfNoteToggle, UpdateSourceTrigger=PropertyChanged}"
-                    />
-            </Grid>
-            <Grid Grid.Column="4">
-                <ToggleButton
-                    Style="{DynamicResource ToggleCommonButton}"
-                    x:Name="QuarterButton"
-                    Content="1/4"
-                    IsChecked="{Binding QuarterNoteToggle, UpdateSourceTrigger=PropertyChanged}"
-                    />
-            </Grid>
-            <Grid Grid.Column="6">
-                <ToggleButton
-                    Style="{DynamicResource ToggleCommonButton}"
-                    x:Name="EighthButton"
-                    Content="1/8"
-                    IsChecked="{Binding EighthNoteToggle, UpdateSourceTrigger=PropertyChanged}"
-                    />
-            </Grid>
-            <Grid Grid.Column="8">
-                <ToggleButton
-                    Style="{DynamicResource ToggleCommonButton}"
-                    x:Name="SixteenthButton"
-                    Content="1/16"
-                    IsChecked="{Binding SixteenthNoteToggle, UpdateSourceTrigger=PropertyChanged}"
-                    />
-            </Grid>
-            <Grid Grid.Column="10">
-                <ToggleButton
-                    Style="{DynamicResource ToggleCommonButton}"
-                    x:Name="ThirtySecondButton"
-                    Content="1/32"
-                    IsChecked="{Binding ThirtySecondNoteToggle, UpdateSourceTrigger=PropertyChanged}"
-                    />
-            </Grid>
-            <Grid Grid.Column="12">
-                <ct:PlaceHolderTextBox
-                    Style="{DynamicResource CommonTextBox}"
-                    FontSize="{DynamicResource CommonFontSize}"
-                    x:Name="NoteFretTextBox"
-                    Text="{Binding CurrentFret, UpdateSourceTrigger=PropertyChanged}"
-                    />
-            </Grid>
+            
         </Grid>
         <Grid Grid.Row="5" Grid.Column="1">
-            <TextBlock
-                Style="{DynamicResource CommonTextBlock}"
-                x:Name="TabStringTextBlock"/>
+            <StackPanel>
+                <ScrollViewer
+                    Background="White"
+                    HorizontalScrollBarVisibility="Auto" 
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                    <TextBlock
+                        Style="{DynamicResource CommonTextBlock}"
+                        FontSize="{DynamicResource SmallerFontSize}"
+                        Background="White"
+                        x:Name="TabStringTextBlock"
+                        Text="{Binding TabText, UpdateSourceTrigger=PropertyChanged}"/>
+                </ScrollViewer>
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

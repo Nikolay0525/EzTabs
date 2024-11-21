@@ -1,10 +1,14 @@
-﻿using EzTabs.Presentation.Services.NavigationServices;
+﻿using CommunityToolkit.Mvvm.Input;
+using EzTabs.Data.Domain.BaseModels;
+using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels;
 using EzTabs.Presentation.Views.AuthControls;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace EzTabs.Presentation.ViewModels;
 

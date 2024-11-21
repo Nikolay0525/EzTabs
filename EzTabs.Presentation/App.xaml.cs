@@ -1,4 +1,5 @@
-﻿using EzTabs.Presentation.Services.DomainServices;
+﻿using EzTabs.Data;
+using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.ViewModels;
@@ -19,7 +20,7 @@ public partial class App : Application
     public App()
     {
         IServiceCollection services = new ServiceCollection();
-        services.AddSingleton<MainWindow>(serviceProvider => new Views.MainWindow
+        services.AddSingleton<MainWindow>(serviceProvider => new Views.MainWindow()
         {
             DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>()
         });
@@ -37,6 +38,7 @@ public partial class App : Application
         services.AddTransient<UserService>();
         services.AddTransient<TabService>();
         services.AddTransient<TuningService>();
+        services.AddDbContext<EzTabsContext>(); 
 
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IViewModelService, ViewModelService>();

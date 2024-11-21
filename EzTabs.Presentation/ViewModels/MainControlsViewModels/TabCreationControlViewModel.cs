@@ -17,21 +17,20 @@ public class TabCreationControlViewModel : BaseViewModel
 {
     public BaseViewModel ControlBarViewModel { get; private set; }
 
-    private readonly UserService _userService;
     private readonly TabService _tabService;
     private readonly TuningService _tuningService;
 
     private bool _addVisibilitySwitch = true;
     private bool _editRemoveVisibilitySwitch = false;
-    private string? _selectedItem;
-    private string? _title;
-    private string? _band;
-    private string? _genre;
-    private string? _key;
+    private string _selectedItem;
+    private string _title;
+    private string _band;
+    private string _genre;
+    private string _key;
     private int _bpm = 120;
-    private string? _description;
+    private string _description;
     private int _stringOrder = 1;
-    private string? _stringNote = "e";
+    private string _stringNote = "e";
     private ObservableCollection<Tuning> _tunings = new();
     private ObservableCollection<string> _listOfTunings = new();
     public bool AddVisibilitySwitch
@@ -53,7 +52,7 @@ public class TabCreationControlViewModel : BaseViewModel
         }
     }
 
-    public string? SelectedItem
+    public string SelectedItem
     {
         get => _selectedItem;
         set
@@ -65,7 +64,7 @@ public class TabCreationControlViewModel : BaseViewModel
     }
 
     [Required(ErrorMessage = "Title is required")]
-    public string? Title
+    public string Title
     {
         get => _title;
         set
@@ -75,7 +74,7 @@ public class TabCreationControlViewModel : BaseViewModel
         }
     }
     [Required(ErrorMessage = "Band is required")]
-    public string? Band
+    public string Band
     {
         get => _band;
         set
@@ -86,7 +85,7 @@ public class TabCreationControlViewModel : BaseViewModel
     }
     [Required(ErrorMessage = "Genre is required")]
     [AllowedCharacters(@"^[a-zA-Z-]+$", ErrorMessage = "Only letters and \"-\" symbol can be written in genre")]
-    public string? Genre
+    public string Genre
     {
         get => _genre;
         set
@@ -97,7 +96,7 @@ public class TabCreationControlViewModel : BaseViewModel
     }
     [Required(ErrorMessage = "Key is required")]
     [AllowedCharacters(@"^[a-zA-Z#1-7]+$", ErrorMessage = "Only letters of notes and \"#\" symbol can be written in Key")]
-    public string? Key
+    public string Key
     {
         get => _key;
         set
@@ -118,7 +117,7 @@ public class TabCreationControlViewModel : BaseViewModel
     }
     public string BitsPerMinuteText => $"{BitsPerMinute} BPM";
 
-    public string? Description
+    public string Description
     {
         get => _description;
         set
@@ -143,12 +142,13 @@ public class TabCreationControlViewModel : BaseViewModel
 
     [Required(ErrorMessage = "String Note is required")]
     [AllowedCharacters(@"^[cCdDeEfFgGaAbB#]+$", ErrorMessage = "Only notes letters and \"#\" symbol can be written in String Note")]
-    public string? StringNote
+    public string StringNote
     {
         get => _stringNote;
         set
         {
             _stringNote = value;
+            if (_stringNote.Length < 2) _stringNote = _stringNote + " ";
             OnPropertyChanged(nameof(StringNote));
         }
     }
@@ -166,10 +166,8 @@ public class TabCreationControlViewModel : BaseViewModel
     public ICommand EditTuningCommand { get; }
     public ICommand RemoveTuningCommand { get; }
 
-    public TabCreationControlViewModel(INavigationService navigationService, IViewModelService viewModelService, UserService userService, TabService tabService, TuningService tuningService) : base(viewModelService, navigationService)
+    public TabCreationControlViewModel(INavigationService navigationService, IViewModelService viewModelService, TabService tabService, TuningService tuningService) : base(viewModelService, navigationService)
     {
-        
-        _userService = userService;
         _tabService = tabService;
         _tuningService = tuningService;
         ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
@@ -229,9 +227,9 @@ public class TabCreationControlViewModel : BaseViewModel
         if (ListOfTunings is null) throw new ArgumentNullException(nameof(_tunings));
         if (StringNote is null) throw new ArgumentNullException(nameof(StringNote));
 
-        if (_tunings.FirstOrDefault(t => t.StringOrder == StringOrder) != null)
+        if (_tunings.Any(t => t.StringOrder == StringOrder))
         {
-            // add message
+            ShowMessage("Validation", "You can't add two same order strings");
             return;
         }
         var newTuning = new Tuning

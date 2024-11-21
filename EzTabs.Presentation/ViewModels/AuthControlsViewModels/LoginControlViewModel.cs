@@ -12,7 +12,7 @@ namespace EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 
 public class LoginControlViewModel : BaseViewModel
 {
-    private UserService _userService;
+    private readonly UserService _userService;
 
     private string _username;
     private string _password;

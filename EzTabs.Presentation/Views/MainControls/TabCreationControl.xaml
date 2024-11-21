@@ -147,6 +147,7 @@
                         <TextBox 
                             Style="{DynamicResource CommonTextBox}" x:Name="KeyTextBox"
                             Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"
+                            MaxLength="3"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
                             Margin="0,35,0,0"
@@ -239,6 +240,7 @@
                             x:Name="NoteTextBox"
                             FontSize="{DynamicResource SmallerFontSize}"
                             Text="{Binding StringNote, UpdateSourceTrigger=PropertyChanged}"
+                            MaxLength="2"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Width="100"

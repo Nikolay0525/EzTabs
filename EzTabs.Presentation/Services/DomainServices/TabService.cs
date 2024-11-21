@@ -1,4 +1,6 @@
-﻿using EzTabs.Data.Domain;
+﻿using EzTabs.Data;
+using EzTabs.Data.Domain;
+using EzTabs.Data.Repository;
 using EzTabs.Presentation.Services.DomainServices.BaseServices;
 
 namespace EzTabs.Presentation.Services.DomainServices;
@@ -7,14 +9,14 @@ public class TabService : BaseService<Tab>
 {
     public static Tab? SavedTab { get; private set; }
 
-    public TabService()
+    public TabService(EzTabsContext context) : base(context)
     {
-        _initializeTask = Task.Run(InitializeRepoAsync);
+
     }
 
     public async Task<Tab?> CreateTab(Guid authorId, string title, string band, string genre, string key, int bpm, string description)
     {
-        await EnsureRepositoryInitialized();
+        EnsureRepositoryInitialized();
 
         if (_repository is null) throw new ArgumentNullException(nameof(_repository) + "Haven't loaded in time");
         var allTabs = await _repository.GetAll();

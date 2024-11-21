@@ -15,7 +15,6 @@ public sealed class Tab : Entity
     public DateTime DateOfCreation { get; private set; } = DateTime.Now;
     public User? Author { get; set; }
     public List<Tuning>? Tunings { get; set; }
-    public List<Note>? Notes { get; set; }
     public List<TabReport>? TabReports { get; set; }
     public List<Comment>? Comments { get; set; }
     public List<FavouriteTab>? FavouriteTabs { get; set; }

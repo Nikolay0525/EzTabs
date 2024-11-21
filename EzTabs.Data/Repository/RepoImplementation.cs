@@ -8,7 +8,7 @@ namespace EzTabs.Data.Repository
         private readonly DbContext _context;
         private readonly DbSet<T> _dbSet;
 
-        private RepoImplementation(DbContext context)
+        public RepoImplementation(DbContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();

@@ -1,21 +1,32 @@
-﻿using EzTabs.Data;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using EzTabs.Data;
 using EzTabs.Data.Repository;
+using EzTabs.Presentation.Services.NavigationServices;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace EzTabs.Presentation.Services.DomainServices.BaseServices
 {
-    public abstract class BaseService<T> where T : class
+    public abstract class BaseService<T> : ObservableObject where T : class
     {
         protected Task _initializeTask;
-        protected RepoImplementation<T>? _repository;
-        protected BaseService(EzTabsContext context) 
+        protected RepoImplementation<T> _repository;
+
+        private INavigationService _navigationService;
+        public INavigationService NavigationService
         {
-            _repository = new RepoImplementation<T>(context);
+            get => _navigationService;
+            set
+            {
+                _navigationService = value;
+                OnPropertyChanged();
+            }
         }
 
-        protected void EnsureRepositoryInitialized()
+        protected BaseService(EzTabsContext context, INavigationService navigationService) 
         {
-            if (_repository == null) throw new InvalidOperationException("Repository is not initialized.");
+            _navigationService = navigationService;
+            _repository = new RepoImplementation<T>(context);
         }
     }
 }

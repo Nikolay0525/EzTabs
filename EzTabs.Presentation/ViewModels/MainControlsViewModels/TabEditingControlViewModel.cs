@@ -14,12 +14,15 @@ public class TabEditingControlViewModel : BaseViewModel
 {
     public BaseViewModel ControlBarViewModel { get; private set; }
 
-    private int _cursorPosition = 2;
-    private int _cursorLine = 0;
+    private char? _symbolBehindCursor = null;
+    private int _symbolBehindCursorPosition;
+    private int _symbolBehindCursorLine;
+    private int _cursorPosition = 3;
+    private int _cursorLine = 3;
 
     private readonly TuningService _tuningService;
     private readonly Task _initializedTask;
-    private List<Tuning> _tunings;
+    private List<Tuning> _tunings = new();
     private List<string> _tabLines = new();
     private string _tabText;
     private int _lineLength = 20;
@@ -84,7 +87,7 @@ public class TabEditingControlViewModel : BaseViewModel
     {
         ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
         _tuningService = tuningService;
-        Task.Run(UpdateTabText);
+        UpdateTabText();
         MoveCursorCommand = new AsyncRelayCommand<string>(MoveCursor);
         HandleKeyCommand = new AsyncRelayCommand<string>(HandleKeyPress);
         RemoveSymbolCommand = new AsyncRelayCommand(RemoveSymbol);
@@ -107,20 +110,20 @@ public class TabEditingControlViewModel : BaseViewModel
         switch (direction) 
         {
             case "Up":
-                if (_cursorLine <= 0) break;
+                if (_cursorLine <= 0) return;
                 CursorLine--; break;
 
             case "Down":
-                if (_cursorLine >= _tabLines.Count) break;
+                if (_cursorLine >= _tabLines.Count-2) return;
                 CursorLine++; 
                 break;
 
             case "Right":
-                if (_cursorPosition >= _tabLines[_cursorLine].Length) break;
+                if (_cursorPosition >= _tabLines[_cursorLine].Length-2) return;
                 CursorPosition++; break;
 
             case "Left":
-                if (_cursorPosition <= 3) break;
+                if (_cursorPosition <= 3) return;
                 CursorPosition--; break;
 
         }
@@ -136,31 +139,46 @@ public class TabEditingControlViewModel : BaseViewModel
         await UpdateTabText();
     }
 
-    public async Task UpdateTabText()
+    private async Task ReplaceCursorSymbol()
+    {
+        if (_symbolBehindCursor == null) return;
+
+        List<string> tabLinesCopy = _tabLines;
+        char[] tabLineToPutCursor = tabLinesCopy![CursorLine + 1].ToCharArray();
+        tabLineToPutCursor[CursorPosition] = '^';
+        tabLinesCopy[CursorLine + 1] = new(tabLineToPutCursor);
+    }
+
+    private async Task UpdateTabText()
     {
         if(_tabLines.Count == 0) await CreateEmptyTabText();
-        List<string> tabLinesWithCursor = _tabLines;
-        char[] tabLineWithCursorChars = tabLinesWithCursor![CursorLine].ToCharArray();
-        tabLineWithCursorChars[CursorPosition-1] = '>';
-        tabLinesWithCursor[CursorLine] = new(tabLineWithCursorChars);
-        TabText = string.Join("\n", tabLinesWithCursor);
+
+        List<string> tabLinesCopy = _tabLines.ToList();
+        char[] tabLineToPutCursor = tabLinesCopy![CursorLine+1].ToCharArray();
+        tabLineToPutCursor[CursorPosition] = '^';
+        tabLinesCopy[CursorLine+1] = new(tabLineToPutCursor);
+
+        TabText = string.Join("\n", tabLinesCopy);
     }
 
     private async Task CreateEmptyTabText()
     {
         if (TabService.SavedTab is null) throw new ArgumentNullException(nameof(TabService.SavedTab));
-        _tunings ??= await _tuningService.GetAllTunings(TabService.SavedTab);
-        _tunings = _tunings.OrderBy(s => s.StringOrder).ToList();
+        if(_tunings.Count == 0)
+        {
+            _tunings = await _tuningService.GetAllTunings(TabService.SavedTab);
+            _tunings = _tunings.OrderBy(s => s.StringOrder).ToList();
+        }
 
         foreach(var tuning in _tunings)
         {
-            if(tuning.StringOrder > 0) 
+            if(tuning.StringOrder > 0 && tuning.StringOrder != _tunings.Count) 
             { 
                 _tabLines.Add(tuning.StringNote + "|");
             }
             else
             {
-                _tabLines.Add(string.Empty);
+                _tabLines.Add("   ");
             }
         }
 
@@ -168,7 +186,11 @@ public class TabEditingControlViewModel : BaseViewModel
         {
             for (int j = 0; j < _tabLines.Count; j++)
             {
-                if (_tabLines[j].StartsWith(" ")) continue;
+                if (string.IsNullOrWhiteSpace(_tabLines[j]))
+                {
+                    _tabLines[j] += new string(' ', LineLength + 1);
+                    continue;
+                }
                 _tabLines[j] += new string('-', LineLength) + "|";
             }
         }

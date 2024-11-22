@@ -90,21 +90,24 @@
             
         </Grid>
         <Grid Grid.Row="5" Grid.Column="1">
-            <StackPanel>
-                <ScrollViewer
-                    Background="White"
-                    HorizontalScrollBarVisibility="Auto" 
-                    VerticalScrollBarVisibility="Auto"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
-                    <TextBlock
-                        Style="{DynamicResource CommonTextBlock}"
-                        FontSize="{DynamicResource SmallerFontSize}"
-                        Background="White"
-                        x:Name="TabStringTextBlock"
-                        Text="{Binding TabText, UpdateSourceTrigger=PropertyChanged}"/>
-                </ScrollViewer>
-            </StackPanel>
+            <Border CornerRadius="5" Background="White">
+                <StackPanel>
+                    <ScrollViewer
+                        Background="Transparent"
+                        HorizontalScrollBarVisibility="Auto" 
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                        <TextBlock
+                            Style="{DynamicResource CommonTextBlock}"
+                            FontSize="{DynamicResource SmallerFontSize}"
+                            FontFamily="Courier New"
+                            Foreground="Black"
+                            x:Name="TabStringTextBlock"
+                            Text="{Binding TabText, UpdateSourceTrigger=PropertyChanged}"/>
+                    </ScrollViewer>
+                </StackPanel>
+            </Border>
         </Grid>
     </Grid>
 </UserControl>

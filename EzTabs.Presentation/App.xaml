@@ -51,6 +51,7 @@
                 <ResourceDictionary Source="Resources/Styles/ListBoxStyle.xaml"/>
                 <ResourceDictionary Source="Resources/Styles/CommonFontStyle.xaml"/>
                 <ResourceDictionary Source="Resources/Styles/GenericStyle.xaml"/>
+                <ResourceDictionary Source="Resources/Styles/ComboBoxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

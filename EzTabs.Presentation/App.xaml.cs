@@ -1,6 +1,7 @@
 ﻿using EzTabs.Data;
 using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
+using EzTabs.Presentation.Services.SearchingServices;
 using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.ViewModels;
 using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
@@ -38,6 +39,7 @@ public partial class App : Application
         services.AddTransient<UserService>();
         services.AddTransient<TabService>();
         services.AddTransient<TuningService>();
+        services.AddTransient<SearchingService>();
         services.AddDbContext<EzTabsContext>(); 
 
         services.AddSingleton<INavigationService, NavigationService>();

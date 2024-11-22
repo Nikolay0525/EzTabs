@@ -1,0 +1,74 @@
+﻿<UserControl 
+    x:Class="EzTabs.Presentation.Views.MainControls.SimpleControls.TabInSearchPageControl"    
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls"
+    xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels"
+    xmlns:c="clr-namespace:EzTabs.Presentation.Converters"
+    mc:Ignorable="d" 
+    d:DesignHeight="40"
+    d:DesignWidth="540"
+    d:DataContext="{x:Type vm:SearchControlViewModel}"
+    Name="rootControl">
+
+    <UserControl.Resources>
+        <c:BoolToVisibilityConverter x:Key="boolConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Button
+                Style="{DynamicResource ListButton}"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                Foreground="Black"
+                x:Name="TabToClickButton"
+                Command="{Binding GoToClickedTabCommand}"
+                CommandParameter="{Binding TabId, ElementName=rootControl}"
+                HorizontalContentAlignment="Stretch">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <TextBlock 
+                            Style="{DynamicResource CommonTextBlock}" 
+                            Foreground="Black"
+                            d:Text="Baaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                            Text="{Binding Text, ElementName=rootControl}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <TextBlock 
+                            Style="{DynamicResource CommonTextBlock}" 
+                            Foreground="Black"
+                            Text="rating"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+                    </Grid>
+                </Grid>
+            </Button>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Button
+                Style="{DynamicResource ListButton}"
+                Visibility="{Binding CanBeEdited, ElementName=rootControl, Converter={StaticResource boolConverter}}"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                Foreground="Black"
+                x:Name="EditButton"
+                Command="{Binding GoEditClickedTabCommand}"
+                CommandParameter="{Binding TabId, ElementName=rootControl}"
+                Content="Edit Tab">
+            </Button>
+        </Grid>
+    </Grid>
+    
+</UserControl>

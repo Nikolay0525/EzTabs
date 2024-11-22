@@ -20,6 +20,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Button 
@@ -37,6 +39,13 @@
                 Content="Settings"/>
         </Grid>
         <Grid Grid.Row="4">
+            <Button 
+                Style="{DynamicResource CommonButton}"
+                Command="{Binding CreateTabCommand}"
+                x:Name="CreateTabButton"
+                Content="Create Tab"/>
+        </Grid>
+        <Grid Grid.Row="6">
             <Button 
                 Style="{DynamicResource CommonButton}"
                 Command="{Binding SignOutCommand}"

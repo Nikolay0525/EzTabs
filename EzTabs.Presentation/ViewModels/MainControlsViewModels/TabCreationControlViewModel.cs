@@ -148,7 +148,6 @@ public class TabCreationControlViewModel : BaseViewModel
         set
         {
             _stringNote = value;
-            if (_stringNote.Length < 2) _stringNote = _stringNote + " ";
             OnPropertyChanged(nameof(StringNote));
         }
     }
@@ -160,7 +159,6 @@ public class TabCreationControlViewModel : BaseViewModel
     }
 
     public ICommand GoToSearchControlCommand { get; }
-    public ICommand GoToTabEditingControlCommand { get; }
     public ICommand CreateTabCommand { get; }
     public ICommand AddTuningCommand { get; }
     public ICommand EditTuningCommand { get; }
@@ -223,9 +221,10 @@ public class TabCreationControlViewModel : BaseViewModel
         };
         Validate(SpecificProperties);
         if (HasErrors) return;
-        if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
-        if (ListOfTunings is null) throw new ArgumentNullException(nameof(_tunings));
-        if (StringNote is null) throw new ArgumentNullException(nameof(StringNote));
+
+        var stringNote = StringNote;
+
+        if (StringNote.Length < 2) stringNote = stringNote + " ";
 
         if (_tunings.Any(t => t.StringOrder == StringOrder))
         {
@@ -235,7 +234,7 @@ public class TabCreationControlViewModel : BaseViewModel
         var newTuning = new Tuning
         {
             StringOrder = StringOrder,
-            StringNote = StringNote
+            StringNote = stringNote
         };
         _tunings.Add(newTuning);
         ListUpdater(_tunings);

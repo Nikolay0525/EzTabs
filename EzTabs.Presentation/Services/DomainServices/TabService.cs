@@ -2,6 +2,8 @@
 using EzTabs.Data.Domain;
 using EzTabs.Data.Repository;
 using EzTabs.Presentation.Services.DomainServices.BaseServices;
+using EzTabs.Presentation.Services.NavigationServices;
+using EzTabs.Presentation.ViewModels.MainControlsViewModels;
 
 namespace EzTabs.Presentation.Services.DomainServices;
 
@@ -9,17 +11,26 @@ public class TabService : BaseService<Tab>
 {
     public static Tab? SavedTab { get; private set; }
 
-    public TabService(EzTabsContext context) : base(context)
+    public TabService(EzTabsContext context, INavigationService navigationService) : base(context, navigationService)
     {
 
     }
 
+    public async Task GoToTab(Guid tabId)
+    {
+        SavedTab = await _repository!.GetById(tabId);
+        NavigationService.NavigateTo<TabControlViewModel>();
+    }
+    
+    public async Task GoEditTab(Guid tabId)
+    {
+        SavedTab = await _repository!.GetById(tabId);
+        NavigationService.NavigateTo<TabEditingControlViewModel>();
+    }
+
     public async Task<Tab?> CreateTab(Guid authorId, string title, string band, string genre, string key, int bpm, string description)
     {
-        EnsureRepositoryInitialized();
-
-        if (_repository is null) throw new ArgumentNullException(nameof(_repository) + "Haven't loaded in time");
-        var allTabs = await _repository.GetAll();
+        var allTabs = await _repository!.GetAll();
         if (allTabs.FirstOrDefault(t => t.AuthorId == authorId && t.Title == title && t.Band == band && t.Genre == genre) != null) return null;
         var newTab = new Tab
         {

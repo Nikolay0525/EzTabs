@@ -3,6 +3,7 @@ using EzTabs.Data.Domain;
 using EzTabs.Data.Domain.Enums;
 using EzTabs.Presentation.Services.DomainServices.BaseServices;
 using EzTabs.Presentation.Services.EmailServices;
+using EzTabs.Presentation.Services.NavigationServices;
 
 namespace EzTabs.Presentation.Services.DomainServices;
 
@@ -10,16 +11,13 @@ public class UserService : BaseService<User>
 {
     public static User SavedUser { get; private set; } = new User();
 
-    public UserService(EzTabsContext context) : base(context)
+    public UserService(EzTabsContext context, INavigationService navigationService) : base(context, navigationService)
     {
 
     }
 
     public async Task<List<string>> RegisterUser(string name, string email, string password, string verificationCode)
     {
-        //await EnsureRepositoryInitialized();
-
-        if (_repository is null) throw new ArgumentNullException(nameof(_repository));
         List<string> errors = new();
         User newUser = new()
         {
@@ -48,8 +46,6 @@ public class UserService : BaseService<User>
 
     public async Task<bool> VerificateUser(string verificationCode)
     {
-        //await EnsureRepositoryInitialized();
-
         if (SavedUser == null || verificationCode == null)
         {
             throw new NullReferenceException();
@@ -57,7 +53,6 @@ public class UserService : BaseService<User>
         if (SavedUser.VerificationCode == verificationCode)
         {
             SavedUser.IsEmailVerified = true;
-            if (_repository is null) throw new ArgumentNullException(nameof(_repository));
             await _repository.Update(SavedUser);
             return true;
         }
@@ -65,9 +60,6 @@ public class UserService : BaseService<User>
     }
     public async Task<bool> LoginUser(User userToLogin)
     {
-        //await EnsureRepositoryInitialized();
-
-        if (_repository is null) throw new ArgumentNullException(nameof(_repository));
         var allUsers = await _repository.GetAll();
         var foundedUser = allUsers.FirstOrDefault(u => u.Name == userToLogin.Name);
         if (foundedUser != null && foundedUser.Password == userToLogin.Password)

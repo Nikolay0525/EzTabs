@@ -20,7 +20,7 @@ public class MainWindowViewModel : BaseViewModel
     {
         NavigationService = navigationService;
         ViewModelService = viewModelService;
-        NavigationService.NavigateTo<TabEditingControlViewModel>();
+        NavigationService.NavigateTo<LoginControlViewModel>();
         ViewModelService.OnSomethingLoadingChanged += OnSomethingLoadingChanged;
     }
 

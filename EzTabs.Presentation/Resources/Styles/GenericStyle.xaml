@@ -45,26 +45,4 @@
         </Setter>
     </Style>
     
-    <Style x:Key="PlaceHolderTextBox" TargetType="{x:Type ct:PlaceHolderTextBox}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ct:PlaceHolderTextBox}">
-                    <ControlTemplate.Resources>
-                        <bc:BoolToVisibilityConverter x:Key="boolConverter"/>
-                    </ControlTemplate.Resources>
-                    <Grid>
-                        <ct:PlaceHolderTextBox
-                            Padding="{TemplateBinding Margin}"
-                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                            Panel.ZIndex="1"
-                            IsHitTestVisible="False"
-                            Opacity="0.5"
-                            Text="{TemplateBinding PlaceHolderText}"
-                            Visibility="{TemplateBinding IsEmpty,Converter={StaticResource boolConverter}}"/>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 </ResourceDictionary>

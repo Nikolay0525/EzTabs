@@ -45,10 +45,13 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsVi
         }
 
         public ICommand SwitchMenuCommand { get; }
+        public ICommand CreateTabCommand { get; }
         public ICommand SignOutCommand { get; }
+
         public ControlBarViewModel(INavigationService navigationService,IViewModelService viewModelService) : base(viewModelService, navigationService)
         {
             SwitchMenuCommand = new RelayCommand(SwitchMenu);
+            CreateTabCommand = new RelayCommand(CreateTab);
             SignOutCommand = new RelayCommand(SignOut);
             if (UserService.SavedUser is null) throw new ArgumentNullException(nameof(UserService.SavedUser));
             if (UserService.SavedUser.Role == UserRole.User) ShowModerationButton = false;
@@ -60,6 +63,11 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsVi
             IsMenuOpen = !IsMenuOpen;
         }
 
+        private void CreateTab()
+        {
+            NavigationService.NavigateTo<TabCreationControlViewModel>();
+        }
+        
         private void SignOut()
         {
             NavigationService.NavigateTo<LoginControlViewModel>();

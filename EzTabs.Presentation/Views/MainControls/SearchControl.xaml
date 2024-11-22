@@ -8,6 +8,8 @@
              xmlns:vmcbp="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs"
              xmlns:sc="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls"
              xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels" 
+             xmlns:ct="clr-namespace:EzTabs.Presentation.Resources.Styles.CustomTypes" 
+             xmlns:c="clr-namespace:EzTabs.Presentation.Converters" 
              d:DataContext="{d:DesignInstance Type=vm:SearchControlViewModel}"
              mc:Ignorable="d" 
              FontFamily="{DynamicResource CommonFontFamily}"
@@ -16,33 +18,34 @@
              d:DesignHeight="540" d:DesignWidth="960"
              Background="#2e2e2e">
     <UserControl.Resources>
-
+        <c:BoolToVisibilityConverter x:Key="boolConverter"/>
     </UserControl.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="400"/>
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
-
-        <Grid Grid.Column="0" Grid.Row="1" Background="Transparent">
+        <Grid Grid.Column="1" Grid.Row="1" Background="Transparent">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="1" Background="Transparent">
+            <Grid Grid.Column="0" Background="Transparent">
                 <Border Padding="2">
                     <Path Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" 
                               Fill="White" 
@@ -50,55 +53,38 @@
                               />
                 </Border>
             </Grid>
-            <Grid Grid.Column="3" Background="Transparent">
-                <TextBox Style="{DynamicResource CommonTextBox}" x:Name="SearchTextBox" 
-                         Background="White"
-                         Text="Search"
-                         VerticalAlignment="Stretch"
-                         HorizontalAlignment="Stretch"
-                         Padding="2,5,2,5"/>
+            <Grid Grid.Column="2" Background="Transparent">
+                <ct:PlaceHolderTextBox 
+                    Style="{DynamicResource CommonPlaceHolderTextBox}" 
+                    x:Name="SearchTextBox" 
+                    PlaceHolderText="Search"
+                    Padding="2,5,2,5"
+                    Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
-            <Grid Grid.Column="5" Background="Transparent">
-                
-                <Button Style="{DynamicResource CommonButton}" x:Name="FilterButton"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Content="Filter"
-                        VerticalContentAlignment="Top"/>
+            <Grid Grid.Column="4" Background="Transparent">
+                <Button 
+                    Style="{DynamicResource CommonButton}" 
+                    Command="{Binding SwitchFilterCommand}"
+                    x:Name="FilterButton"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Content="Filter"/>
+            </Grid>
+            <Grid Grid.Column="6">
+                <ContentControl x:Name="ControlBar" Content="{Binding ControlBarViewModel}"/>
             </Grid>
         </Grid>
-        <Grid Grid.Column ="0" Grid.Row="2" Background="Transparent">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5"/>
-            </Grid.ColumnDefinitions>
-            <ListBox Grid.Column="1" Grid.Row="1" Style="{DynamicResource CommonListBox}" x:Name="TabList"
-                     Background="White"/>
+        <Grid Grid.Column ="1" Grid.Row="2" Background="Transparent">
+            <sc:SearchFilters Visibility="{Binding IsFilterEnabled, Converter={StaticResource boolConverter}}"/>
         </Grid>
-        <Grid Grid.Column="1" Grid.Row="1"  Background="Transparent">
-            <ContentControl x:Name="ControlBar" Content="{Binding ControlBarViewModel}"/>
-        </Grid>
-        <Grid Grid.Column="1" Grid.Row="2" Background="Transparent">
-
-            <Button Style="{DynamicResource CommonButton}" x:Name="CreateTabButton"
-                    Content="Create Tab"
-                    Command="{Binding GoToCreationOfTabCommand}"
-                    Width="250"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Margin="0,0,0,100"/>
-
-            <Button Style="{DynamicResource CommonButton}" x:Name="LoadTabButton"
-                    Width="250"
-                    Content="Edit Tab"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Margin="0,100,0,0"/>
+        <Grid Grid.Column ="1" Grid.Row="4" Background="Transparent">
+            <ListBox 
+                Grid.Column="1" 
+                Grid.Row="1" 
+                Style="{DynamicResource CommonListBox}" 
+                x:Name="TabList"
+                ItemsSource="{Binding TabsInSearchList}"
+                Background="White"/>
         </Grid>
     </Grid>
 </UserControl>

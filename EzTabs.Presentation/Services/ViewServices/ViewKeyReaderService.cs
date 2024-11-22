@@ -41,13 +41,10 @@ public static class ViewKeyReaderService
                 command.Execute($"{e.Key.ToString().ToUpper()}");
                 return;               
             }
-            else if(e.Key == Key.Oem5 || Keyboard.Modifiers == ModifierKeys.Shift && e.Key != Key.LeftShift & e.Key != Key.RightShift)
+            else if(Keyboard.Modifiers == ModifierKeys.Shift && e.Key != Key.LeftShift & e.Key != Key.RightShift)
             {
                 switch (e.Key)
                 {
-                    case Key.Oem5:
-                        command.Execute("~");
-                        break;
                     case Key.D0:
                         command.Execute(")");
                         break;

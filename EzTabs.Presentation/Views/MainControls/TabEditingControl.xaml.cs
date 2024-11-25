@@ -10,11 +10,5 @@ public partial class TabEditingControl : UserControl
     public TabEditingControl()
     {
         InitializeComponent();
-        this.Loaded += UserControl_Loaded;
-    }
-
-    private void UserControl_Loaded(object sender, RoutedEventArgs e)
-    {
-        Keyboard.Focus(this); // Ensure the control receives keyboard input.
     }
 }

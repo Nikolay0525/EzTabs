@@ -11,7 +11,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
@@ -19,13 +19,15 @@
             <Button Style="{DynamicResource CommonButton}"
                     x:Name="MinusButton"
                     Content="-"
-                    Click="OnMinusButtonClick"/>
+                    Click="OnMinusButtonClick"
+                    Focusable="False"/>
         </Grid>
         <Grid Grid.Column="2">
             <TextBox Style="{DynamicResource CommonTextBox}"
                      x:Name="ValueTextBlock"
                      Text="{Binding CurrentValue, ElementName=rootControl}"
                      TextAlignment="Center"
+                     Width="{Binding TextBoxWidth, ElementName=rootControl}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Center">
                 
@@ -35,7 +37,8 @@
             <Button Style="{DynamicResource CommonButton}"
                     x:Name="PlusButton"
                     Content="+"
-                    Click="OnPlusButtonClick"/>
+                    Click="OnPlusButtonClick"
+                    Focusable="False"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -1,5 +1,6 @@
 ﻿using EzTabs.Data;
 using EzTabs.Data.Domain;
+using EzTabs.Presentation.Services.ContextServices;
 using EzTabs.Presentation.Services.DomainServices.BaseServices;
 using EzTabs.Presentation.Services.NavigationServices;
 
@@ -7,14 +8,14 @@ namespace EzTabs.Presentation.Services.DomainServices;
 
 public class TuningService : BaseService<Tuning>
 {
-    public TuningService(EzTabsContext context, INavigationService navigationService) : base(context, navigationService)
+    public TuningService(IContextFactoryService contextFactoryService, INavigationService navigationService) : base(contextFactoryService, navigationService)
     {
         
     }
 
     public async Task CreateTuning(Tab tab, List<Tuning> tunings)
     {
-        if (_repository is null) throw new ArgumentNullException(nameof(_repository));
+        await EnsureRepoCreated();
 
         List<Tuning> emptyLines = new()
         {
@@ -36,7 +37,7 @@ public class TuningService : BaseService<Tuning>
     
     public async Task<List<Tuning>> GetAllTunings(Tab tab)
     {
-        if (_repository is null) throw new ArgumentNullException(nameof(_repository));
+        await EnsureRepoCreated();
 
         IEnumerable<Tuning> alltunings = await _repository.GetAll();
         List<Tuning> tunings = new List<Tuning>();

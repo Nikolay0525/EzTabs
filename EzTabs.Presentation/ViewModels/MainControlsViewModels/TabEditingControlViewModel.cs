@@ -10,16 +10,14 @@ using System.Windows.Shapes;
 
 namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 
-public class TabEditingControlViewModel : BaseViewModel
+public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
 {
     public BaseViewModel ControlBarViewModel { get; private set; }
 
-    private char? _symbolBehindCursor = null;
-    private int _symbolBehindCursorPosition;
-    private int _symbolBehindCursorLine;
     private int _cursorPosition = 3;
     private int _cursorLine = 3;
 
+    private bool _isFocused;
     private readonly TuningService _tuningService;
     private readonly Task _initializedTask;
     private List<Tuning> _tunings = new();
@@ -27,6 +25,17 @@ public class TabEditingControlViewModel : BaseViewModel
     private string _tabText;
     private int _lineLength = 20;
     private int _barAmount = 2;
+
+    public bool IsFocused
+    {
+        get => _isFocused;
+        set
+        {
+            _isFocused = value;
+            OnPropertyChanged();
+            Task.Run(UpdateTabText);
+        }
+    }
 
     public int CursorPosition
     {
@@ -78,7 +87,12 @@ public class TabEditingControlViewModel : BaseViewModel
         }
     }
 
+    public ICommand GoToMainPageCommand { get; }
     public ICommand HandleKeyCommand { get; }
+    public ICommand CreateBarsButtonCommand { get; }
+    public ICommand RemoveBarsButtonCommand { get; }
+    public ICommand CreateLineButtonCommand { get; }
+    public ICommand RemoveLineButtonCommand { get; }
     public ICommand MoveCursorCommand { get; }
     public ICommand WriteNumberCommand { get; }
     public ICommand RemoveSymbolCommand { get; }
@@ -87,10 +101,18 @@ public class TabEditingControlViewModel : BaseViewModel
     {
         ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
         _tuningService = tuningService;
-        UpdateTabText();
+        Task.Run(UpdateTabText);
+
+        CreateLineButtonCommand = new AsyncRelayCommand(CreateEmptyTabText);
+        GoToMainPageCommand = new RelayCommand(GoToMainPage);
         MoveCursorCommand = new AsyncRelayCommand<string>(MoveCursor);
         HandleKeyCommand = new AsyncRelayCommand<string>(HandleKeyPress);
         RemoveSymbolCommand = new AsyncRelayCommand(RemoveSymbol);
+    }
+
+    private void GoToMainPage()
+    {
+        NavigationService.NavigateTo<SearchControlViewModel>();
     }
 
     private async Task HandleKeyPress(string? symbol)
@@ -139,26 +161,21 @@ public class TabEditingControlViewModel : BaseViewModel
         await UpdateTabText();
     }
 
-    private async Task ReplaceCursorSymbol()
-    {
-        if (_symbolBehindCursor == null) return;
-
-        List<string> tabLinesCopy = _tabLines;
-        char[] tabLineToPutCursor = tabLinesCopy![CursorLine + 1].ToCharArray();
-        tabLineToPutCursor[CursorPosition] = '^';
-        tabLinesCopy[CursorLine + 1] = new(tabLineToPutCursor);
-    }
-
     private async Task UpdateTabText()
     {
         if(_tabLines.Count == 0) await CreateEmptyTabText();
 
-        List<string> tabLinesCopy = _tabLines.ToList();
-        char[] tabLineToPutCursor = tabLinesCopy![CursorLine+1].ToCharArray();
-        tabLineToPutCursor[CursorPosition] = '^';
-        tabLinesCopy[CursorLine+1] = new(tabLineToPutCursor);
+        if (IsFocused) 
+        {
+            List<string> tabLinesCopy = _tabLines.ToList();
+            char[] tabLineToPutCursor = tabLinesCopy![CursorLine + 1].ToCharArray();
+            tabLineToPutCursor[CursorPosition] = '^';
+            tabLinesCopy[CursorLine + 1] = new(tabLineToPutCursor);
 
-        TabText = string.Join("\n", tabLinesCopy);
+            TabText = string.Join("\n", tabLinesCopy);
+            return;
+        }
+        TabText = string.Join("\n", _tabLines);
     }
 
     private async Task CreateEmptyTabText()

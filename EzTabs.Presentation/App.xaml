@@ -52,6 +52,7 @@
                 <ResourceDictionary Source="Resources/Styles/CommonFontStyle.xaml"/>
                 <ResourceDictionary Source="Resources/Styles/GenericStyle.xaml"/>
                 <ResourceDictionary Source="Resources/Styles/ComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="Resources/Styles/CheckBoxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

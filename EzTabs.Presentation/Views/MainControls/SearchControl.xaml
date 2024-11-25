@@ -29,6 +29,8 @@
             <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5"/>
@@ -85,6 +87,60 @@
                 x:Name="TabList"
                 ItemsSource="{Binding TabsInSearchList}"
                 Background="White"/>
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1">
+                <Button 
+                    Style="{DynamicResource CommonButton}"
+                    Command="{Binding PreviousPageCommand}"
+                    Visibility="{Binding PreviousPageVisibility, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}"
+                    Content="Previous page"
+                    Width="200"/>
+
+            </Grid>
+
+            <Grid Grid.Column="3">
+                <Button
+                    Style="{DynamicResource CommonButton}"
+                    Command="{Binding OnTheFirstPageCommand}"
+                    Visibility="{Binding FirstPageVisibility, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}"
+                    Width="50"
+                    d:Content="1..."/>
+            </Grid>
+
+            <Grid Grid.Column="5">
+                <Border BorderThickness="2" CornerRadius="5" BorderBrush="White">
+                    <TextBlock
+                        Style="{DynamicResource CommonTextBlock}"
+                        FontSize="{DynamicResource CommonFontSize}"
+                        FontWeight="Bold"
+                        Text="{Binding CurrentPage, UpdateSourceTrigger=PropertyChanged}"
+                        TextAlignment="Center"
+                        VerticalAlignment="Center"
+                        d:Text="1"/>
+                </Border>
+            </Grid>
+            
+            <Grid Grid.Column="7">
+                <Button 
+                    Style="{DynamicResource CommonButton}"
+                    Command="{Binding NextPageCommand}"
+                    Visibility="{Binding NextPageVisibility, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}"
+                    Content="Next page"
+                    Width="200"/>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

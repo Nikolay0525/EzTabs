@@ -4,6 +4,7 @@ using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.SearchingServices;
 using EzTabs.Presentation.Services.ViewModelServices;
+using EzTabs.Presentation.Services.ViewServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs;
 using EzTabs.Presentation.Views.MainControls.SimpleControls;
@@ -19,6 +20,11 @@ public class SearchControlViewModel : BaseViewModel
     private int _currentPage = 0;
     private bool _isFilterEnabled = false;
     private double _filterRowHeight = 0;
+    private bool _firstPageVisibility = false;
+    private bool _nextPageVisibility = false;
+    private bool _previousPageVisibility = false;
+
+    private readonly IWindowService _windowService;
 
     public bool IsFilterEnabled
     {
@@ -54,7 +60,7 @@ public class SearchControlViewModel : BaseViewModel
         {
             _searchString = value;
             OnPropertyChanged();
-            UpdateSearchList();
+            Task.Run(UpdateSearchList);
         }
     }
 
@@ -64,10 +70,46 @@ public class SearchControlViewModel : BaseViewModel
         set
         {
             _currentPage = value;
-            OnPropertyChanged(); 
+            OnPropertyChanged();
+            if (_currentPage > 0) PreviousPageVisibility = true;
+            else PreviousPageVisibility = false;
+            Task.Run(UpdateSearchList);
         }
     }
 
+    public bool FirstPageVisibility 
+    { 
+        get => _firstPageVisibility; 
+        set 
+        {
+            _firstPageVisibility = value;
+            OnPropertyChanged();
+        } 
+    }
+    
+    public bool NextPageVisibility 
+    { 
+        get => _nextPageVisibility; 
+        set 
+        {
+            _nextPageVisibility = value;
+            OnPropertyChanged();
+        } 
+    }
+
+    public bool PreviousPageVisibility 
+    { 
+        get => _previousPageVisibility; 
+        set 
+        {
+            _previousPageVisibility = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ICommand NextPageCommand { get; }
+    public ICommand PreviousPageCommand { get; }
+    public ICommand OnTheFirstPageCommand { get; }
     public ICommand SwitchFilterCommand { get; }
     public ICommand GoToCreationOfTabCommand { get; }
     public ICommand GoToClickedTabCommand { get; }
@@ -78,12 +120,17 @@ public class SearchControlViewModel : BaseViewModel
 
     public BaseViewModel ControlBarViewModel { get; private set; }
 
-    public SearchControlViewModel(INavigationService navigationService ,IViewModelService viewModelService, TabService tabService, SearchingService searchingService) : base(viewModelService, navigationService)
+
+    public SearchControlViewModel(INavigationService navigationService ,IViewModelService viewModelService, TabService tabService, SearchingService searchingService, IWindowService windowService) : base(viewModelService, navigationService)
     {
+        _windowService = windowService;
         _tabService = tabService;
         _searchingService = searchingService;
-        UpdateSearchList();
+        Task.Run(UpdateSearchList);
         ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
+        NextPageCommand = new RelayCommand(NextPage);
+        PreviousPageCommand = new RelayCommand(PreviousPage);
+        OnTheFirstPageCommand = new RelayCommand(OnTheFirstPage);
         SwitchFilterCommand = new RelayCommand(SwitchFilter);
         GoToCreationOfTabCommand = new RelayCommand(GoToCreationOfTab);
         GoToClickedTabCommand = new AsyncRelayCommand<Guid>(GoToClickedTab);
@@ -100,9 +147,30 @@ public class SearchControlViewModel : BaseViewModel
        await _tabService.GoEditTab(tabId);
     }
 
-    private void UpdateSearchList()
+    private void NextPage()
     {
-        List<Tab> tabsToDisplay = _searchingService.SearchTabs(300, CurrentPage, SearchString);
+        CurrentPage++;
+    }
+    
+    private void PreviousPage()
+    {
+        CurrentPage--;
+    }
+    
+    private void OnTheFirstPage()
+    {
+        CurrentPage = 0;
+    }
+
+    private async Task UpdateSearchList()
+    {
+        List<Tab> tabsToDisplay = await _searchingService.SearchTabs(_windowService.WindowHeight - 200, CurrentPage, SearchString);
+
+        if (tabsToDisplay.Count > (_windowService.WindowHeight - 200) / 40)
+        {
+            NextPageVisibility = true;
+        }
+        else { NextPageVisibility = false; }
 
         TabsInSearchList.Clear();
 

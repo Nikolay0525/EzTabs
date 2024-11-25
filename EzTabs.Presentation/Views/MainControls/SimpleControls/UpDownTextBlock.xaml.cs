@@ -10,6 +10,12 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
             InitializeComponent();
         }
 
+        public static readonly DependencyProperty ButtonStepMultiplierProperty =
+            DependencyProperty.Register("ButtonStepMultiplier", typeof(int), typeof(UpDownTextBlock), new PropertyMetadata(1));
+
+        public static readonly DependencyProperty TextBoxWidthProperty =
+            DependencyProperty.Register("TextBoxWidth", typeof(double), typeof(UpDownTextBlock), new PropertyMetadata(50.0));
+
         public static readonly DependencyProperty MinimumProperty =
             DependencyProperty.Register("Minimum", typeof(double), typeof(UpDownTextBlock), new PropertyMetadata(0.0));
 
@@ -19,6 +25,18 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
         public static readonly DependencyProperty CurrentValueProperty =
             DependencyProperty.Register("CurrentValue", typeof(double), typeof(UpDownTextBlock), new PropertyMetadata(50.0));
 
+        public int ButtonStepMultiplier
+        {
+            get => (int)GetValue(ButtonStepMultiplierProperty);
+            set => SetValue(ButtonStepMultiplierProperty, value);
+        }
+        
+        public double TextBoxWidth
+        {
+            get => (double)GetValue(TextBoxWidthProperty);
+            set => SetValue(TextBoxWidthProperty, value);
+        }
+        
         public double Minimum
         {
             get => (double)GetValue(MinimumProperty);
@@ -40,13 +58,13 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
         private void OnMinusButtonClick(object sender, RoutedEventArgs e)
         {
             if (CurrentValue > Minimum)
-                CurrentValue -= 1;
+                CurrentValue -= 1*ButtonStepMultiplier;
         }
 
         private void OnPlusButtonClick(object sender, RoutedEventArgs e)
         {
             if (CurrentValue < Maximum)
-                CurrentValue += 1;
+                CurrentValue += 1*ButtonStepMultiplier;
         }
     }
 }

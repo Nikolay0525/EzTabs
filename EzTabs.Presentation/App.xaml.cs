@@ -1,14 +1,17 @@
 ﻿using EzTabs.Data;
+using EzTabs.Presentation.Services.ContextServices;
 using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.SearchingServices;
 using EzTabs.Presentation.Services.ViewModelServices;
+using EzTabs.Presentation.Services.ViewServices;
 using EzTabs.Presentation.ViewModels;
 using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs;
 using EzTabs.Presentation.Views;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
@@ -21,7 +24,7 @@ public partial class App : Application
     public App()
     {
         IServiceCollection services = new ServiceCollection();
-        services.AddSingleton<MainWindow>(serviceProvider => new Views.MainWindow()
+        services.AddSingleton<MainWindow>(serviceProvider => new Views.MainWindow(serviceProvider.GetRequiredService<IWindowService>())
         {
             DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>()
         });
@@ -40,11 +43,15 @@ public partial class App : Application
         services.AddTransient<TabService>();
         services.AddTransient<TuningService>();
         services.AddTransient<SearchingService>();
-        services.AddDbContext<EzTabsContext>(); 
+
+        services.AddTransient<EzTabsContext>();
 
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IViewModelService, ViewModelService>();
+        services.AddSingleton<IContextFactoryService, ContextFactoryService>();
+        services.AddSingleton<IWindowService, WindowService>();
         services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider => viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType)); // ViewModelFactory
+        services.AddSingleton<Func<Type, EzTabsContext>>(serviceProvider => context => (EzTabsContext)serviceProvider.GetRequiredService(context)); // ContextFactory
 
         _serviceProvider = services.BuildServiceProvider();
     }

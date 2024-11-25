@@ -2,6 +2,7 @@
 using EzTabs.Data.Domain.BaseModels;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ViewModelServices;
+using EzTabs.Presentation.Services.ViewServices;
 using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels;

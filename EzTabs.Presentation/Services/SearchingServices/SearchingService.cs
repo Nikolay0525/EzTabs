@@ -1,5 +1,7 @@
 ﻿using EzTabs.Data;
 using EzTabs.Data.Domain;
+using EzTabs.Data.Repository;
+using EzTabs.Presentation.Services.ContextServices;
 using EzTabs.Presentation.Services.DomainServices;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,20 +9,31 @@ namespace EzTabs.Presentation.Services.SearchingServices
 {
     public class SearchingService
     {
+        private IContextFactoryService _contextFactoryService;
         private EzTabsContext _context;
+        private Task _initializeTask;
 
-        public SearchingService(EzTabsContext context)
+        public SearchingService(IContextFactoryService contextFactoryService)
         {
-            _context = context;
+            _contextFactoryService = contextFactoryService;
+            _initializeTask = Task.Run(async () =>
+            {
+                _context = await contextFactoryService.CreateAsync();
+            });
         }
 
-
-
-        public List<Tab> SearchTabs(int height, int currentPage, string searchText, string? authorName = null)
+        private async Task EnsureContextCreated()
         {
-            int amountOftabsToShow = height / 40;
+            if (_context == null) await _initializeTask;
+        }
 
-            IQueryable<Tab> tabs = _context.Set<Tab>();
+        public async Task<List<Tab>> SearchTabs(double height, int currentPage, string searchText, string? authorName = null)
+        {
+            await EnsureContextCreated();
+
+            int amountOftabsToSend = (int)(height / 40) + 1;
+
+            IQueryable<Tab> tabs = _context!.Set<Tab>();
 
             if (authorName != null)
             {
@@ -32,8 +45,8 @@ namespace EzTabs.Presentation.Services.SearchingServices
 
             return tabs
                 .AsNoTracking()
-                .Skip(currentPage * amountOftabsToShow)
-                .Take(amountOftabsToShow)
+                .Skip(currentPage * amountOftabsToSend)
+                .Take(amountOftabsToSend)
                 .Select(tab => new Tab
                 {
                     Id = tab.Id,

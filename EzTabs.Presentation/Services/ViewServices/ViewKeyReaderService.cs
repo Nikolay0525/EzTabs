@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace EzTabs.Presentation.Services.ViewServices;
@@ -32,6 +34,11 @@ public static class ViewKeyReaderService
 
     private static void Element_PreviewKeyDown(object sender, KeyEventArgs e)
     {
+        if (IsTextInputFocused())
+        {
+            return;
+        }
+
         if (sender is UIElement element)
         {
             var command = GetKeyCommand(element);
@@ -101,5 +108,16 @@ public static class ViewKeyReaderService
                 command.Execute(e.Key.ToString().ToLower());
             }
         }
+    }
+    private static bool IsTextInputFocused()
+    {
+        var focusedElement = Keyboard.FocusedElement;
+
+        if (focusedElement is TextBoxBase)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

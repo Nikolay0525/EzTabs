@@ -18,23 +18,14 @@
     mc:Ignorable="d" 
     d:DesignHeight="540" d:DesignWidth="960"
     Background="#2e2e2e"
-    vs:ViewKeyReaderService.KeyCommand="{Binding HandleKeyCommand}"
-    Focusable="True">
+    vs:ViewKeyReaderService.KeyCommand="{Binding HandleKeyCommand}">
 
-    <UserControl.InputBindings>
-        <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Up" Key="Up"/>
-        <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Down" Key="Down"/>
-        <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Left" Key="Left"/>
-        <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Right" Key="Right"/>
-        <KeyBinding Command="{Binding RemoveSymbolCommand}" Key="Backspace"/>
-    </UserControl.InputBindings>
-    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="5"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
@@ -46,65 +37,174 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Button 
                     Style="{DynamicResource CommonButton}" 
                     x:Name="GoToSearchButton" 
                     Command="{Binding GoToSearchControlCommand}"
-                    Content="Return to searching" 
+                    Content="Main page" 
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"/>
 
-            </Grid>
-            <Grid Grid.Column="1">
-                <TextBlock
-                    Style="{DynamicResource CommonTextBlock}"
-                    TextAlignment="Center"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    x:Name="TabPageTextBlock"
-                    Text="Tab Editing"/>
             </Grid>
             <Grid Grid.Column="2">
                 <ContentControl x:Name="ControlBar" Content="{Binding ControlBarViewModel}"/>
             </Grid>
         </Grid>
         <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Grid.Row="0">
+                <TextBlock
+                    Style="{DynamicResource CommonTextBlock}"
+                    x:Name="BarAmountTextBlock"
+                    Text="Bar Amount"
+                    TextAlignment="Center"
+                    VerticalAlignment="Center"/>
+                
+            </Grid>
+            <Grid Grid.Column="0" Grid.Row="2">
+                <sc:UpDownTextBlock 
+                    x:Name="BarAmountTextBox"
+                    TextBoxWidth="50"
+                    CurrentValue="{Binding BarAmount}"/>
+                
+            </Grid>
+            <Grid Grid.Column="2" Grid.Row="0">
+                <TextBlock
+                    Style="{DynamicResource CommonTextBlock}"
+                    x:Name="BarLengthTextBlock"
+                    Text="Bar Length"
+                    TextAlignment="Center"
+                    VerticalAlignment="Center"/>
+            </Grid>
+            <Grid Grid.Column="2" Grid.Row="2">
+                <sc:UpDownTextBlock 
+                    x:Name="BarLengthTextBox"
+                    TextBoxWidth="50"
+                    CurrentValue="{Binding LineLength}"/>
+            </Grid>
+
+            <Grid Grid.Column="4" Grid.Row="0">
+                <Button
+                    Style="{DynamicResource CommonButton}"
+                    x:Name="CreateBarsButton"
+                    Content="Create Bars"
+                    Command="{Binding CreateBarsButton}"
+                    Focusable="False"/>
+            </Grid>
             
+            <Grid Grid.Column="4" Grid.Row="2">
+                <Button
+                    Style="{DynamicResource CommonButton}"
+                    x:Name="RemoveBarsButton"
+                    Content="Remove Bars"
+                    Command="{Binding RemoveBarsButton}"
+                    Focusable="False"/>
+            </Grid>
+
+            <Grid Grid.Column="6" Grid.Row="0">
+                <Button
+                    Style="{DynamicResource CommonButton}"
+                    x:Name="CreateBarsLineButton"
+                    Content="Create Line"
+                    Command="{Binding CreateLineButtonCommand}"
+                    Focusable="False"/>
+            </Grid>
+
+            
+            <Grid Grid.Column="6" Grid.Row="2">
+                <Button
+                    Style="{DynamicResource CommonButton}"
+                    x:Name="RemoveBarsLineButton"
+                    Content="Remove Line"
+                    Command="{Binding RemoveLineButton}"
+                    Focusable="False"/>
+            </Grid>
+            
+            <Grid Grid.Column="8" Grid.Row="0">
+                <TextBlock
+                    Style="{DynamicResource CommonTextBlock}"
+                    x:Name="CurrentZoomTextBlock"
+                    Text="Zoom"
+                    TextAlignment="Center"
+                    VerticalAlignment="Center"/>
+            </Grid>
+            
+            <Grid Grid.Column="8" Grid.Row="2">
+                <sc:UpDownTextBlock
+                    x:Name="ZoomTextBox"
+                    CurrentValue="{Binding CurrentZoom}"
+                    TextBoxWidth="50"
+                    ButtonStepMultiplier="5"/>
+            </Grid>
+            
+            <Grid Grid.Column="10" Grid.Row="0">
+                <CheckBox 
+                    Style="{DynamicResource CommonCheckBox}"
+                    x:Name="InsertModeCheckBox"
+                    Content="Insert"
+                    VerticalContentAlignment="Center"
+                    Focusable="False"/>
+            </Grid>
+
+            <Grid Grid.Column="10" Grid.Row="2">
+                <CheckBox
+                    Style="{DynamicResource CommonCheckBox}"
+                    x:Name="AutoSaveCheckBox"
+                    Content="Auto Save"
+                    VerticalContentAlignment="Center"
+                    Focusable="False"/>
+            </Grid>
         </Grid>
         <Grid Grid.Row="5" Grid.Column="1">
-            <Border CornerRadius="5" Background="White">
-                <StackPanel>
+            <Border CornerRadius="5" Background="White" Focusable="False">
+                <StackPanel Focusable="False">
                     <ScrollViewer
                         Background="Transparent"
                         HorizontalScrollBarVisibility="Auto" 
                         VerticalScrollBarVisibility="Auto"
                         HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch">
+                        VerticalAlignment="Stretch"
+                        Focusable="True" 
+                        vs:FocusTrackingService.IsFocused="True">
+
+                        <ScrollViewer.InputBindings>
+                            <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Up" Key="Up"/>
+                            <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Down" Key="Down"/>
+                            <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Left" Key="Left"/>
+                            <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Right" Key="Right"/>
+                            <KeyBinding Command="{Binding RemoveSymbolCommand}" Key="Backspace"/>
+                        </ScrollViewer.InputBindings>
+
                         <TextBlock
                             Style="{DynamicResource CommonTextBlock}"
-                            FontSize="{DynamicResource SmallerFontSize}"
+                            FontSize="{Binding CurrentFontSize}"
                             FontFamily="Courier New"
                             Foreground="Black"
                             x:Name="TabStringTextBlock"
-                            Text="{Binding TabText, UpdateSourceTrigger=PropertyChanged}"/>
+                            Text="{Binding TabText, UpdateSourceTrigger=PropertyChanged}"
+                            Focusable="False"/>
                     </ScrollViewer>
                 </StackPanel>
             </Border>

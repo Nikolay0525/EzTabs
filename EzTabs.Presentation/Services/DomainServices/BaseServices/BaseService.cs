@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using EzTabs.Data;
 using EzTabs.Data.Repository;
+using EzTabs.Presentation.Services.ContextServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -23,10 +24,19 @@ namespace EzTabs.Presentation.Services.DomainServices.BaseServices
             }
         }
 
-        protected BaseService(EzTabsContext context, INavigationService navigationService) 
+        protected BaseService(IContextFactoryService contextFactoryService, INavigationService navigationService) 
         {
             _navigationService = navigationService;
-            _repository = new RepoImplementation<T>(context);
+            _initializeTask = Task.Run(async () =>
+            {
+                var context = await contextFactoryService.CreateAsync(); 
+                _repository = new RepoImplementation<T>(context);    
+            });
+        }
+
+        protected async Task EnsureRepoCreated()
+        {
+            if (_repository == null) await _initializeTask;
         }
     }
 }

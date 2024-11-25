@@ -31,7 +31,7 @@ namespace EzTabs.Presentation.Services.SearchingServices
         {
             await EnsureContextCreated();
 
-            int amountOftabsToSend = (int)(height / 40) + 1;
+            int amountOftabsToSend = ((int)height / 40) + 1;
 
             IQueryable<Tab> tabs = _context!.Set<Tab>();
 

@@ -21,8 +21,8 @@ public class SearchControlViewModel : BaseViewModel
     private bool _isFilterEnabled = false;
     private double _filterRowHeight = 0;
     private bool _firstPageVisibility = false;
-    private bool _nextPageVisibility = false;
-    private bool _previousPageVisibility = false;
+    private bool _nextPageEnabled = false;
+    private bool _previousPageEnabled = false;
 
     private readonly IWindowService _windowService;
 
@@ -60,20 +60,20 @@ public class SearchControlViewModel : BaseViewModel
         {
             _searchString = value;
             OnPropertyChanged();
-            Task.Run(UpdateSearchList);
+            UpdateSearchList();
         }
     }
 
     public int CurrentPage
     {
-        get => _currentPage;
+        get => _currentPage + 1;
         set
         {
             _currentPage = value;
             OnPropertyChanged();
-            if (_currentPage > 0) PreviousPageVisibility = true;
-            else PreviousPageVisibility = false;
-            Task.Run(UpdateSearchList);
+            if (_currentPage > 0) PreviousPageEnabled = true;
+            else PreviousPageEnabled = false;
+            UpdateSearchList();
         }
     }
 
@@ -87,22 +87,22 @@ public class SearchControlViewModel : BaseViewModel
         } 
     }
     
-    public bool NextPageVisibility 
+    public bool NextPageEnabled
     { 
-        get => _nextPageVisibility; 
+        get => _nextPageEnabled; 
         set 
         {
-            _nextPageVisibility = value;
+            _nextPageEnabled = value;
             OnPropertyChanged();
         } 
     }
 
-    public bool PreviousPageVisibility 
+    public bool PreviousPageEnabled 
     { 
-        get => _previousPageVisibility; 
+        get => _previousPageEnabled;
         set 
         {
-            _previousPageVisibility = value;
+            _previousPageEnabled = value;
             OnPropertyChanged();
         }
     }
@@ -126,7 +126,7 @@ public class SearchControlViewModel : BaseViewModel
         _windowService = windowService;
         _tabService = tabService;
         _searchingService = searchingService;
-        Task.Run(UpdateSearchList);
+        UpdateSearchList();
         ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
         NextPageCommand = new RelayCommand(NextPage);
         PreviousPageCommand = new RelayCommand(PreviousPage);
@@ -149,12 +149,14 @@ public class SearchControlViewModel : BaseViewModel
 
     private void NextPage()
     {
-        CurrentPage++;
+        int add = ++_currentPage;
+        CurrentPage = add;
     }
     
     private void PreviousPage()
     {
-        CurrentPage--;
+        int minus = --_currentPage;
+        CurrentPage = minus;
     }
     
     private void OnTheFirstPage()
@@ -164,13 +166,13 @@ public class SearchControlViewModel : BaseViewModel
 
     private async Task UpdateSearchList()
     {
-        List<Tab> tabsToDisplay = await _searchingService.SearchTabs(_windowService.WindowHeight - 200, CurrentPage, SearchString);
+        List<Tab> tabsToDisplay = await _searchingService.SearchTabs(_windowService.WindowHeight - 200, _currentPage, _searchString);
 
         if (tabsToDisplay.Count > (_windowService.WindowHeight - 200) / 40)
         {
-            NextPageVisibility = true;
+            NextPageEnabled = true;
         }
-        else { NextPageVisibility = false; }
+        else { NextPageEnabled = false; }
 
         TabsInSearchList.Clear();
 

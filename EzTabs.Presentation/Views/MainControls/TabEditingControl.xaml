@@ -87,7 +87,7 @@
                 <sc:UpDownTextBlock 
                     x:Name="BarAmountTextBox"
                     TextBoxWidth="50"
-                    CurrentValue="{Binding BarAmount}"/>
+                    CurrentValue="{Binding BarAmount, Mode=TwoWay}"/>
                 
             </Grid>
             <Grid Grid.Column="2" Grid.Row="0">
@@ -102,7 +102,7 @@
                 <sc:UpDownTextBlock 
                     x:Name="BarLengthTextBox"
                     TextBoxWidth="50"
-                    CurrentValue="{Binding LineLength}"/>
+                    CurrentValue="{Binding LineLength, Mode=TwoWay}"/>
             </Grid>
 
             <Grid Grid.Column="4" Grid.Row="0">
@@ -154,7 +154,7 @@
             <Grid Grid.Column="8" Grid.Row="2">
                 <sc:UpDownTextBlock
                     x:Name="ZoomTextBox"
-                    CurrentValue="{Binding CurrentZoom}"
+                    CurrentValue="{Binding Zoom, Mode=TwoWay}"
                     TextBoxWidth="50"
                     ButtonStepMultiplier="5"/>
             </Grid>
@@ -163,6 +163,7 @@
                 <CheckBox 
                     Style="{DynamicResource CommonCheckBox}"
                     x:Name="InsertModeCheckBox"
+                    IsChecked="{Binding Insert, UpdateSourceTrigger=PropertyChanged}"
                     Content="Insert"
                     VerticalContentAlignment="Center"
                     Focusable="False"/>
@@ -199,7 +200,7 @@
 
                         <TextBlock
                             Style="{DynamicResource CommonTextBlock}"
-                            FontSize="{Binding CurrentFontSize}"
+                            FontSize="{Binding FontSize, UpdateSourceTrigger=PropertyChanged}"
                             FontFamily="Courier New"
                             Foreground="Black"
                             x:Name="TabStringTextBlock"

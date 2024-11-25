@@ -5,6 +5,7 @@ using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs;
+using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Shapes;
 
@@ -15,14 +16,19 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
     public BaseViewModel ControlBarViewModel { get; private set; }
 
     private int _cursorPosition = 3;
-    private int _cursorLine = 3;
+    private int _cursorLine = 2;
+    private int _cursorRow = 0;
+    private int _cursorBar = 1;
 
+    private bool _insert = false;
     private bool _isFocused;
     private readonly TuningService _tuningService;
     private readonly Task _initializedTask;
     private List<Tuning> _tunings = new();
-    private List<string> _tabLines = new();
+    private List<List<List<string>>> _tabRows = new();
     private string _tabText;
+    private int _zoom = 100;
+    private double _fontSize = 33.3;
     private int _lineLength = 20;
     private int _barAmount = 2;
 
@@ -47,6 +53,26 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
         }
     }
     
+    public int CursorRow
+    {
+        get => _cursorRow;
+        private set
+        {
+            _cursorRow = value;
+            OnPropertyChanged();
+        }
+    }
+    
+    public int CursorBar
+    {
+        get => _cursorBar;
+        private set
+        {
+            _cursorBar = value;
+            OnPropertyChanged();
+        }
+    }
+    
     public int CursorLine
     {
         get => _cursorLine;
@@ -67,6 +93,29 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
         }
     }
 
+    public int Zoom
+    {
+        get => _zoom;
+        set
+        {
+            _zoom = value;
+            FontSize = value / 3;
+            OnPropertyChanged();
+            Task.Run(UpdateTabText);
+        }
+    }
+    
+    public double FontSize
+    {
+        get => _fontSize;
+        set
+        {
+            _fontSize = value;
+            OnPropertyChanged();
+            Task.Run(UpdateTabText);
+        }
+    }
+    
     public int LineLength
     {
         get => _lineLength;
@@ -87,6 +136,16 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
         }
     }
 
+    public bool Insert 
+    { 
+        get => _insert;
+        set
+        {
+            _insert = value;
+            OnPropertyChanged();
+        } 
+    }
+
     public ICommand GoToMainPageCommand { get; }
     public ICommand HandleKeyCommand { get; }
     public ICommand CreateBarsButtonCommand { get; }
@@ -101,13 +160,14 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
     {
         ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
         _tuningService = tuningService;
-        Task.Run(UpdateTabText);
+        Task.Run(CreateEmptyTabText);
 
-        CreateLineButtonCommand = new AsyncRelayCommand(CreateEmptyTabText);
+        CreateLineButtonCommand = new RelayCommand(CreateRow);
+        //CreateBarButtonCommand = new RelayCommand(CreateStringsBars);
         GoToMainPageCommand = new RelayCommand(GoToMainPage);
-        MoveCursorCommand = new AsyncRelayCommand<string>(MoveCursor);
-        HandleKeyCommand = new AsyncRelayCommand<string>(HandleKeyPress);
-        RemoveSymbolCommand = new AsyncRelayCommand(RemoveSymbol);
+        MoveCursorCommand = new RelayCommand<string>(MoveCursor);
+        HandleKeyCommand = new RelayCommand<string>(HandleKeyPress);
+        RemoveSymbolCommand = new RelayCommand(RemoveSymbol);
     }
 
     private void GoToMainPage()
@@ -115,68 +175,186 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
         NavigationService.NavigateTo<SearchControlViewModel>();
     }
 
-    private async Task HandleKeyPress(string? symbol)
+    private void HandleKeyPress(string? symbol)
     {
-        if (_cursorPosition < _tabLines![_cursorLine].Length)
-        {
-            _tabLines[_cursorLine] = _tabLines[_cursorLine]
-                .Remove(_cursorPosition, 1)
-                .Insert(_cursorPosition, symbol!);
-        }
-        OnPropertyChanged(nameof(TabText));
-        await UpdateTabText();
+        _tabRows[_cursorRow][_cursorLine][_cursorBar] = _tabRows[_cursorRow][_cursorLine][_cursorBar]
+            .Remove(_cursorPosition, 1)
+            .Insert(_cursorPosition, symbol!);
+
+        if (!Insert) MoveCursor("Right");
+
+        UpdateTabText();
     }
 
-    private async Task MoveCursor(string? direction)
+    private void MoveCursor(string? direction)
     {
         switch (direction) 
         {
             case "Up":
-                if (_cursorLine <= 0) return;
+                if (_cursorLine <= 0)
+                {
+                    if (_cursorRow == 0) return;
+
+                    _cursorRow--;
+                    _cursorLine = _tunings.Count-2;
+                    break;
+                }
                 CursorLine--; break;
 
             case "Down":
-                if (_cursorLine >= _tabLines.Count-2) return;
+                if (_cursorLine >= _tunings.Count-2)
+                {
+                    if (_cursorRow == _tabRows.Count - 1 || _tabRows[_cursorRow][_cursorLine][0] == "   ") return;
+
+                    _cursorRow++;
+                    _cursorLine = 0;
+                    break;
+                }
                 CursorLine++; 
                 break;
 
             case "Right":
-                if (_cursorPosition >= _tabLines[_cursorLine].Length-2) return;
+                if (_tabRows[_cursorRow][_cursorLine][0] == "   " && _cursorPosition >= _tabRows[_cursorRow][_cursorLine][_cursorBar].Length - 1)
+                {
+                    if (_cursorBar == _tabRows[_cursorRow][_cursorLine].Count - 1) return;
+                    _cursorBar++;
+                    _cursorPosition = 0;
+                    break;
+                }
+                if (_tabRows[_cursorRow][_cursorLine][0] != "   " && _cursorPosition >= _tabRows[_cursorRow][_cursorLine][_cursorBar].Length - 2)
+                {
+                    if (_cursorBar == _tabRows[_cursorRow][_cursorLine].Count - 1) return;
+                    _cursorBar++;
+                    _cursorPosition = 0;
+                    break;
+                }
                 CursorPosition++; break;
 
             case "Left":
-                if (_cursorPosition <= 3) return;
+                if (_cursorPosition <= 0)
+                {
+                    if (_cursorBar <= 1) return;
+
+                    _cursorBar--;
+                    if(_tabRows[_cursorRow][_cursorLine][0] == "   ")
+                    {
+                        _cursorPosition = _tabRows[_cursorRow][_cursorLine][_cursorBar].Length - 1;
+                        break;
+                    }
+                    _cursorPosition = _tabRows[_cursorRow][_cursorLine][_cursorBar].Length - 2;
+                    break;
+                }
                 CursorPosition--; break;
 
         }
-        await UpdateTabText();
+        UpdateTabText();
     }
 
 
-    private async Task RemoveSymbol()
+    private void RemoveSymbol()
     {
-        char[] tabLine = _tabLines![CursorLine].ToCharArray();
-        tabLine[CursorPosition] = '-';
-        _tabLines[CursorLine] = new(tabLine);
-        await UpdateTabText();
+        if (!Insert) MoveCursor("Left");
+
+        string symbol = _tabRows[_cursorRow][_cursorLine][0] == "   " ? " " : "-";
+
+        _tabRows[_cursorRow][_cursorLine][_cursorBar] = _tabRows[_cursorRow][_cursorLine][_cursorBar]
+            .Remove(_cursorPosition, 1)
+            .Insert(_cursorPosition, symbol!);
+
+        UpdateTabText();
     }
 
-    private async Task UpdateTabText()
+    private void UpdateTabText()
     {
-        if(_tabLines.Count == 0) await CreateEmptyTabText();
+        List<string> lines = new();
 
         if (IsFocused) 
         {
-            List<string> tabLinesCopy = _tabLines.ToList();
-            char[] tabLineToPutCursor = tabLinesCopy![CursorLine + 1].ToCharArray();
-            tabLineToPutCursor[CursorPosition] = '^';
-            tabLinesCopy[CursorLine + 1] = new(tabLineToPutCursor);
+            List<List<List<string>>> tabRowsCopy = _tabRows
+                .Select(row => row
+                    .Select(stringsBars => stringsBars.ToList())
+                    .ToList())
+                .ToList();
 
-            TabText = string.Join("\n", tabLinesCopy);
+            List<List<string>> tabStringsBarsCopy = tabRowsCopy[CursorRow];
+            List<string> tabStringBarsCopy = tabStringsBarsCopy[CursorLine + 1];
+            char[] tabStringBarToPutCursor = tabStringBarsCopy![CursorBar].ToCharArray();
+            tabStringBarToPutCursor[CursorPosition] = '^';
+            tabRowsCopy[CursorRow][CursorLine + 1][CursorBar] = new(tabStringBarToPutCursor);
+
+            foreach (var row in tabRowsCopy)
+            {
+                foreach(var stringsBars in row)
+                {
+                    lines.Add(string.Join("", stringsBars));
+                }
+            }
+
+            TabText = string.Join("\n", lines);
             return;
         }
-        TabText = string.Join("\n", _tabLines);
+
+        foreach(var row in _tabRows)
+        {
+            foreach(var stringsBars in row)
+            {
+                lines.Add(string.Join("", stringsBars));
+            }
+        }
+
+        TabText = string.Join("\n", lines);
     }
+    
+    private void CreateRow()
+    {
+        List<List<string>> stringsBars = CreateStrings(_tunings);
+        stringsBars = CreateStringsBars(stringsBars);
+        _tabRows.Add(stringsBars);
+
+    }
+
+    private void CreateBar()
+    {
+        //_tabRows.Add(new List<string>());
+    }
+
+    private List<List<string>> CreateStrings(List<Tuning> tuningsOfStrings)
+    {
+        List<List<string>> strings = [];
+
+        foreach (var tuning in tuningsOfStrings)
+        {
+            if (tuning.StringOrder > 0 && tuning.StringOrder != tuningsOfStrings.Count)
+            {
+                List<string> stringBars = [tuning.StringNote + "|"];
+                strings.Add(stringBars);
+            }
+            else
+            {
+                List<string> stringBars = ["   "];
+                strings.Add(stringBars);
+            }
+        }
+        return strings;
+    }
+
+    private List<List<string>> CreateStringsBars(List<List<string>> stringsBarsToAddBars)
+    {
+        for (int j = 0; j < stringsBarsToAddBars.Count; j++)
+        {
+            for (int i = 0; i < BarAmount; i++)
+            {
+                if (string.IsNullOrWhiteSpace(stringsBarsToAddBars[j][i]))
+                {
+                    stringsBarsToAddBars[j].Add(new string(' ', LineLength + 1));
+                    continue;
+                }
+                stringsBarsToAddBars[j].Add(new string('-', LineLength) + "|");
+            } 
+        }
+        return stringsBarsToAddBars;
+    }
+
 
     private async Task CreateEmptyTabText()
     {
@@ -187,29 +365,7 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
             _tunings = _tunings.OrderBy(s => s.StringOrder).ToList();
         }
 
-        foreach(var tuning in _tunings)
-        {
-            if(tuning.StringOrder > 0 && tuning.StringOrder != _tunings.Count) 
-            { 
-                _tabLines.Add(tuning.StringNote + "|");
-            }
-            else
-            {
-                _tabLines.Add("   ");
-            }
-        }
-
-        for (int i = 0; i < BarAmount; i++)
-        {
-            for (int j = 0; j < _tabLines.Count; j++)
-            {
-                if (string.IsNullOrWhiteSpace(_tabLines[j]))
-                {
-                    _tabLines[j] += new string(' ', LineLength + 1);
-                    continue;
-                }
-                _tabLines[j] += new string('-', LineLength) + "|";
-            }
-        }
+        CreateRow();
+        UpdateTabText();
     }
 }

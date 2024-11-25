@@ -105,7 +105,7 @@
                 <Button 
                     Style="{DynamicResource CommonButton}"
                     Command="{Binding PreviousPageCommand}"
-                    Visibility="{Binding PreviousPageVisibility, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}"
+                    IsEnabled="{Binding PreviousPageEnabled, UpdateSourceTrigger=PropertyChanged}"
                     Content="Previous page"
                     Width="200"/>
 
@@ -137,7 +137,7 @@
                 <Button 
                     Style="{DynamicResource CommonButton}"
                     Command="{Binding NextPageCommand}"
-                    Visibility="{Binding NextPageVisibility, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}"
+                    IsEnabled="{Binding NextPageEnabled, UpdateSourceTrigger=PropertyChanged}"
                     Content="Next page"
                     Width="200"/>
             </Grid>

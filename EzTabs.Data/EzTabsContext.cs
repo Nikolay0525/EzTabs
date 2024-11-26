@@ -29,6 +29,15 @@ public class EzTabsContext : DbContext
             if (currentDirectory == null) break;
         }
 
+        if (currentDirectory == null)
+        {
+            while (!File.Exists(Path.Combine(currentDirectory, "EzTabs.Presentation.exe")))
+            {
+                currentDirectory = Directory.GetParent(currentDirectory)?.FullName;
+                if (currentDirectory == null) break;
+            }
+        }
+
         var json = File.ReadAllText(currentDirectory + "/ConnectionString.json");
         var jsonConverted = JsonConvert.DeserializeObject<Connection>(json);
         optionsBuilder.UseMySql(jsonConverted.ConnectionString, new MySqlServerVersion(jsonConverted.Version));

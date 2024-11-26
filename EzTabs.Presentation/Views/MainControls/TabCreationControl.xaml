@@ -44,7 +44,7 @@
                     Style="{DynamicResource CommonButton}" 
                     x:Name="GoToSearchButton" 
                     Command="{Binding GoToSearchControlCommand}"
-                    Content="Main Page" 
+                    Content="Return to Main Page" 
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"/>
             </Grid>

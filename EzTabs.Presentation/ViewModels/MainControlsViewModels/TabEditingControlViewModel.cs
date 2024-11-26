@@ -13,7 +13,8 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 
 public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
 {
-    public BaseViewModel ControlBarViewModel { get; private set; }
+    private readonly TuningService _tuningService;
+    private readonly TabService _tabService;
 
     private int _cursorPosition = 3;
     private int _cursorLine = 2;
@@ -22,7 +23,6 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
 
     private bool _insert = false;
     private bool _isFocused;
-    private readonly TuningService _tuningService;
     private readonly Task _initializedTask;
     private List<Tuning> _tunings = new();
     private List<List<List<string>>> _tabRows = new();
@@ -31,6 +31,8 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
     private double _fontSize = 33.3;
     private int _lineLength = 20;
     private int _barAmount = 2;
+
+    public BaseViewModel ControlBarViewModel { get; private set; }
 
     public bool IsFocused
     {
@@ -156,22 +158,24 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
     public ICommand WriteNumberCommand { get; }
     public ICommand RemoveSymbolCommand { get; }
 
-    public TabEditingControlViewModel(IViewModelService viewModelService, INavigationService navigationService, TuningService tuningService) : base(viewModelService, navigationService)
+    public TabEditingControlViewModel(IViewModelService viewModelService, INavigationService navigationService, TuningService tuningService, TabService tabService) : base(viewModelService, navigationService)
     {
         ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
         _tuningService = tuningService;
+        _tabService = tabService;
         Task.Run(CreateEmptyTabText);
 
         CreateLineButtonCommand = new RelayCommand(CreateRow);
         //CreateBarButtonCommand = new RelayCommand(CreateStringsBars);
-        GoToMainPageCommand = new RelayCommand(GoToMainPage);
+        GoToMainPageCommand = new AsyncRelayCommand(GoToMainPage);
         MoveCursorCommand = new RelayCommand<string>(MoveCursor);
         HandleKeyCommand = new RelayCommand<string>(HandleKeyPress);
         RemoveSymbolCommand = new RelayCommand(RemoveSymbol);
     }
 
-    private void GoToMainPage()
+    private async Task GoToMainPage()
     {
+        await _tabService.SaveTabText(TabText);
         NavigationService.NavigateTo<SearchControlViewModel>();
     }
 

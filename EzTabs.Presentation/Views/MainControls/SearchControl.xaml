@@ -85,7 +85,7 @@
                 Grid.Row="1" 
                 Style="{DynamicResource CommonListBox}" 
                 x:Name="TabList"
-                ItemsSource="{Binding TabsInSearchList}"
+                ItemsSource="{Binding TabsInSearchList, UpdateSourceTrigger=PropertyChanged}"
                 Background="White"/>
         </Grid>
 

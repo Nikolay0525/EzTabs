@@ -53,4 +53,12 @@ public class TabService : BaseService<Tab>
         SavedTab = newTab;
         return newTab;
     }
+
+    public async Task SaveTabText(string tabText)
+    {
+        await EnsureRepoCreated();
+
+        SavedTab!.TabText = tabText;
+        await _repository.Update(SavedTab!);
+    }
 }

@@ -4,12 +4,80 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls"
+             xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="540" d:DesignWidth="960">
+             FontFamily="{DynamicResource CommonFontFamily}"
+             FontWeight="{DynamicResource CommonFontWeight}"
+             FontSize="{DynamicResource CommonFontSize}"
+             d:DesignHeight="540" d:DesignWidth="960"
+             d:DataContext="{x:Type vm:TabControlViewModel}"
+             Background="#2e2e2e">
+    
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button 
+                Style="{DynamicResource CommonButton}" 
+                x:Name="GoToSearchButton" 
+                Command="{Binding GoToSearchControlCommand}"
+                Content="Return to Main Page" 
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"/>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="2">
+            <ContentControl x:Name="ControlBar" Content="{Binding ControlBarViewModel}"/>
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <TextBlock
+                    Style="{DynamicResource CommonTextBlock}"
+                    Text="{Binding TitleBand, UpdateSourceTrigger=PropertyChanged}"
+                    TextAlignment="Center"
+                    VerticalAlignment="Center"
+                    d:Text="Alice In Chains - Would?"/>
+            </Grid>
+            <Grid Grid.Row="2">
+                
+                <Border CornerRadius="5" Background="White">
+                    <ScrollViewer 
+                        Template="{DynamicResource CommonScrollViewer}"
+                        Background="Transparent"
+                        HorizontalScrollBarVisibility="Auto" 
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        FontSize="{Binding FontSize, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="Courier New"
+                        Foreground="Black"
+                        Content="{Binding TabText, UpdateSourceTrigger=PropertyChanged}"/>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

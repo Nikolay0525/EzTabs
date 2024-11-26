@@ -50,7 +50,11 @@ public class SearchControlViewModel : BaseViewModel
     public ObservableCollection<TabInSearchPageControl> TabsInSearchList
     {
         get => _tabsInSearchList;
-        set => _tabsInSearchList = value;
+        set
+        {
+            _tabsInSearchList = value;
+            OnPropertyChanged();
+        }
     }
 
     public string SearchString
@@ -151,12 +155,14 @@ public class SearchControlViewModel : BaseViewModel
     {
         int add = ++_currentPage;
         CurrentPage = add;
+        if (_currentPage == 0) FirstPageVisibility = false; else FirstPageVisibility = true;
     }
-    
+
     private void PreviousPage()
     {
         int minus = --_currentPage;
         CurrentPage = minus;
+        if(_currentPage == 0) FirstPageVisibility = false; else FirstPageVisibility = true;
     }
     
     private void OnTheFirstPage()
@@ -173,12 +179,18 @@ public class SearchControlViewModel : BaseViewModel
             NextPageEnabled = true;
         }
         else { NextPageEnabled = false; }
-
         TabsInSearchList.Clear();
 
-        foreach(Tab tab in tabsToDisplay)
+        TabsInSearchList = AddTabsInSearchList(tabsToDisplay);
+    }
+    
+    private ObservableCollection<TabInSearchPageControl> AddTabsInSearchList(List<Tab> tabsToDisplay)
+    {
+        ObservableCollection<TabInSearchPageControl> tabInSearchPageControls = new();
+
+        foreach (Tab tab in tabsToDisplay)
         {
-            
+
             TabInSearchPageControl tabItem = new()
             {
                 DataContext = this,
@@ -186,10 +198,12 @@ public class SearchControlViewModel : BaseViewModel
                 Text = tab.Band + " - " + tab.Title
             };
             if (tab.AuthorId == UserService.SavedUser.Id) tabItem.CanBeEdited = true;
-            TabsInSearchList.Add(tabItem);
+            tabInSearchPageControls.Add(tabItem);
         }
+
+        return tabInSearchPageControls;
     }
-    
+
     private void SwitchFilter()
     {
         IsFilterEnabled = !IsFilterEnabled;

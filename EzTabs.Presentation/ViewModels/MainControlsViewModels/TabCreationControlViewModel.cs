@@ -33,6 +33,7 @@ public class TabCreationControlViewModel : BaseViewModel
     private string _stringNote = "e";
     private ObservableCollection<Tuning> _tunings = new();
     private ObservableCollection<string> _listOfTunings = new();
+
     public bool AddVisibilitySwitch
     {
         get => _addVisibilitySwitch;

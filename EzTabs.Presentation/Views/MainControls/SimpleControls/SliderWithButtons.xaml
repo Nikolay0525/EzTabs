@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls"
              mc:Ignorable="d" 
              x:Name="rootControl"
-             FontSize="24">
+             FontSize="24"
+             d:Width="200">
     <Grid VerticalAlignment="Stretch">
 
         <Grid.ColumnDefinitions>

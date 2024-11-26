@@ -13,8 +13,8 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsVi
     public class ControlBarViewModel : BaseViewModel
     {
         private bool _isMenuOpen = false;
-        private string? _username;
         private bool _showModerationButton = true;
+        private string? _username;
 
         public bool IsMenuOpen
         {
@@ -25,6 +25,7 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsVi
                 OnPropertyChanged(nameof(IsMenuOpen));
             }
         }
+
         public string? Username
         {
             get => _username;

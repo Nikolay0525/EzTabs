@@ -56,7 +56,7 @@ namespace EzTabs.Presentation.ViewModels.AuthControlsViewModels
             var isVerificated = await _userService.VerificateUser(_verificationCode);
             if (isVerificated)
             {
-                //NavigationService.Instance.NavigateTo(new LoginControlViewModel());
+                NavigationService.NavigateTo<LoginControlViewModel>();
             }
             else { ShowMessage("Validation", "Wrong verification code"); }
         }

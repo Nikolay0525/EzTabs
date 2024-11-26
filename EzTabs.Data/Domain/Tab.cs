@@ -11,6 +11,7 @@ public sealed class Tab : Entity
     public string Key { get; set; } = "";
     public int BitsPerMinute { get; set; } = 0;
     public string Description { get; set; } = "";
+    public string TabText { get; set; } = "";
     public long Views { get; set; } = 0;
     public DateTime DateOfCreation { get; set; } = DateTime.Now;
     public User? Author { get; set; }

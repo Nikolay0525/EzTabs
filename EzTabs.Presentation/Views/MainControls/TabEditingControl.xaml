@@ -44,9 +44,9 @@
             <Grid Grid.Column="0">
                 <Button 
                     Style="{DynamicResource CommonButton}" 
-                    x:Name="GoToSearchButton" 
-                    Command="{Binding GoToSearchControlCommand}"
-                    Content="Main page" 
+                    x:Name="GoToMainPageButton" 
+                    Command="{Binding GoToMainPageCommand}"
+                    Content="Return to Main Page" 
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"/>
 
@@ -183,8 +183,8 @@
                 <StackPanel Focusable="False">
                     <ScrollViewer
                         Background="Transparent"
-                        HorizontalScrollBarVisibility="Auto" 
-                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Visible" 
+                        VerticalScrollBarVisibility="Visible"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         Focusable="True" 

@@ -117,7 +117,7 @@
                     Command="{Binding OnTheFirstPageCommand}"
                     Visibility="{Binding FirstPageVisibility, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}"
                     Width="50"
-                    d:Content="1..."/>
+                    Content="1..."/>
             </Grid>
 
             <Grid Grid.Column="5">

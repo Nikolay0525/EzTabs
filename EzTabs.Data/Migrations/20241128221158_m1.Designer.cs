@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EzTabs.Data.Migrations
 {
     [DbContext(typeof(EzTabsContext))]
-    [Migration("20241021123849_m1")]
+    [Migration("20241128221158_m1")]
     partial class m1
     {
         /// <inheritdoc />
@@ -20,12 +20,12 @@ namespace EzTabs.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("EzTabs.Model.Comment", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.Comment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,7 +55,7 @@ namespace EzTabs.Data.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.CommentRate", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.CommentRate", b =>
                 {
                     b.Property<Guid>("CommentId")
                         .HasColumnType("char(36)");
@@ -73,7 +73,7 @@ namespace EzTabs.Data.Migrations
                     b.ToTable("CommentRate");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.CommentReport", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.CommentReport", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
@@ -94,7 +94,7 @@ namespace EzTabs.Data.Migrations
                     b.ToTable("CommentReport");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.FavouriteTab", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.FavouriteTab", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
@@ -109,32 +109,7 @@ namespace EzTabs.Data.Migrations
                     b.ToTable("FavouriteTab");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.Note", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<int?>("Fret")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("String")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("TabId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TabId");
-
-                    b.ToTable("Notes");
-                });
-
-            modelBuilder.Entity("EzTabs.Model.Notification", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.Notification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -159,7 +134,7 @@ namespace EzTabs.Data.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.Tab", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.Tab", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -168,7 +143,12 @@ namespace EzTabs.Data.Migrations
                     b.Property<Guid?>("AuthorId")
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("AutoSavedTabText")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Band")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("BitsPerMinute")
@@ -178,15 +158,31 @@ namespace EzTabs.Data.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("JsonAutoSavedTabText")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("JsonTabText")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TabText")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<long>("Views")
@@ -199,7 +195,7 @@ namespace EzTabs.Data.Migrations
                     b.ToTable("Tabs");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.TabRate", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.TabRate", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
@@ -217,7 +213,7 @@ namespace EzTabs.Data.Migrations
                     b.ToTable("TabRate");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.TabReport", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.TabReport", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
@@ -238,12 +234,12 @@ namespace EzTabs.Data.Migrations
                     b.ToTable("TabReport");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.Tuning", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.Tuning", b =>
                 {
                     b.Property<Guid?>("TabId")
                         .HasColumnType("char(36)");
 
-                    b.Property<int?>("StringOrder")
+                    b.Property<int>("StringOrder")
                         .HasColumnType("int");
 
                     b.Property<string>("StringNote")
@@ -254,7 +250,7 @@ namespace EzTabs.Data.Migrations
                     b.ToTable("Tuning");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.User", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -264,21 +260,25 @@ namespace EzTabs.Data.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<bool>("IsEmailVerified")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
                     b.Property<string>("VerificationCode")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -286,15 +286,15 @@ namespace EzTabs.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.Comment", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.Comment", b =>
                 {
-                    b.HasOne("EzTabs.Model.Tab", "Tab")
+                    b.HasOne("EzTabs.Data.Domain.Tab", "Tab")
                         .WithMany("Comments")
                         .HasForeignKey("TabId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EzTabs.Model.User", "User")
+                    b.HasOne("EzTabs.Data.Domain.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId");
 
@@ -303,15 +303,15 @@ namespace EzTabs.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.CommentRate", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.CommentRate", b =>
                 {
-                    b.HasOne("EzTabs.Model.Comment", "Comment")
+                    b.HasOne("EzTabs.Data.Domain.Comment", "Comment")
                         .WithMany("CommentRates")
                         .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EzTabs.Model.User", "User")
+                    b.HasOne("EzTabs.Data.Domain.User", "User")
                         .WithMany("CommentRates")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -322,15 +322,15 @@ namespace EzTabs.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.CommentReport", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.CommentReport", b =>
                 {
-                    b.HasOne("EzTabs.Model.Comment", "Comment")
+                    b.HasOne("EzTabs.Data.Domain.Comment", "Comment")
                         .WithMany("CommentReports")
                         .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EzTabs.Model.User", "User")
+                    b.HasOne("EzTabs.Data.Domain.User", "User")
                         .WithMany("CommentReports")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -341,15 +341,15 @@ namespace EzTabs.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.FavouriteTab", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.FavouriteTab", b =>
                 {
-                    b.HasOne("EzTabs.Model.Tab", "Tab")
+                    b.HasOne("EzTabs.Data.Domain.Tab", "Tab")
                         .WithMany("FavouriteTabs")
                         .HasForeignKey("TabId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EzTabs.Model.User", "User")
+                    b.HasOne("EzTabs.Data.Domain.User", "User")
                         .WithMany("FavouriteTabs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -360,42 +360,33 @@ namespace EzTabs.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.Note", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.Notification", b =>
                 {
-                    b.HasOne("EzTabs.Model.Tab", "Tab")
-                        .WithMany("Notes")
-                        .HasForeignKey("TabId");
-
-                    b.Navigation("Tab");
-                });
-
-            modelBuilder.Entity("EzTabs.Model.Notification", b =>
-                {
-                    b.HasOne("EzTabs.Model.User", "User")
+                    b.HasOne("EzTabs.Data.Domain.User", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.Tab", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.Tab", b =>
                 {
-                    b.HasOne("EzTabs.Model.User", "Author")
+                    b.HasOne("EzTabs.Data.Domain.User", "Author")
                         .WithMany("Tab")
                         .HasForeignKey("AuthorId");
 
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.TabRate", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.TabRate", b =>
                 {
-                    b.HasOne("EzTabs.Model.Tab", "Tab")
+                    b.HasOne("EzTabs.Data.Domain.Tab", "Tab")
                         .WithMany("TabRates")
                         .HasForeignKey("TabId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EzTabs.Model.User", "User")
+                    b.HasOne("EzTabs.Data.Domain.User", "User")
                         .WithMany("TabRates")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -406,15 +397,15 @@ namespace EzTabs.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.TabReport", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.TabReport", b =>
                 {
-                    b.HasOne("EzTabs.Model.Tab", "Tab")
+                    b.HasOne("EzTabs.Data.Domain.Tab", "Tab")
                         .WithMany("TabReports")
                         .HasForeignKey("TabId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EzTabs.Model.User", "User")
+                    b.HasOne("EzTabs.Data.Domain.User", "User")
                         .WithMany("TabReports")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -425,9 +416,9 @@ namespace EzTabs.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.Tuning", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.Tuning", b =>
                 {
-                    b.HasOne("EzTabs.Model.Tab", "Tab")
+                    b.HasOne("EzTabs.Data.Domain.Tab", "Tab")
                         .WithMany("Tunings")
                         .HasForeignKey("TabId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -436,20 +427,18 @@ namespace EzTabs.Data.Migrations
                     b.Navigation("Tab");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.Comment", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.Comment", b =>
                 {
                     b.Navigation("CommentRates");
 
                     b.Navigation("CommentReports");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.Tab", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.Tab", b =>
                 {
                     b.Navigation("Comments");
 
                     b.Navigation("FavouriteTabs");
-
-                    b.Navigation("Notes");
 
                     b.Navigation("TabRates");
 
@@ -458,7 +447,7 @@ namespace EzTabs.Data.Migrations
                     b.Navigation("Tunings");
                 });
 
-            modelBuilder.Entity("EzTabs.Model.User", b =>
+            modelBuilder.Entity("EzTabs.Data.Domain.User", b =>
                 {
                     b.Navigation("CommentRates");
 

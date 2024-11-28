@@ -1,7 +1,7 @@
 ﻿using EzTabs.Data;
 using EzTabs.Data.Domain;
 using EzTabs.Data.Repository;
-using EzTabs.Presentation.Services.ContextServices;
+
 using EzTabs.Presentation.Services.DomainServices;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,28 +9,15 @@ namespace EzTabs.Presentation.Services.SearchingServices
 {
     public class SearchingService
     {
-        private IContextFactoryService _contextFactoryService;
         private EzTabsContext _context;
-        private Task _initializeTask;
 
-        public SearchingService(IContextFactoryService contextFactoryService)
+        public SearchingService(EzTabsContext context)
         {
-            _contextFactoryService = contextFactoryService;
-            _initializeTask = Task.Run(async () =>
-            {
-                _context = await contextFactoryService.CreateAsync();
-            });
+            _context = context;
         }
 
-        private async Task EnsureContextCreated()
+        public List<Tab> SearchTabs(double height, int currentPage, string searchText, string? authorName = null)
         {
-            if (_context == null) await _initializeTask;
-        }
-
-        public async Task<List<Tab>> SearchTabs(double height, int currentPage, string searchText, string? authorName = null)
-        {
-            await EnsureContextCreated();
-
             int amountOftabsToSend = ((int)height / 40) + 1;
 
             IQueryable<Tab> tabs = _context!.Set<Tab>();

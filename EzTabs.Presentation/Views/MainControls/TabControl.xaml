@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls"
              xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels"
+             xmlns:sc ="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls"
              mc:Ignorable="d" 
              FontFamily="{DynamicResource CommonFontFamily}"
              FontWeight="{DynamicResource CommonFontWeight}"
@@ -35,32 +36,71 @@
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button 
-                Style="{DynamicResource CommonButton}" 
-                x:Name="GoToSearchButton" 
-                Command="{Binding GoToSearchControlCommand}"
-                Content="Return to Main Page" 
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"/>
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Button 
+                    Style="{DynamicResource CommonButton}" 
+                    x:Name="GoToSearchButton" 
+                    Command="{Binding GoToSearchControlCommand}"
+                    Content="Return to Main Page" 
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"/>
+            </Grid>
+            
+            <Grid Grid.Row="1" Grid.Column="2">
+                <ContentControl x:Name="ControlBar" Content="{Binding ControlBarViewModel}"/>
+            </Grid>
         </Grid>
-        <Grid Grid.Row="1" Grid.Column="2">
-            <ContentControl x:Name="ControlBar" Content="{Binding ControlBarViewModel}"/>
-        </Grid>
+        
 
         <Grid Grid.Column="1" Grid.Row="3">
             <Grid.RowDefinitions>
-                <RowDefinition Height="80"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
             <Grid Grid.Row="0">
-                <TextBlock
-                    Style="{DynamicResource CommonTextBlock}"
-                    Text="{Binding TitleBand, UpdateSourceTrigger=PropertyChanged}"
-                    TextAlignment="Center"
-                    VerticalAlignment="Center"
-                    d:Text="Alice In Chains - Would?"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="5"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="1">
+                        <TextBlock
+                            Style="{DynamicResource CommonTextBlock}"
+                            FontSize="{DynamicResource CommonFontSize}"
+                            Text="{Binding TitleBand, UpdateSourceTrigger=PropertyChanged}"
+                            TextAlignment="Center"
+                            VerticalAlignment="Center"
+                            d:Text="Alice In Chains - Would?"/>
+                    </Grid>
+                    <Grid Grid.Column="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <TextBlock
+                                Style="{DynamicResource CommonTextBlock}"
+                                TextAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="Zoom"
+                                />
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <sc:UpDownTextBlock
+                                x:Name="ZoomTextBox"
+                                CurrentValue="{Binding Zoom, Mode=TwoWay}"
+                                TextBoxWidth="50"
+                                ButtonStepMultiplier="5"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </Grid>
             <Grid Grid.Row="2">
                 

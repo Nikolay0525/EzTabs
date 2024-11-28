@@ -19,14 +19,14 @@ namespace EzTabs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
+                    Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Password = table.Column<string>(type: "longtext", nullable: true)
+                    Password = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: true)
+                    Email = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsEmailVerified = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    VerificationCode = table.Column<string>(type: "longtext", nullable: true)
+                    VerificationCode = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Role = table.Column<int>(type: "int", nullable: false),
                     DateOfCreation = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -65,16 +65,24 @@ namespace EzTabs.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     AuthorId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    Title = table.Column<string>(type: "longtext", nullable: true)
+                    Title = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Band = table.Column<string>(type: "longtext", nullable: true)
+                    Band = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Genre = table.Column<string>(type: "longtext", nullable: true)
+                    Genre = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Key = table.Column<string>(type: "longtext", nullable: true)
+                    Key = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BitsPerMinute = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "longtext", nullable: true)
+                    Description = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    JsonTabText = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TabText = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    JsonAutoSavedTabText = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AutoSavedTabText = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Views = table.Column<long>(type: "bigint", nullable: false),
                     DateOfCreation = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -141,27 +149,6 @@ namespace EzTabs.Data.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Notes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Order = table.Column<int>(type: "int", nullable: true),
-                    String = table.Column<int>(type: "int", nullable: true),
-                    Fret = table.Column<int>(type: "int", nullable: true),
-                    TabId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Notes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Notes_Tabs_TabId",
-                        column: x => x.TabId,
-                        principalTable: "Tabs",
-                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -320,11 +307,6 @@ namespace EzTabs.Data.Migrations
                 column: "TabId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notes_TabId",
-                table: "Notes",
-                column: "TabId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Notifications_UserId",
                 table: "Notifications",
                 column: "UserId");
@@ -356,9 +338,6 @@ namespace EzTabs.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "FavouriteTab");
-
-            migrationBuilder.DropTable(
-                name: "Notes");
 
             migrationBuilder.DropTable(
                 name: "Notifications");

@@ -10,6 +10,9 @@ public class TabControlViewModel : BaseViewModel
 {
     public BaseViewModel ControlBarViewModel { get; private set; }
 
+
+    private int _zoom = 100;
+    private double _fontSize = 33.3;
     private string _tabText;
     private string _titleBand;
 
@@ -33,10 +36,37 @@ public class TabControlViewModel : BaseViewModel
         }
     }
 
+    public int Zoom
+    {
+        get => _zoom;
+        set
+        {
+            _zoom = value;
+            FontSize = value / 3;
+            OnPropertyChanged();
+        }
+    }
+
+    public double FontSize
+    {
+        get => _fontSize;
+        set
+        {
+            _fontSize = value;
+            OnPropertyChanged();
+            UpdateTabText();
+        }
+    }
+
     public TabControlViewModel(IViewModelService viewModelService, INavigationService navigationService)  : base(viewModelService, navigationService)
     {
         ControlBarViewModel = viewModelService.CreateViewModel<ControlBarViewModel>();
-        TitleBand = TabService.SavedTab!.Title + TabService.SavedTab!.Band;
+        UpdateTabText();
+    }
+
+    private void UpdateTabText()
+    {
+        TitleBand = TabService.SavedTab!.Title + " - " + TabService.SavedTab!.Band;
         TabText = TabService.SavedTab!.TabText;
     }
 }

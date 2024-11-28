@@ -140,6 +140,10 @@ namespace EzTabs.Data.Migrations
                     b.Property<Guid?>("AuthorId")
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("AutoSavedTabText")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Band")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -155,6 +159,14 @@ namespace EzTabs.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("JsonAutoSavedTabText")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("JsonTabText")
                         .IsRequired()
                         .HasColumnType("longtext");
 

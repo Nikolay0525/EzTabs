@@ -1,5 +1,5 @@
 ﻿using EzTabs.Data;
-using EzTabs.Presentation.Services.ContextServices;
+
 using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.SearchingServices;
@@ -24,7 +24,7 @@ public partial class App : Application
     public App()
     {
         IServiceCollection services = new ServiceCollection();
-        services.AddSingleton<MainWindow>(serviceProvider => new Views.MainWindow(serviceProvider.GetRequiredService<IWindowService>())
+        services.AddSingleton<MainWindow>(serviceProvider => new Views.MainWindow(serviceProvider.GetRequiredService<IWindowService>(), serviceProvider.GetRequiredService<EzTabsContext>())
         {
             DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>()
         });
@@ -44,14 +44,12 @@ public partial class App : Application
         services.AddTransient<TuningService>();
         services.AddTransient<SearchingService>();
 
-        services.AddTransient<EzTabsContext>();
+        services.AddDbContext<EzTabsContext>();
 
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IViewModelService, ViewModelService>();
-        services.AddSingleton<IContextFactoryService, ContextFactoryService>();
         services.AddSingleton<IWindowService, WindowService>();
         services.AddSingleton<Func<Type, BaseViewModel>>(serviceProvider => viewModelType => (BaseViewModel)serviceProvider.GetRequiredService(viewModelType)); // ViewModelFactory
-        services.AddSingleton<Func<Type, EzTabsContext>>(serviceProvider => context => (EzTabsContext)serviceProvider.GetRequiredService(context)); // ContextFactory
 
         _serviceProvider = services.BuildServiceProvider();
     }

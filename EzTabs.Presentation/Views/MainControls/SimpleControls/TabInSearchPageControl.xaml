@@ -49,7 +49,6 @@
                         <TextBlock 
                             Style="{DynamicResource CommonTextBlock}" 
                             Foreground="Black"
-                            Text="rating"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"/>
                     </Grid>

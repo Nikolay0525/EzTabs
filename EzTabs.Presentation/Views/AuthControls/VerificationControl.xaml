@@ -41,7 +41,7 @@
 
         <Button 
             Style="{DynamicResource CommonButton}" x:Name="SendVerificationCodeButton"
-            Command="{Binding TryToVerificateCommand}"
+            Command="{Binding VerificateCommand}"
             Width="525"
             Content="Verificate account"
             HorizontalAlignment="Center" 

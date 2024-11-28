@@ -15,6 +15,8 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 
 public class SearchControlViewModel : BaseViewModel
 {
+    private readonly TabService _tabService;
+    private readonly SearchingService _searchingService;
     private ObservableCollection<TabInSearchPageControl> _tabsInSearchList = new();
     private string _searchString;
     private int _currentPage = 0;
@@ -32,8 +34,8 @@ public class SearchControlViewModel : BaseViewModel
         set 
         {
             _isFilterEnabled = value;
-            OnPropertyChanged();
             FilterRowHeight = IsFilterEnabled ? 45 : 0;
+            OnPropertyChanged();
         }
     }
     
@@ -119,13 +121,10 @@ public class SearchControlViewModel : BaseViewModel
     public ICommand GoToClickedTabCommand { get; }
     public ICommand GoEditClickedTabCommand { get; }
 
-    private readonly TabService _tabService;
-    private readonly SearchingService _searchingService;
-
     public BaseViewModel ControlBarViewModel { get; private set; }
 
 
-    public SearchControlViewModel(INavigationService navigationService ,IViewModelService viewModelService, TabService tabService, SearchingService searchingService, IWindowService windowService) : base(viewModelService, navigationService)
+    public SearchControlViewModel(INavigationService navigationService ,IViewModelService viewModelService, IWindowService windowService, TabService tabService, SearchingService searchingService) : base(viewModelService, navigationService)
     {
         _windowService = windowService;
         _tabService = tabService;
@@ -170,9 +169,9 @@ public class SearchControlViewModel : BaseViewModel
         CurrentPage = 0;
     }
 
-    private async Task UpdateSearchList()
+    private void UpdateSearchList()
     {
-        List<Tab> tabsToDisplay = await _searchingService.SearchTabs(_windowService.WindowHeight - 200, _currentPage, _searchString);
+        List<Tab> tabsToDisplay = _searchingService.SearchTabs(_windowService.WindowHeight - 200, _currentPage, _searchString);
 
         if (tabsToDisplay.Count > (_windowService.WindowHeight - 200) / 40)
         {

@@ -38,13 +38,13 @@ public abstract class BaseViewModel : ObservableObject ,INotifyPropertyChanged, 
         }
     }
 
-    public void ShowMessage(string title, string message)
+    public static void ShowMessage(string title, string message)
     {
         MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
     }
-    public void ShowOkCancelMessage(string title, string message)
+    public static MessageBoxResult ShowOkCancelMessage(string title, string message)
     {
-        MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
+        return MessageBox.Show(message, title, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
     }
 
     public void Validate(IEnumerable<string>? SpecificProperties = null)

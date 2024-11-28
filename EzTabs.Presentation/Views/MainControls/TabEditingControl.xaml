@@ -110,7 +110,7 @@
                     Style="{DynamicResource CommonButton}"
                     x:Name="CreateBarsButton"
                     Content="Create Bars"
-                    Command="{Binding CreateBarsButton}"
+                    Command="{Binding CreateBarsButtonCommand}"
                     Focusable="False"/>
             </Grid>
             
@@ -119,7 +119,7 @@
                     Style="{DynamicResource CommonButton}"
                     x:Name="RemoveBarsButton"
                     Content="Remove Bars"
-                    Command="{Binding RemoveBarsButton}"
+                    Command="{Binding RemoveBarButtonCommand}"
                     Focusable="False"/>
             </Grid>
 
@@ -138,7 +138,7 @@
                     Style="{DynamicResource CommonButton}"
                     x:Name="RemoveBarsLineButton"
                     Content="Remove Line"
-                    Command="{Binding RemoveLineButton}"
+                    Command="{Binding RemoveLineButtonCommand}"
                     Focusable="False"/>
             </Grid>
             
@@ -158,56 +158,33 @@
                     TextBoxWidth="50"
                     ButtonStepMultiplier="5"/>
             </Grid>
-            
-            <Grid Grid.Column="10" Grid.Row="0">
-                <CheckBox 
-                    Style="{DynamicResource CommonCheckBox}"
-                    x:Name="InsertModeCheckBox"
-                    IsChecked="{Binding Insert, UpdateSourceTrigger=PropertyChanged}"
-                    Content="Insert"
-                    VerticalContentAlignment="Center"
-                    Focusable="False"/>
-            </Grid>
 
-            <Grid Grid.Column="10" Grid.Row="2">
-                <CheckBox
-                    Style="{DynamicResource CommonCheckBox}"
-                    x:Name="AutoSaveCheckBox"
-                    Content="Auto Save"
-                    VerticalContentAlignment="Center"
-                    Focusable="False"/>
-            </Grid>
+            <Grid Grid.Column="10" Grid.Row="2"/>
         </Grid>
         <Grid Grid.Row="5" Grid.Column="1">
             <Border CornerRadius="5" Background="White" Focusable="False">
-                <StackPanel Focusable="False">
-                    <ScrollViewer
+                <ScrollViewer
+                        FontSize="{Binding FontSize, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="{DynamicResource MonoSpaceFontFamily}"
+                        Foreground="Black"
                         Background="Transparent"
-                        HorizontalScrollBarVisibility="Visible" 
-                        VerticalScrollBarVisibility="Visible"
+                        HorizontalScrollBarVisibility="Auto" 
+                        VerticalScrollBarVisibility="Auto"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         Focusable="True" 
-                        vs:FocusTrackingService.IsFocused="True">
+                        vs:FocusTrackingService.IsFocused="True"
+                        Content="{Binding TabText, UpdateSourceTrigger=PropertyChanged}">
 
-                        <ScrollViewer.InputBindings>
-                            <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Up" Key="Up"/>
-                            <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Down" Key="Down"/>
-                            <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Left" Key="Left"/>
-                            <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Right" Key="Right"/>
-                            <KeyBinding Command="{Binding RemoveSymbolCommand}" Key="Backspace"/>
-                        </ScrollViewer.InputBindings>
+                    <ScrollViewer.InputBindings>
+                        <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Up" Key="Up"/>
+                        <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Down" Key="Down"/>
+                        <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Left" Key="Left"/>
+                        <KeyBinding Command="{Binding MoveCursorCommand}" CommandParameter="Right" Key="Right"/>
+                        <KeyBinding Command="{Binding RemoveSymbolCommand}" Key="Backspace"/>
+                    </ScrollViewer.InputBindings>
 
-                        <TextBlock
-                            Style="{DynamicResource CommonTextBlock}"
-                            FontSize="{Binding FontSize, UpdateSourceTrigger=PropertyChanged}"
-                            FontFamily="Courier New"
-                            Foreground="Black"
-                            x:Name="TabStringTextBlock"
-                            Text="{Binding TabText, UpdateSourceTrigger=PropertyChanged}"
-                            Focusable="False"/>
-                    </ScrollViewer>
-                </StackPanel>
+                </ScrollViewer>
             </Border>
         </Grid>
     </Grid>

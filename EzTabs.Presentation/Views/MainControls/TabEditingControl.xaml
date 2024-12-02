@@ -70,6 +70,8 @@
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="Auto"/>
@@ -109,7 +111,7 @@
                 <Button
                     Style="{DynamicResource CommonButton}"
                     x:Name="CreateBarsButton"
-                    Content="Create Bars"
+                    Content="Create Bar"
                     Command="{Binding CreateBarsButtonCommand}"
                     Focusable="False"/>
             </Grid>
@@ -118,7 +120,7 @@
                 <Button
                     Style="{DynamicResource CommonButton}"
                     x:Name="RemoveBarsButton"
-                    Content="Remove Bars"
+                    Content="Remove Bar"
                     Command="{Binding RemoveBarButtonCommand}"
                     Focusable="False"/>
             </Grid>
@@ -143,6 +145,24 @@
             </Grid>
             
             <Grid Grid.Column="8" Grid.Row="0">
+                <Button
+                    Style="{DynamicResource CommonButton}"
+                    x:Name="ExtendBarButton"
+                    Content="Extend Bar"
+                    Command="{Binding RemoveLineButtonCommand}"
+                    Focusable="False"/>
+            </Grid>
+            
+            <Grid Grid.Column="8" Grid.Row="2">
+                <Button
+                    Style="{DynamicResource CommonButton}"
+                    x:Name="ShortenBarButton"
+                    Content="Shorten Bar"
+                    Command="{Binding RemoveLineButtonCommand}"
+                    Focusable="False"/>
+            </Grid>
+            
+            <Grid Grid.Column="10" Grid.Row="0">
                 <TextBlock
                     Style="{DynamicResource CommonTextBlock}"
                     x:Name="CurrentZoomTextBlock"
@@ -151,7 +171,7 @@
                     VerticalAlignment="Center"/>
             </Grid>
             
-            <Grid Grid.Column="8" Grid.Row="2">
+            <Grid Grid.Column="10" Grid.Row="2">
                 <sc:UpDownTextBlock
                     x:Name="ZoomTextBox"
                     CurrentValue="{Binding Zoom, Mode=TwoWay}"

@@ -7,6 +7,26 @@ namespace EzTabs.Presentation.Services.ViewServices;
 
 public static class ViewKeyReaderService
 {
+    private static Dictionary<Key, string> _stringProducedByKeyWithShift = new()
+    {
+        {Key.D0, ")"},
+        {Key.D1, "!"},
+        {Key.D2, "@"},
+        {Key.D3, "#"},
+        {Key.D4, "$"},
+        {Key.D5, "%"},
+        {Key.D6, "^"},
+        {Key.D7, "&"},
+        {Key.D8, "*"},
+        {Key.D9, "("},
+        {Key.Oem2, "/"},
+        {Key.Oem3, "~"},
+        {Key.OemComma, "<"},
+        {Key.OemPeriod, ">"},
+        {Key.OemMinus, "-"},
+        {Key.OemPlus, "+"},
+    };
+
     public static readonly DependencyProperty KeyCommandProperty =
         DependencyProperty.RegisterAttached("KeyCommand", typeof(ICommand), typeof(ViewKeyReaderService), new PropertyMetadata(null, OnKeyCommandChanged));
 
@@ -48,64 +68,20 @@ public static class ViewKeyReaderService
                 command.Execute($"{e.Key.ToString().ToUpper()}");
                 return;               
             }
-            else if(Keyboard.Modifiers == ModifierKeys.Shift && e.Key != Key.LeftShift & e.Key != Key.RightShift)
+            if(Keyboard.Modifiers == ModifierKeys.Shift && e.Key != Key.LeftShift & e.Key != Key.RightShift)
             {
-                switch (e.Key)
-                {
-                    case Key.D0:
-                        command.Execute(")");
-                        break;
-                    case Key.D1:
-                        command.Execute("!");
-                        break;
-                    case Key.D2:
-                        command.Execute("@");
-                        break;
-                    case Key.D3:
-                        command.Execute("#");
-                        break;
-                    case Key.D4:
-                        command.Execute("$");
-                        break;
-                    case Key.D5:
-                        command.Execute("%");
-                        break;
-                    case Key.D6:
-                        command.Execute("^");
-                        break;
-                    case Key.D7:
-                        command.Execute("&");
-                        break;
-                    case Key.D8:
-                        command.Execute("*");
-                        break;
-                    case Key.D9:
-                        command.Execute("(");
-                        break;
-                    case Key.Oem2:
-                        command.Execute("/");
-                        break;
-                    case Key.OemComma:
-                        command.Execute("<");
-                        break;
-                    case Key.OemPeriod:
-                        command.Execute(">");
-                        break;
-                    case Key.Oem3:
-                        command.Execute("~");
-                        break;
-                    default:
-                        break;
-                }
+                if (command.CanExecute(_stringProducedByKeyWithShift.TryGetValue(e.Key, out string? key))) command.Execute(key);
+                return;
             }
-            else if (e.Key >= Key.D0 && e.Key <= Key.D9)
+            if (e.Key >= Key.D0 && e.Key <= Key.D9)
             {
-
                 command.Execute(e.Key.ToString().Replace("D",""));
+                return;
             }
-            else if (e.Key >= Key.A && e.Key <= Key.Z)
+            if (e.Key >= Key.A && e.Key <= Key.Z)
             {
                 command.Execute(e.Key.ToString().ToLower());
+                return;
             }
         }
     }

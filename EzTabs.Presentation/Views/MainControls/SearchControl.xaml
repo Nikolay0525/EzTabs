@@ -43,7 +43,7 @@
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
@@ -64,21 +64,72 @@
                     Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
             <Grid Grid.Column="4" Background="Transparent">
-                <Button 
-                    Style="{DynamicResource CommonButton}" 
-                    Command="{Binding SwitchFilterCommand}"
+                <ct:ToggleDropButton 
+                    Style="{DynamicResource ToggleImageButtonFlipping}"
                     x:Name="FilterButton"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    Content="Filter"/>
+                    Text="Filter"
+                    Padding="10"
+                    IsChecked="{Binding IsFilterEnabled, Mode=TwoWay}"/>
             </Grid>
             <Grid Grid.Column="6">
                 <ContentControl x:Name="ControlBar" Content="{Binding ControlBarViewModel}"/>
             </Grid>
         </Grid>
-        <Grid Grid.Column ="1" Grid.Row="2" Background="Transparent">
-            <sc:SearchFilters Visibility="{Binding IsFilterEnabled, Converter={StaticResource boolConverter}}"/>
+        <Grid Grid.Column ="1" 
+              Grid.Row="2" 
+              Background="Transparent" 
+              d:Visibility="Visible"
+              Visibility="{Binding IsFilterEnabled, Converter={StaticResource boolConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="1" Grid.Column="0">
+                <CheckBox
+                    Foreground="White"
+                    Content="Favourite Tabs"
+                    VerticalContentAlignment="Center"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+            </Grid>
+            
+            <Grid Grid.Row="1" Grid.Column="2" Visibility="Visible">
+                <ct:PlaceHolderTextBox
+                    Style="{DynamicResource CommonTextBox}"
+                    PlaceHolderText="Author Name"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+            </Grid>
+            
+            <Grid Grid.Row="1" Grid.Column="4">
+                <sc:ComboBoxControl
+                    Text="{Binding SelectedSearchByOption, UpdateSourceTrigger=PropertyChanged}"
+                    IsOpen="{Binding IsSearchByOpen, Mode=TwoWay}"
+                    ItemsSource="{Binding ListOfSearchByOptions, UpdateSourceTrigger=PropertyChanged}"
+                    />
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.Column="6">
+                <sc:ComboBoxControl
+                    Text="{Binding SelectedSortByOption, UpdateSourceTrigger=PropertyChanged}"
+                    IsOpen="{Binding IsSortByOpen, Mode=TwoWay}"
+                    ItemsSource="{Binding ListOfSortByOptions, UpdateSourceTrigger=PropertyChanged}"
+                    />
+            </Grid>
         </Grid>
+        
         <Grid Grid.Column ="1" Grid.Row="4" Background="Transparent">
             <ListBox 
                 Grid.Column="1" 

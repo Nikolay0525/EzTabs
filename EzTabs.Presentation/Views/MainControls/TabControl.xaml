@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls"
              xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels"
              xmlns:sc ="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls"
+             xmlns:ct ="clr-namespace:EzTabs.Presentation.Resources.Styles.CustomTypes"
+             xmlns:c ="clr-namespace:EzTabs.Presentation.Converters"
              mc:Ignorable="d" 
              FontFamily="{DynamicResource CommonFontFamily}"
              FontWeight="{DynamicResource CommonFontWeight}"
@@ -13,6 +15,10 @@
              d:DesignHeight="540" d:DesignWidth="960"
              d:DataContext="{x:Type vm:TabControlViewModel}"
              Background="#2e2e2e">
+
+    <UserControl.Resources>
+        <c:BoolToVisibilityConverter x:Key="boolConverter"/>
+    </UserControl.Resources>
     
     <Grid>
         <Grid.RowDefinitions>
@@ -40,7 +46,7 @@
                 <Button 
                     Style="{DynamicResource CommonButton}" 
                     x:Name="GoToSearchButton" 
-                    Command="{Binding GoToSearchControlCommand}"
+                    Command="{Binding GoToSearchCommand}"
                     Content="Return to Main Page" 
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"/>
@@ -59,50 +65,65 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="80"/>
-                </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="1">
-                        <TextBlock
-                            Style="{DynamicResource CommonTextBlock}"
+
+                    <Grid x:Name="GridWithSongName" Grid.Column="0">
+                        <ct:ToggleDropButton
+                            x:Name="SongTitleBandButton"
+                            Style="{DynamicResource ToggleImageButtonFlipping}"
                             FontSize="{DynamicResource CommonFontSize}"
                             Text="{Binding TitleBand, UpdateSourceTrigger=PropertyChanged}"
-                            TextAlignment="Center"
-                            VerticalAlignment="Center"
+                            IsChecked="{Binding IsInfoOpen, Mode=TwoWay}"
                             d:Text="Alice In Chains - Would?"/>
+                        <Popup 
+                            x:Name="InfoPopup" 
+                            PlacementTarget="{Binding ElementName=GridWithSongName}"
+                            Placement="Bottom"
+                            StaysOpen="True"
+                            IsOpen="{Binding IsInfoOpen, UpdateSourceTrigger=PropertyChanged}"
+                            AllowsTransparency="True">
+                            <sc:InfoDropControl
+                                x:Name="InfoTextBox"
+                                Width="{Binding ElementName=GridWithSongName, Path=ActualWidth}"/>
+                        </Popup>
                     </Grid>
-                    <Grid Grid.Column="3">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="40"/>
-                            <RowDefinition Height="40"/>
-                        </Grid.RowDefinitions>
+
+                    <Grid Grid.Column="4">
                         <Grid Grid.Row="0">
-                            <TextBlock
-                                Style="{DynamicResource CommonTextBlock}"
-                                TextAlignment="Center"
-                                VerticalAlignment="Center"
+                            <ct:ToggleDropButton
+                                Width="140"
+                                Style="{DynamicResource ToggleImageButtonFlipping}"
+                                x:Name="ZoomDropButton"
                                 Text="Zoom"
-                                />
+                                Padding="5"
+                                IsChecked="{Binding IsZoomOpen, Mode=TwoWay}"/>
                         </Grid>
-                        <Grid Grid.Row="1">
+                        <Popup 
+                            x:Name="ZoomPopup" 
+                            PlacementTarget="{Binding ElementName=ZoomDropButton}" 
+                            Placement="Bottom" 
+                            HorizontalAlignment="Center"
+                            HorizontalOffset="0" 
+                            StaysOpen="True"
+                            IsOpen="{Binding IsZoomOpen, UpdateSourceTrigger=PropertyChanged}"
+                            AllowsTransparency="True">
                             <sc:UpDownTextBlock
                                 x:Name="ZoomTextBox"
                                 CurrentValue="{Binding Zoom, Mode=TwoWay}"
+                                Minimum="5"
+                                Maximum="150"
                                 TextBoxWidth="50"
                                 ButtonStepMultiplier="5"/>
-                        </Grid>
+                        </Popup>
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid Grid.Column="1" Grid.Row="2">
                 
                 <Border CornerRadius="5" Background="White">
                     <ScrollViewer 
@@ -112,11 +133,117 @@
                         VerticalScrollBarVisibility="Auto"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        FontSize="{Binding FontSize, UpdateSourceTrigger=PropertyChanged}"
                         FontFamily="Courier New"
                         Foreground="Black"
+                        FontSize="{Binding FontSize, UpdateSourceTrigger=PropertyChanged}"
                         Content="{Binding TabText, UpdateSourceTrigger=PropertyChanged}"/>
                 </Border>
+            </Grid>
+            
+            
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <ct:ToggleDropButton
+                        Style="{DynamicResource ToggleImageButtonFlipping}"
+                        x:Name="ShowCommentsButton"
+                        Text="Show Comments"
+                        IsChecked="{Binding IsCommentSectionVisible, Mode=TwoWay}"
+                        Padding="5"/>
+                </Grid>
+                <Grid Grid.Column="2">
+                    <sc:ComboBoxControl
+                        Text="{Binding SelectedOrderByOption, UpdateSourceTrigger=PropertyChanged}"
+                        IsOpen="{Binding IsSortByOpen, Mode=TwoWay}"
+                        Visibility="{Binding IsCommentSectionVisible, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding ListOfSortByOptions, UpdateSourceTrigger=PropertyChanged}"
+                        Width="250"
+                        />
+                    
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="3" d:Visibility="Visible" Visibility="{Binding IsCommentSectionVisible, Converter={StaticResource boolConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <ListBox 
+                        Style="{DynamicResource CommonListBox}" 
+                        x:Name="CommentsList"
+                        d:Height="200"
+                        ItemsSource="{Binding CommentsInList, UpdateSourceTrigger=PropertyChanged}"
+                        Background="White"/>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="1">
+                        <Button 
+                            Style="{DynamicResource CommonButton}"
+                            Command="{Binding PreviousPageCommand}"
+                            IsEnabled="{Binding PreviousPageEnabled, UpdateSourceTrigger=PropertyChanged}"
+                            Content="Previous page"
+                            Width="200"/>
+
+                    </Grid>
+
+                    <Grid Grid.Column="3">
+                        <Button
+                            Style="{DynamicResource CommonButton}"
+                            Command="{Binding OnTheFirstPageCommand}"
+                            Visibility="{Binding FirstPageVisibility, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}"
+                            Width="50"
+                            Content="1..."/>
+                    </Grid>
+
+                    <Grid Grid.Column="5">
+                        <Border BorderThickness="2" CornerRadius="5" BorderBrush="White">
+                            <TextBlock
+                                Style="{DynamicResource CommonTextBlock}"
+                                FontSize="{DynamicResource CommonFontSize}"
+                                FontWeight="Bold"
+                                Text="{Binding CurrentPage, UpdateSourceTrigger=PropertyChanged}"
+                                TextAlignment="Center"
+                                VerticalAlignment="Center"
+                                d:Text="1"/>
+                        </Border>
+                    </Grid>
+
+                    <Grid Grid.Column="7">
+                        <Button 
+                            Style="{DynamicResource CommonButton}"
+                            Command="{Binding NextPageCommand}"
+                            IsEnabled="{Binding NextPageEnabled, UpdateSourceTrigger=PropertyChanged}"
+                            Content="Next page"
+                            Width="200"/>
+                    </Grid>
+                </Grid>
+                
             </Grid>
         </Grid>
     </Grid>

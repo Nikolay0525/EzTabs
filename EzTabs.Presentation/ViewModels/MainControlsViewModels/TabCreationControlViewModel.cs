@@ -181,10 +181,6 @@ public class TabCreationControlViewModel : BaseViewModel
     {
         NavigationService.NavigateTo<SearchControlViewModel>();
     }
-    private void GoToTabEditingControl()
-    {
-        NavigationService.NavigateTo<TabEditingControlViewModel>();
-    }
 
     private void ManageButtonAccessibility()
     {

@@ -70,7 +70,7 @@ public static class ViewKeyReaderService
             }
             if(Keyboard.Modifiers == ModifierKeys.Shift && e.Key != Key.LeftShift & e.Key != Key.RightShift)
             {
-                if (command.CanExecute(_stringProducedByKeyWithShift.TryGetValue(e.Key, out string? key))) command.Execute(key);
+                command.Execute(_stringProducedByKeyWithShift.GetValueOrDefault(e.Key));
                 return;
             }
             if (e.Key >= Key.D0 && e.Key <= Key.D9)

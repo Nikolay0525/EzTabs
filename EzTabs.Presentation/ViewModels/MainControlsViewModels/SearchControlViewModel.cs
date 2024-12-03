@@ -18,15 +18,101 @@ public class SearchControlViewModel : BaseViewModel
     private readonly TabService _tabService;
     private readonly SearchingService _searchingService;
     private ObservableCollection<TabInSearchPageControl> _tabsInSearchList = new();
+    private readonly IWindowService _windowService;
+
+    private bool _firstPageVisibility = false;
+    private bool _previousPageEnabled = false;
+    private bool _nextPageEnabled = false;
+    private bool _isFilterEnabled = false;
+    private bool _isSortByOpen = false;
+    private bool _isSearchByOpen = false;
+    private bool _onlyMineTabs = false;
+    private bool _onlyFavouriteTabs = false;
+
     private string _searchString;
     private int _currentPage = 0;
-    private bool _isFilterEnabled = false;
     private double _filterRowHeight = 0;
-    private bool _firstPageVisibility = false;
-    private bool _nextPageEnabled = false;
-    private bool _previousPageEnabled = false;
 
-    private readonly IWindowService _windowService;
+    private string _selectedSearchByOption = "Search By";
+    private string _selectedSortByOption = "Order By";
+    private ObservableCollection<ComboButtonControl> _listOfSearchByOptions = new();
+    private ObservableCollection<ComboButtonControl> _listOfSortByOptions = new();
+
+    private List<string> SearchByOptions { get; } = new()
+    {
+        "Song & Band",
+        "Song & Author"
+    };
+    
+    private List<string> SortByOptions { get; } = new()
+    {
+        "Most Popular",
+        "Highly Rated",
+        "Newest"
+    };
+
+    public ObservableCollection<ComboButtonControl> ListOfSearchByOptions
+    {
+        get => _listOfSearchByOptions;
+        set => _listOfSearchByOptions = value;
+    }
+    
+    public ObservableCollection<ComboButtonControl> ListOfSortByOptions
+    {
+        get => _listOfSortByOptions;
+        set => _listOfSortByOptions = value;
+    }
+
+    public bool IsSortByOpen
+    { 
+        get => _isSortByOpen; 
+        set 
+        {
+            _isSortByOpen = value;
+            OnPropertyChanged();
+        }
+    }
+    
+    public bool IsSearchByOpen
+    { 
+        get => _isSearchByOpen; 
+        set 
+        {
+            _isSearchByOpen = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string SelectedSearchByOption
+    { 
+        get => _selectedSearchByOption; 
+        set 
+        {
+            _selectedSearchByOption = value;
+            OnPropertyChanged();
+        }
+    }
+    
+    public string SelectedSortByOption
+    { 
+        get => _selectedSortByOption; 
+        set 
+        {
+            _selectedSortByOption = value;
+            OnPropertyChanged();
+        }
+    }
+    
+
+    public bool OnlyFavouriteTabs 
+    { 
+        get => _onlyFavouriteTabs; 
+        set 
+        {
+            _onlyFavouriteTabs = value;
+            OnPropertyChanged();
+        }
+    }
 
     public bool IsFilterEnabled
     {
@@ -113,6 +199,10 @@ public class SearchControlViewModel : BaseViewModel
         }
     }
 
+    public BaseViewModel ControlBarViewModel { get; private set; }
+
+    public ICommand HandleSearchByCommand { get; }
+    public ICommand HandleSortByCommand { get; }
     public ICommand NextPageCommand { get; }
     public ICommand PreviousPageCommand { get; }
     public ICommand OnTheFirstPageCommand { get; }
@@ -121,8 +211,6 @@ public class SearchControlViewModel : BaseViewModel
     public ICommand GoToClickedTabCommand { get; }
     public ICommand GoEditClickedTabCommand { get; }
 
-    public BaseViewModel ControlBarViewModel { get; private set; }
-
 
     public SearchControlViewModel(INavigationService navigationService ,IViewModelService viewModelService, IWindowService windowService, TabService tabService, SearchingService searchingService) : base(viewModelService, navigationService)
     {
@@ -130,15 +218,57 @@ public class SearchControlViewModel : BaseViewModel
         _tabService = tabService;
         _searchingService = searchingService;
         UpdateSearchList();
+        UpdateLists();
         ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
         NextPageCommand = new RelayCommand(NextPage);
         PreviousPageCommand = new RelayCommand(PreviousPage);
         OnTheFirstPageCommand = new RelayCommand(OnTheFirstPage);
-        SwitchFilterCommand = new RelayCommand(SwitchFilter);
         GoToCreationOfTabCommand = new RelayCommand(GoToCreationOfTab);
         GoToClickedTabCommand = new AsyncRelayCommand<Guid>(GoToClickedTab);
         GoEditClickedTabCommand = new AsyncRelayCommand<Guid>(GoEditClickedTab);
     }
+
+    private void UpdateLists()
+    {
+        foreach (var option in SortByOptions)
+        {
+            var button = new ComboButtonControl()
+            {
+                Command = this.HandleSortByCommand,
+                CommandParameter = $"{option}",
+                Text = $"{option}"
+            };
+
+            ListOfSortByOptions.Add(button);
+        }
+
+        foreach (var option in SearchByOptions)
+        {
+            var button = new ComboButtonControl()
+            {
+                Command = this.HandleSortByCommand,
+                CommandParameter = $"{option}",
+                Text = $"{option}"
+            };
+
+            ListOfSearchByOptions.Add(button);
+        }
+    }
+
+    private void HandleSearchBy(string? selectedOption)
+    {
+        if (selectedOption is null) throw new ArgumentNullException(nameof(selectedOption));
+        SelectedSearchByOption = selectedOption;
+        IsSearchByOpen = false;
+    }
+
+    private void HandleSortBy(string? selectedOption)
+    {
+        if (selectedOption is null) throw new ArgumentNullException(nameof(selectedOption));
+        SelectedSortByOption = selectedOption;
+        IsSortByOpen = false;
+    }
+
 
     private async Task GoToClickedTab(Guid tabId)
     {
@@ -201,11 +331,6 @@ public class SearchControlViewModel : BaseViewModel
         }
 
         return tabInSearchPageControls;
-    }
-
-    private void SwitchFilter()
-    {
-        IsFilterEnabled = !IsFilterEnabled;
     }
 
     private void GoToCreationOfTab()

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace EzTabs.Presentation.Views.MainControls.SimpleControls
 {
     /// <summary>
-    /// Interaction logic for SearchFilters.xaml
+    /// Interaction logic for InfoDropControl.xaml
     /// </summary>
-    public partial class SearchFilters : UserControl
+    public partial class InfoDropControl : UserControl
     {
-        public SearchFilters()
+        public InfoDropControl()
         {
             InitializeComponent();
         }

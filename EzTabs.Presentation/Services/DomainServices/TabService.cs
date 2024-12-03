@@ -53,7 +53,7 @@ public class TabService : BaseService<Tab>
     public async Task SaveTabText(string tabText, List<List<List<string>>> tabTextInList)
     {
         SavedTab!.TabText = tabText;
-        SavedTab!.JsonTabText = JsonSerializer.Serialize<List<List<List<string>>>>(tabTextInList);
+        SavedTab!.JsonTabText = JsonSerializer.Serialize(tabTextInList);
         await _repository.Update(SavedTab!);
     }
 }

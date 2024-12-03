@@ -236,12 +236,6 @@
                                                     To="Black"
                                                     From="White"
                                                     Duration="0:0:0.2" />
-                                        <ColorAnimation 
-                                                    Storyboard.TargetName="path"
-                                                    Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)"
-                                                    To="Black"
-                                                    From="White"
-                                                    Duration="0:0:0.2" />
 
                                         <ColorAnimation Storyboard.TargetName="border"
                                                     Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
@@ -256,13 +250,6 @@
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetName="path"
                                                     Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
-                                                    To="White"
-                                                    From="Black"
-                                                    Duration="0:0:0.2" />
-
-                                        <ColorAnimation 
-                                                    Storyboard.TargetName="path"
-                                                    Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)"
                                                     To="White"
                                                     From="Black"
                                                     Duration="0:0:0.2" />
@@ -318,27 +305,26 @@
                             VerticalAlignment="{TemplateBinding VerticalAlignment}"
                             Data="{TemplateBinding PathData}"  
                             Stretch="{TemplateBinding Stretch}"
-                            StrokeThickness="{TemplateBinding StrokeThickness}"
                             Fill="White"
-                            Stroke="White"/>
+                            Stroke="White"
+                            />
                     </Border>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter Property="Background" TargetName="border" Value="White"/>
                             <Setter Property="Foreground" Value="Black"/>
+                            <Setter TargetName="path" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleY="-1" />
+                                </Setter.Value>
+                            </Setter>
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation 
                                         Storyboard.TargetName="path"
                                         Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
-                                        To="Black"
-                                        From="White"
-                                        Duration="0:0:0.2" />
-                                        <ColorAnimation 
-                                        Storyboard.TargetName="path"
-                                        Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)"
                                         To="Black"
                                         From="White"
                                         Duration="0:0:0.2" />
@@ -357,12 +343,6 @@
                                         <ColorAnimation 
                                         Storyboard.TargetName="path"
                                         Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
-                                        To="White"
-                                        From="Black"
-                                        Duration="0:0:0.2" />
-                                        <ColorAnimation 
-                                        Storyboard.TargetName="path"
-                                        Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)"
                                         To="White"
                                         From="Black"
                                         Duration="0:0:0.2" />
@@ -387,7 +367,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ToggleImageButtonEmpty" TargetType="{x:Type ct:ToggleImageButton}">
+    <Style x:Key="ToggleImageButtonFlipping" TargetType="{x:Type ct:ToggleDropButton}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
@@ -398,7 +378,7 @@
         <Setter Property="Padding" Value="4"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ct:ToggleImageButton}">
+                <ControlTemplate TargetType="{x:Type ct:ToggleDropButton}">
                     <Border 
                         x:Name="border" CornerRadius="5" 
                         Background="{TemplateBinding Background}" 
@@ -407,36 +387,69 @@
                         SnapsToDevicePixels="true"
                         Padding="{TemplateBinding Padding}">
 
-                        <Path 
-                            x:Name="path" 
-                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
-                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                            Data="{TemplateBinding PathData}"  
-                            Stretch="{TemplateBinding Stretch}"
-                            StrokeThickness="{TemplateBinding StrokeThickness}"
-                            Fill="Transparent"
-                            Stroke="White"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="20"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                x:Name="text"
+                                Grid.Column="0"
+                                TextAlignment="Center"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="{DynamicResource CommonFontFamily}"
+                                FontSize="{DynamicResource CommonFontSize}"
+                                Text="{TemplateBinding Text}"
+                                Foreground="{TemplateBinding Foreground}"/>
+                            <Path
+                                Grid.Column="2"
+                                x:Name="path" 
+                                HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
+                                VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                RenderTransformOrigin="0.5 0.5"
+                                Data="M0 0 3 3 6 0"  
+                                Stretch="Uniform"
+                                Fill="White"
+                                Stroke="White"/>
+                        </Grid>
                     </Border>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="path" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleY="-1" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="border" Value="White"/>
                             <Setter Property="Foreground" Value="Black"/>
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation 
-                                        Storyboard.TargetName="path"
-                                        Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)"
-                                        To="Black"
-                                        From="White"
-                                        Duration="0:0:0.2" />
+                                            Storyboard.TargetName="text"
+                                            Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                                            To="Black"
+                                            From="White"
+                                            Duration="0:0:0.2" />
+                                        
                                         <ColorAnimation 
-                                        Storyboard.TargetName="border"
-                                        Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-                                        To="White"
-                                        From="Transparent"
-                                        Duration="0:0:0.2" />
+                                            Storyboard.TargetName="path"
+                                            Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                            To="Black"
+                                            From="White"
+                                            Duration="0:0:0.2" />   
+
+                                        <ColorAnimation 
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                                            To="White"
+                                            From="Transparent"
+                                            Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -444,20 +457,33 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation 
-                                        Storyboard.TargetName="path"
-                                        Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)"
-                                        To="White"
-                                        From="Black"
-                                        Duration="0:0:0.2" />
+                                            Storyboard.TargetName="text"
+                                            Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                                            To="White"
+                                            From="Black"
+                                            Duration="0:0:0.2" />
+                                        
                                         <ColorAnimation 
-                                        Storyboard.TargetName="border"
-                                        Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-                                        To="Transparent"
-                                        From="White"
-                                        Duration="0:0:0.2" />
+                                            Storyboard.TargetName="path"
+                                            Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                            To="White"
+                                            From="Black"
+                                            Duration="0:0:0.2" />
+
+                                        <ColorAnimation 
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                                            To="Transparent"
+                                            From="White"
+                                            Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Static.Pressed}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Static.Pressed}"/>
                         </Trigger>
 
                         <Trigger Property="IsEnabled" Value="false">
@@ -497,11 +523,11 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation 
-                                        Storyboard.TargetName="border"
-                                        Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
-                                        To="Black"
-                                        From="Transparent"
-                                        Duration="0:0:0.2" />
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
+                                            To="Black"
+                                            From="Transparent"
+                                            Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -510,11 +536,11 @@
                                     <Storyboard>
 
                                         <ColorAnimation 
-                                        Storyboard.TargetName="border"
-                                        Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
-                                        To="Transparent"
-                                        From="Black"
-                                        Duration="0:0:0.2" />
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
+                                            To="Transparent"
+                                            From="Black"
+                                            Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>

@@ -9,7 +9,7 @@
              xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs" 
              d:DataContext="{d:DesignInstance Type=vm:ControlBarViewModel}"
              mc:Ignorable="d"
-             Height="38">
+             Height="40">
     <Grid>
         <Grid Grid.Column="1" Background="Transparent">
             <Grid.ColumnDefinitions>
@@ -61,9 +61,10 @@
                 <Popup x:Name="MenuPopup" 
                        PlacementTarget="{Binding ElementName=MenuButton}" 
                        Placement="Bottom" 
-                       HorizontalOffset="-50" 
+                       HorizontalOffset="-100" 
                        StaysOpen="True"
-                       IsOpen="{Binding IsMenuOpen, UpdateSourceTrigger=PropertyChanged}">
+                       IsOpen="{Binding IsMenuOpen, UpdateSourceTrigger=PropertyChanged}"
+                       AllowsTransparency="True">
                     <dc:MenuDropControl/>
                 </Popup>
             </Grid>

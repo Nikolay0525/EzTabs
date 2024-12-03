@@ -70,4 +70,9 @@ public class UserService : BaseService<User>
         }
         return false;
     }
+
+    public async Task<User?> FindUserById(Guid userId)
+    {
+        var foundedUser = await _repository.GetById(userId); return foundedUser;
+    }
 }

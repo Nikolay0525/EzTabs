@@ -7,38 +7,44 @@
              mc:Ignorable="d" 
              FontSize="24"
              x:Name="rootControl">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="40"/>
-        </Grid.ColumnDefinitions>
+    <Border CornerRadius="5" Background="#2e2e2e">
         <Grid>
-            <Button Style="{DynamicResource CommonButton}"
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Button 
+                    Style="{DynamicResource CommonButton}"
                     x:Name="MinusButton"
                     Content="-"
                     Click="OnMinusButtonClick"
                     Focusable="False"/>
-        </Grid>
-        <Grid Grid.Column="2">
-            <TextBox Style="{DynamicResource CommonTextBox}"
-                     x:Name="ValueTextBlock"
-                     Text="{Binding CurrentValue, ElementName=rootControl}"
-                     TextAlignment="Center"
-                     Width="{Binding TextBoxWidth, ElementName=rootControl}"
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Center">
-                
-            </TextBox>
-        </Grid>
-        <Grid Grid.Column="4">
-            <Button Style="{DynamicResource CommonButton}"
+            </Grid>
+            <Grid Grid.Column="2">
+                <TextBox 
+                    Style="{DynamicResource CommonTextBox}"
+                    x:Name="ValueTextBlock"
+                    Text="{Binding CurrentValue, ElementName=rootControl}"
+                    TextAlignment="Center"
+                    Width="{Binding TextBoxWidth, ElementName=rootControl}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center">
+
+                </TextBox>
+            </Grid>
+            <Grid 
+                Grid.Column="4">
+                <Button 
+                    Style="{DynamicResource CommonButton}"
                     x:Name="PlusButton"
                     Content="+"
                     Click="OnPlusButtonClick"
                     Focusable="False"/>
+            </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </UserControl>

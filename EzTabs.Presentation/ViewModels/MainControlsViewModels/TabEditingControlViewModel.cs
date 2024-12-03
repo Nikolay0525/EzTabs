@@ -5,11 +5,9 @@ using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs;
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Shapes;
 
 namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 

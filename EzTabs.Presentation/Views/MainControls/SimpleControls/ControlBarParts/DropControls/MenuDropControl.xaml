@@ -7,50 +7,51 @@
              xmlns:conv="clr-namespace:EzTabs.Presentation.Converters"
              xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs" 
              d:DataContext="{d:DesignInstance Type=vm:ControlBarViewModel}"
-             mc:Ignorable="d" 
-             Background="#2e2e2e">
+             mc:Ignorable="d">
 
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Button 
-                Style="{DynamicResource CommonButton}"
-                Command="{Binding}"
-                x:Name="ModerationButton"
-                Content="Moderation"
-                Visibility="{Binding ShowModerationButton,Converter={StaticResource BoolToVisibilityConverter}}"/>
+    <Border CornerRadius="10" Background="#2e2e2e">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Button 
+                    Style="{DynamicResource CommonButton}"
+                    Command="{Binding}"
+                    x:Name="ModerationButton"
+                    Content="Moderation"
+                    Visibility="{Binding ShowModerationButton,Converter={StaticResource BoolToVisibilityConverter}}"/>  
+            </Grid>
+            <Grid Grid.Row="2">
+                <Button 
+                    Style="{DynamicResource CommonButton}"
+                    Command="{Binding}"
+                    x:Name="SettingsButton"
+                    Content="Settings"/>
+            </Grid>
+            <Grid Grid.Row="4">
+                <Button 
+                    Style="{DynamicResource CommonButton}"
+                    Command="{Binding CreateTabCommand}"
+                    x:Name="CreateTabButton"
+                    Content="Create Tab"/>
+            </Grid>
+            <Grid Grid.Row="6">
+                <Button 
+                    Style="{DynamicResource CommonButton}"
+                    Command="{Binding SignOutCommand}"
+                    x:Name="SignOutButton"
+                    Content="Sign Out"/>
+            </Grid>
         </Grid>
-        <Grid Grid.Row="2">
-            <Button 
-                Style="{DynamicResource CommonButton}"
-                Command="{Binding}"
-                x:Name="SettingsButton"
-                Content="Settings"/>
-        </Grid>
-        <Grid Grid.Row="4">
-            <Button 
-                Style="{DynamicResource CommonButton}"
-                Command="{Binding CreateTabCommand}"
-                x:Name="CreateTabButton"
-                Content="Create Tab"/>
-        </Grid>
-        <Grid Grid.Row="6">
-            <Button 
-                Style="{DynamicResource CommonButton}"
-                Command="{Binding SignOutCommand}"
-                x:Name="SignOutButton"
-                Content="Sign Out"/>
-        </Grid>
-    </Grid>
+    </Border>
 </UserControl>

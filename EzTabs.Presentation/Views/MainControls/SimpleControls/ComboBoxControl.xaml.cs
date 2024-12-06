@@ -22,7 +22,39 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
     {
         public ComboBoxControl()
         {
-            InitializeComponent();
+            InitializeComponent(); 
+            this.Loaded += new RoutedEventHandler(ControlBar_Loaded);
+        }
+
+        void ControlBar_Loaded(object sender, RoutedEventArgs e)
+        {
+            var w = Window.GetWindow(this);
+            w.Deactivated += new EventHandler(ControlBarPopUpCloser_Loaded);
+            if (w != null)
+            {
+                w.LocationChanged += (sender2, args) =>
+                {
+                    if (popup != null)
+                    {
+                        var popupOffset = popup.HorizontalOffset;
+                        popup.HorizontalOffset = popupOffset + 1;
+                        popup.HorizontalOffset = popupOffset;
+                    }
+                };
+                w.SizeChanged += (sender3, e2) =>
+                {
+                    if (popup != null)
+                    {
+                        var popupOffset = popup.HorizontalOffset;
+                        popup.HorizontalOffset = popupOffset + 1;
+                        popup.HorizontalOffset = popupOffset;
+                    }
+                };
+            }
+        }
+        void ControlBarPopUpCloser_Loaded(object? sender, EventArgs e)
+        {
+            popup.IsOpen = false;
         }
 
         public static readonly DependencyProperty ItemsSourceProperty =

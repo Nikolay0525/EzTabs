@@ -6,6 +6,7 @@ using EzTabs.Presentation.Services.SearchingServices;
 using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.Services.ViewServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
+using EzTabs.Presentation.ViewModels.MainControlsViewModels.Enums;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs;
 using EzTabs.Presentation.Views.MainControls.SimpleControls;
 using System.Collections.ObjectModel;
@@ -33,22 +34,24 @@ public class SearchControlViewModel : BaseViewModel
     private int _currentPage = 0;
     private double _filterRowHeight = 0;
 
-    private string _selectedSearchByOption = "Search By";
-    private string _selectedSortByOption = "Order By";
+    private SearchByOption _selectedSearchByOption = 0;
+    private SortByOption _selectedSortByOption = 0;
+    private string _selectedSearchByOptionText = "Search By";
+    private string _selectedSortByOptionText = "Sort By";
     private ObservableCollection<ComboButtonControl> _listOfSearchByOptions = new();
     private ObservableCollection<ComboButtonControl> _listOfSortByOptions = new();
 
-    private List<string> SearchByOptions { get; } = new()
+    private Dictionary<string,SearchByOption> _searchByOptions { get; } = new()
     {
-        "Song & Band",
-        "Song & Author"
+        {"Song & Band", SearchByOption.BandTitle},
+        {"Song & Author", SearchByOption.SongAuthor}
     };
     
-    private List<string> SortByOptions { get; } = new()
+    private Dictionary<string,SortByOption> _sortByOptions { get; } = new()
     {
-        "Most Popular",
-        "Highly Rated",
-        "Newest"
+        {"Most Popular" ,SortByOption.Popularity },
+        {"Highly Rated" , SortByOption.Rating },
+        {"Newest" , SortByOption.Newest }
     };
 
     public ObservableCollection<ComboButtonControl> ListOfSearchByOptions
@@ -85,20 +88,22 @@ public class SearchControlViewModel : BaseViewModel
 
     public string SelectedSearchByOption
     { 
-        get => _selectedSearchByOption; 
+        get => _selectedSearchByOptionText; 
         set 
         {
-            _selectedSearchByOption = value;
+            _selectedSearchByOptionText = value;
+            _selectedSearchByOption = _searchByOptions.GetValueOrDefault(value);
             OnPropertyChanged();
         }
     }
     
     public string SelectedSortByOption
     { 
-        get => _selectedSortByOption; 
+        get => _selectedSortByOptionText; 
         set 
         {
-            _selectedSortByOption = value;
+            _selectedSortByOptionText = value;
+            _selectedSortByOption = _sortByOptions.GetValueOrDefault(value);
             OnPropertyChanged();
         }
     }
@@ -217,38 +222,40 @@ public class SearchControlViewModel : BaseViewModel
         _windowService = windowService;
         _tabService = tabService;
         _searchingService = searchingService;
-        UpdateSearchList();
-        UpdateLists();
         ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
+        HandleSearchByCommand = new RelayCommand<string>(HandleSearchBy);
+        HandleSortByCommand = new RelayCommand<string>(HandleSortBy);
         NextPageCommand = new RelayCommand(NextPage);
         PreviousPageCommand = new RelayCommand(PreviousPage);
         OnTheFirstPageCommand = new RelayCommand(OnTheFirstPage);
         GoToCreationOfTabCommand = new RelayCommand(GoToCreationOfTab);
         GoToClickedTabCommand = new AsyncRelayCommand<Guid>(GoToClickedTab);
         GoEditClickedTabCommand = new AsyncRelayCommand<Guid>(GoEditClickedTab);
+        UpdateComboLists();
+        UpdateSearchList();
     }
 
-    private void UpdateLists()
+    private void UpdateComboLists()
     {
-        foreach (var option in SortByOptions)
+        foreach (var option in _sortByOptions)
         {
             var button = new ComboButtonControl()
             {
                 Command = this.HandleSortByCommand,
-                CommandParameter = $"{option}",
-                Text = $"{option}"
+                CommandParameter = option.Key,
+                Text = $"{option.Key}"
             };
 
             ListOfSortByOptions.Add(button);
         }
 
-        foreach (var option in SearchByOptions)
+        foreach (var option in _searchByOptions)
         {
             var button = new ComboButtonControl()
             {
-                Command = this.HandleSortByCommand,
-                CommandParameter = $"{option}",
-                Text = $"{option}"
+                Command = this.HandleSearchByCommand,
+                CommandParameter = option.Key,
+                Text = $"{option.Key}"
             };
 
             ListOfSearchByOptions.Add(button);
@@ -257,14 +264,12 @@ public class SearchControlViewModel : BaseViewModel
 
     private void HandleSearchBy(string? selectedOption)
     {
-        if (selectedOption is null) throw new ArgumentNullException(nameof(selectedOption));
         SelectedSearchByOption = selectedOption;
         IsSearchByOpen = false;
     }
 
     private void HandleSortBy(string? selectedOption)
     {
-        if (selectedOption is null) throw new ArgumentNullException(nameof(selectedOption));
         SelectedSortByOption = selectedOption;
         IsSortByOpen = false;
     }
@@ -301,7 +306,7 @@ public class SearchControlViewModel : BaseViewModel
 
     private void UpdateSearchList()
     {
-        List<Tab> tabsToDisplay = _searchingService.SearchTabs(_windowService.WindowHeight - 200, _currentPage, _searchString);
+        List<Tab> tabsToDisplay = _searchingService.SearchTabs(_windowService.WindowHeight - 200, _currentPage, _searchString, _selectedSearchByOption, _selectedSortByOption, string.Empty, new List<TabRate>());
 
         if (tabsToDisplay.Count > (_windowService.WindowHeight - 200) / 40)
         {

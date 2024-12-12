@@ -46,8 +46,8 @@
             </Grid>
             
             <Grid Grid.Column="4" Background="Transparent">
-                <ct:ImageButton Style="{DynamicResource ImageButton}"
-                                Command="{Binding SwitchMenuCommand, UpdateSourceTrigger=PropertyChanged}"
+                <ct:ToggleImageButton Style="{DynamicResource ToggleImageButton}"
+                                IsChecked="{Binding IsMenuOpen, Mode=TwoWay}"
                                 x:Name="MenuButton"
                                 Background="Transparent"
                                 HorizontalAlignment="Stretch"
@@ -56,7 +56,7 @@
                                 PathData="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
                                 StrokeThickness="0.5">   
 
-                </ct:ImageButton>
+                </ct:ToggleImageButton>
 
                 <Popup x:Name="MenuPopup" 
                        PlacementTarget="{Binding ElementName=MenuButton}" 

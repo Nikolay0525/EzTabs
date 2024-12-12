@@ -17,9 +17,9 @@ namespace EzTabs.Presentation.Services.SearchingServices
             _context = context;
         }
 
-        public List<Comment> ShowComments(double height, int currentPage, SortByOption sortByOption, List<CommentRate> commentRates)
+        public List<Comment> ShowComments(double amount, int currentPage, SortByOption sortByOption)
         {
-            int amountOfCommentsToSend = ((int)height / 80) + 1;
+            int amountOfCommentsToSend = (int)amount + 1;
 
             IQueryable<Comment> comments = _context!.Set<Comment>();
 
@@ -47,10 +47,11 @@ namespace EzTabs.Presentation.Services.SearchingServices
                    Text = c.Text,
                    DateOfCreation = c.DateOfCreation
                })
+               .Where(c => c.TabId == TabService.SavedTab!.Id)
                .ToList();
         }
 
-        public List<Tab> SearchTabs(double height, int currentPage, string searchText, SearchByOption searchByOption, SortByOption sortByOption, string authorName, List<TabRate> tabRates)
+        public List<Tab> SearchTabs(double height, int currentPage, string searchText, SearchByOption searchByOption, SortByOption sortByOption, string authorName)
         {
             int amountOftabsToSend = ((int)height / 40) + 1;
 
@@ -71,7 +72,7 @@ namespace EzTabs.Presentation.Services.SearchingServices
                     tabs = tabs.OrderByDescending(t => t.Views);
                     break;
                 case SortByOption.Rating:
-                    tabs = tabs.OrderBy(t => t.Title);
+                    tabs = tabs.OrderByDescending(t => t.Rating);
                     break;
                 case SortByOption.Newest:
                     tabs = tabs.OrderByDescending(t => t.DateOfCreation);

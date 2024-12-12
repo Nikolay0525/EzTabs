@@ -42,6 +42,8 @@ public partial class App : Application
         services.AddTransient<UserService>();
         services.AddTransient<TabService>();
         services.AddTransient<TuningService>();
+        services.AddTransient<CommentService>();
+        services.AddTransient<CommentRateService>();
         services.AddTransient<SearchingService>();
 
         services.AddDbContext<EzTabsContext>();

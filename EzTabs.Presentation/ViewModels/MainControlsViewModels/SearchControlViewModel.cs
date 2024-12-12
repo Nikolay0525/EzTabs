@@ -18,7 +18,7 @@ public class SearchControlViewModel : BaseViewModel
 {
     private readonly TabService _tabService;
     private readonly SearchingService _searchingService;
-    private ObservableCollection<TabInSearchPageControl> _tabsInSearchList = new();
+    private List<TabInSearchPageControl> _tabsInSearchList = new();
     private readonly IWindowService _windowService;
 
     private bool _firstPageVisibility = false;
@@ -29,7 +29,9 @@ public class SearchControlViewModel : BaseViewModel
     private bool _isSearchByOpen = false;
     private bool _onlyMineTabs = false;
     private bool _onlyFavouriteTabs = false;
+    private bool _isAuthorNameVisible = false;
 
+    private string _authorName;
     private string _searchString;
     private int _currentPage = 0;
     private double _filterRowHeight = 0;
@@ -85,6 +87,26 @@ public class SearchControlViewModel : BaseViewModel
             OnPropertyChanged();
         }
     }
+    
+    public bool IsAuthorNameVisible
+    {
+        get => _isAuthorNameVisible;
+        set 
+        {
+            _isAuthorNameVisible = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string AuthorName
+    {
+        get => _authorName;
+        set
+        {
+            _authorName = value;
+            OnPropertyChanged();
+        }
+    }
 
     public string SelectedSearchByOption
     { 
@@ -93,6 +115,8 @@ public class SearchControlViewModel : BaseViewModel
         {
             _selectedSearchByOptionText = value;
             _selectedSearchByOption = _searchByOptions.GetValueOrDefault(value);
+            if (_selectedSearchByOption == SearchByOption.SongAuthor) IsAuthorNameVisible = true;
+            else IsAuthorNameVisible = false;
             OnPropertyChanged();
         }
     }
@@ -140,7 +164,7 @@ public class SearchControlViewModel : BaseViewModel
         }
     }
     
-    public ObservableCollection<TabInSearchPageControl> TabsInSearchList
+    public List<TabInSearchPageControl> TabsInSearchList
     {
         get => _tabsInSearchList;
         set
@@ -306,7 +330,7 @@ public class SearchControlViewModel : BaseViewModel
 
     private void UpdateSearchList()
     {
-        List<Tab> tabsToDisplay = _searchingService.SearchTabs(_windowService.WindowHeight - 200, _currentPage, _searchString, _selectedSearchByOption, _selectedSortByOption, string.Empty, new List<TabRate>());
+        List<Tab> tabsToDisplay = _searchingService.SearchTabs(_windowService.WindowHeight - 200, _currentPage, _searchString, _selectedSearchByOption, _selectedSortByOption, _authorName);
 
         if (tabsToDisplay.Count > (_windowService.WindowHeight - 200) / 40)
         {
@@ -318,13 +342,12 @@ public class SearchControlViewModel : BaseViewModel
         TabsInSearchList = AddTabsInSearchList(tabsToDisplay);
     }
     
-    private ObservableCollection<TabInSearchPageControl> AddTabsInSearchList(List<Tab> tabsToDisplay)
+    private List<TabInSearchPageControl> AddTabsInSearchList(List<Tab> tabsToDisplay)
     {
-        ObservableCollection<TabInSearchPageControl> tabInSearchPageControls = new();
+        List<TabInSearchPageControl> tabInSearchPageControls = new();
 
         foreach (Tab tab in tabsToDisplay)
         {
-
             TabInSearchPageControl tabItem = new()
             {
                 DataContext = this,

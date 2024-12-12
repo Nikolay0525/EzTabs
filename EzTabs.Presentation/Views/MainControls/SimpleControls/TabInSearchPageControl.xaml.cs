@@ -12,6 +12,9 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
 
         private static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(TabInSearchPageControl), new PropertyMetadata(string.Empty));
+        
+        private static readonly DependencyProperty RatingProperty =
+            DependencyProperty.Register("Rating", typeof(double), typeof(TabInSearchPageControl), new PropertyMetadata(0.0));
 
         private static readonly DependencyProperty TabIdProperty =
              DependencyProperty.Register("TabId", typeof(Guid), typeof(TabInSearchPageControl), new PropertyMetadata(Guid.Empty));
@@ -23,6 +26,12 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
         {
             get { return (Guid)GetValue(TabIdProperty); }
             set { SetValue(TabIdProperty, value); }
+        }
+        
+        public double Rating
+        {
+            get { return (double)GetValue(RatingProperty); }
+            set { SetValue(RatingProperty, value); }
         }
 
         public string Text

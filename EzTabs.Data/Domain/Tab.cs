@@ -16,6 +16,7 @@ public sealed class Tab : Entity
     public string JsonAutoSavedTabText { get; set; } = "";
     public string AutoSavedTabText { get; set; } = "";
     public long Views { get; set; } = 0;
+    public double Rating { get; set; } = 0;
     public DateTime DateOfCreation { get; set; } = DateTime.Now;
     public User? Author { get; set; }
     public List<Tuning>? Tunings { get; set; }

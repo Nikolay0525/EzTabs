@@ -38,6 +38,11 @@ namespace EzTabs.Data.Repository
         {
             return await _dbSet.FindAsync(id);
         }
+        
+        public async Task<T?> GetByCompositeId(Guid firstKey, Guid secondKey)
+        {
+            return await _dbSet.FindAsync(firstKey, secondKey);
+        }
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
         {
             return await _dbSet.AnyAsync(predicate);

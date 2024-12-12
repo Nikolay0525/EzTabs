@@ -104,10 +104,11 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"/>
             </Grid>
-            
-            <Grid Grid.Row="1" Grid.Column="2" Visibility="Visible">
+
+            <Grid Grid.Row="1" Grid.Column="2" Visibility="{Binding IsAuthorNameVisible, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}">
                 <ct:PlaceHolderTextBox
-                    Style="{DynamicResource CommonTextBox}"
+                    Style="{DynamicResource CommonPlaceHolderTextBox}"
+                    Text="{Binding AuthorNameText, UpdateSourceTrigger=PropertyChanged}"
                     PlaceHolderText="Author Name"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"/>

@@ -4,9 +4,141 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        
-    </Grid>
+             xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels"
+             xmlns:ct="clr-namespace:EzTabs.Presentation.Resources.Styles.CustomTypes"
+             xmlns:c="clr-namespace:EzTabs.Presentation.Converters"
+             mc:Ignorable="d"
+             FontSize="{DynamicResource CommonFontSize}"
+             d:DataContext="{x:Type vm:TabControlViewModel}"
+             
+             Name="rootControl">
+
+    <UserControl.Resources>
+        <c:BoolToVisibilityConverter x:Key="boolConverter"/>
+        <c:GuidAndBoolCommandParametersConverter x:Key="boolAndGuidConverter"/>
+    </UserControl.Resources>
+    
+    <Border Background="White" BorderBrush="Black" BorderThickness="1" CornerRadius="10">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <TextBlock
+                        Style="{DynamicResource CommonTextBlock}"
+                        Foreground="Black"
+                        Text="{Binding UserName, ElementName=rootControl}"
+                        d:Text="NickName"/>
+                </Grid>
+                <Grid Grid.Column="2">
+                    <TextBlock
+                        Style="{DynamicResource CommonTextBlock}"
+                        Foreground="Black"
+                        Text="{Binding DateOfCreation, ElementName=rootControl}"
+                        d:Text="10/12/2024"/>
+                </Grid>
+                <Grid Grid.Column="4">
+                    <ct:ToggleImageButton
+                        Style="{DynamicResource ListToggleImageButton}"
+                        PathData="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+                        />
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="1">
+                <TextBlock
+                    Style="{DynamicResource CommonTextBlock}"
+                    TextWrapping="Wrap"
+                    Foreground="Black"
+                    Text="{Binding Text, ElementName=rootControl}"
+                    d:Text="Hello this tab is very good in my opinion"/>
+            </Grid>
+            <Grid Grid.Row="4" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <ct:ToggleImageButton
+                            Style="{DynamicResource ListToggleImageButtonFillable}"
+                            Foreground="Black"
+                            PathData="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 01.443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 01-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 01-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"
+                            Command="{Binding SendLikeStateCommand}"
+                            IsChecked="{Binding Liked, ElementName=rootControl}">
+                            <ToggleButton.CommandParameter>
+                                <MultiBinding Converter="{StaticResource boolAndGuidConverter}">
+                                    <Binding Path="CommentId" ElementName="rootControl" />
+                                    <Binding Path="Liked" ElementName="rootControl"/>
+                                </MultiBinding>
+                            </ToggleButton.CommandParameter>
+                        </ct:ToggleImageButton>
+                        
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <TextBlock
+                            Style="{DynamicResource CommonTextBlock}"
+                            Foreground="Black"
+                            Text="{Binding Likes, ElementName=rootControl}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            d:Text="100"/>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Column="2">
+                    <ct:ToggleDropButton
+                        Style="{DynamicResource ListToggleImageButtonFlipping}"
+                        Foreground="Black"
+                        IsChecked="{Binding IsCommentsOpened, ElementName=rootControl, Mode=TwoWay}"
+                        Text="Show replyes"/>
+                </Grid>
+                <Grid Grid.Column="4">
+                    <Button
+                        Style="{DynamicResource ListButton}"
+                        Foreground="Black"
+                        Content="Reply"
+                        CommandParameter="{Binding GetMessage, ElementName=rootControl}"
+                        Command="{Binding SubmitReplyCommand}"
+                        />
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="6" Grid.Column="1" Visibility="{Binding IsCommentsOpened, ElementName=rootControl, Converter={StaticResource boolConverter}}" d:Visibility="Visible">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="5"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <ListBox
+                        Style="{DynamicResource CommonListBox}"
+                        ItemsSource="{Binding ReplyesList, ElementName=rootControl}"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
 </UserControl>

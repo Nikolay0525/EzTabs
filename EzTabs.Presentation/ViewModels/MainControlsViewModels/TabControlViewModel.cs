@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static EzTabs.Presentation.Views.MainControls.SimpleControls.CommentControl;
 
 namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 
@@ -24,6 +25,8 @@ public class TabControlViewModel : BaseViewModel
     private readonly IWindowService _windowService;
     private UserService _userService;
     private SearchingService _searchingService;
+    private CommentService _commentService;
+    private CommentRateService _commentRateService;
 
     private int _currentPage = 0;
     private bool _nextPageEnabled = false;
@@ -33,6 +36,9 @@ public class TabControlViewModel : BaseViewModel
     private bool _isInfoOpen = false;
     private bool _isSortByOpen = false;
     private bool _isCommentSectionVisible = false;
+    private bool _isMessageWritingVisible = false;
+    private bool _isPageButtonsVisible = true;
+    private bool _firstPageVisibility = false;
 
     private int _zoom = 100;
     private double _fontSize = 33.3;
@@ -48,8 +54,9 @@ public class TabControlViewModel : BaseViewModel
     private string _description;
 
     private ObservableCollection<ComboButtonControl> _listOfSortByOptions = new();
+    private List<Comment> _listOfCommentsToShow = new();
+    private List<CommentControl> _commentsToShow = new();
     private string _selectedOrderByOptionText = "Order By";
-    private ObservableCollection<Comment> _selected = "Order By";
     private SortByOption _selectedOrderByOption = 0;
 
     private Dictionary<string, SortByOption> SortByOptions { get; } = new()
@@ -63,6 +70,16 @@ public class TabControlViewModel : BaseViewModel
         get => _listOfSortByOptions; 
         set => _listOfSortByOptions = value; 
     }
+
+    public List<CommentControl> CommentsToShow
+    { 
+        get => _commentsToShow; 
+        set 
+        {
+            _commentsToShow = value;
+            OnPropertyChanged();
+        }
+    }
     
     public string SelectedOrderByOption
     { 
@@ -71,6 +88,30 @@ public class TabControlViewModel : BaseViewModel
         {
             _selectedOrderByOptionText = value;
             _selectedOrderByOption = SortByOptions.GetValueOrDefault(value);
+            UpdateCommentsList();
+            OnPropertyChanged();
+        }
+    }
+
+    public int CurrentPage
+    {
+        get => _currentPage + 1;
+        set
+        {
+            _currentPage = value;
+            OnPropertyChanged();
+            if (_currentPage > 0) PreviousPageEnabled = true;
+            else PreviousPageEnabled = false;
+            UpdateCommentsList();
+        }
+    }
+
+    public bool FirstPageVisibility
+    {
+        get => _firstPageVisibility;
+        set
+        {
+            _firstPageVisibility = value;
             OnPropertyChanged();
         }
     }
@@ -127,6 +168,25 @@ public class TabControlViewModel : BaseViewModel
         set
         {
             _isCommentSectionVisible = value;
+            OnPropertyChanged();
+        }
+    }
+    public bool IsMessageWritingVisible
+    {
+        get => _isMessageWritingVisible;
+        set
+        {
+            _isMessageWritingVisible = value;
+            IsPageButtonsVisible = !_isMessageWritingVisible;
+            OnPropertyChanged();
+        }
+    }
+    public bool IsPageButtonsVisible
+    {
+        get => _isPageButtonsVisible;
+        private set
+        {
+            _isPageButtonsVisible = value;
             OnPropertyChanged();
         }
     }
@@ -237,22 +297,75 @@ public class TabControlViewModel : BaseViewModel
         }
     }
 
+    public ICommand SubmitCommentCommand { get; }
+    public ICommand SubmitReplyCommand { get; }
+    public ICommand SendLikeStateCommand { get; }
+    public ICommand NextPageCommand { get; }
+    public ICommand PreviousPageCommand { get; }
+    public ICommand OnTheFirstPageCommand { get; }
     public ICommand GoToSearchCommand { get; }
     public ICommand HandleSortByCommand { get; }
     public ICommand ShowSortByOptionsCommand { get; }
-    public int CurrentPage { get => _currentPage; set => _currentPage = value; }
 
-    public TabControlViewModel(IViewModelService viewModelService, INavigationService navigationService, IWindowService windowService, UserService userService, SearchingService searchingService)  : base(viewModelService, navigationService)
+    public TabControlViewModel(IViewModelService viewModelService, INavigationService navigationService, IWindowService windowService, 
+        UserService userService, SearchingService searchingService, CommentRateService commentRateService, CommentService commentService)  : base(viewModelService, navigationService)
     {
         _windowService = windowService;
         _userService = userService;
         _searchingService = searchingService;
+        _commentRateService = commentRateService;
+        _commentService = commentService;
+        SubmitCommentCommand = new AsyncRelayCommand<string>(SubmitComment);
+        SubmitReplyCommand = new AsyncRelayCommand<object>(SubmitReply);
+        SendLikeStateCommand = new AsyncRelayCommand<object>(SendLikeState);
+        NextPageCommand = new RelayCommand(NextPage);
+        PreviousPageCommand = new RelayCommand(PreviousPage);
+        OnTheFirstPageCommand = new RelayCommand(OnTheFirstPage);
         GoToSearchCommand = new RelayCommand(GoToSearchControl);
         HandleSortByCommand = new RelayCommand<string>(HandleSortBy);
         ControlBarViewModel = viewModelService.CreateViewModel<ControlBarViewModel>();
+        UpdateCommentsList();
         UpdateTabText();
         UpdateSortByList();
         Task.Run(UpdateAuthorName);
+    }
+
+    private async Task SubmitComment(string? messageText)
+    { 
+        if(messageText is null) await _commentService.CreateComment(UserService.SavedUser.Id, TabService.SavedTab!.Id, string.Empty, Guid.Empty);
+        await _commentService.CreateComment(UserService.SavedUser.Id, TabService.SavedTab!.Id, messageText!, Guid.Empty);
+    }
+    
+    private async Task SubmitReply(object? message)
+    {
+        //await _commentService.CreateComment(UserService.SavedUser.Id, TabService.SavedTab!.Id, message.text, message.commentId);
+    }
+
+    private async Task SendLikeState(object? parameter)
+    {
+        if(parameter is Tuple<Guid, bool> args)
+        {
+            await _commentRateService.ApplyCommentRate(UserService.SavedUser.Id, args.Item1, args.Item2);
+        }
+    }
+
+    private void NextPage()
+    {
+        int add = ++_currentPage;
+        CurrentPage = add;
+        if (_currentPage == 0) FirstPageVisibility = false; else FirstPageVisibility = true;
+    }
+
+    private void PreviousPage()
+    {
+        int minus = --_currentPage;
+        CurrentPage = minus;
+        if (_currentPage == 0) FirstPageVisibility = false; else FirstPageVisibility = true;
+    }
+
+    private void OnTheFirstPage()
+    {
+        CurrentPage = 0;
     }
 
     private void UpdateSortByList()
@@ -262,8 +375,8 @@ public class TabControlViewModel : BaseViewModel
             var button = new ComboButtonControl()
             {
                 Command = this.HandleSortByCommand,
-                CommandParameter = $"{option}",
-                Text = $"{option}"
+                CommandParameter = option.Key,
+                Text = $"{option.Key}"
             };
 
             ListOfSortByOptions.Add(button);
@@ -304,35 +417,52 @@ public class TabControlViewModel : BaseViewModel
 
     private void UpdateCommentsList()
     {
-        List<Comment> commentsToDisplay = _searchingService.ShowComments(_windowService.WindowHeight, _currentPage, _selectedOrderByOption, null);
+        List<Comment> commentsToDisplay = _searchingService.ShowComments((_windowService.WindowHeight - (_windowService.WindowHeight / 2))/160, _currentPage, _selectedOrderByOption);
 
-        if (commentsToDisplay.Count > (_windowService.WindowHeight - 200) / 80)
+        if (commentsToDisplay.Count > (_windowService.WindowHeight - _windowService.WindowHeight/2) / 160)
         {
             NextPageEnabled = true;
         }
         else { NextPageEnabled = false; }
-        .Clear();
-
-        TabsInSearchList = AddTabsInSearchList(tabsToDisplay);
+        CommentsToShow.Clear();
+        CommentsToShow = AddCommentsInCommentsList(commentsToDisplay);
+        UpdateCommentsInformation(commentsToDisplay);
     }
 
-    private ObservableCollection<TabInSearchPageControl> AddTabsInSearchList(List<Tab> tabsToDisplay)
+    private List<CommentControl> AddCommentsInCommentsList(List<Comment> commentsToDisplay)
     {
-        ObservableCollection<TabInSearchPageControl> tabInSearchPageControls = new();
+        List<CommentControl> commentControls = new();
 
-        foreach (Tab tab in tabsToDisplay)
+        foreach (Comment comment in commentsToDisplay)
         {
-
-            TabInSearchPageControl tabItem = new()
+            CommentControl commentItem = new()
             {
-                DataContext = this,
-                TabId = tab.Id,
-                Text = tab.Band + " - " + tab.Title
+                CommentId = comment.Id,
+                UserName = string.Empty,
+                Text = comment.Text ?? string.Empty,
+                ReplyesList = new(),
+                Likes = comment.Likes,
+                Liked = false,
+                CanBeEdited = false,
+                IsCommentsOpened = false,
+                DataContext = this
             };
-            if (tab.AuthorId == UserService.SavedUser.Id) tabItem.CanBeEdited = true;
-            tabInSearchPageControls.Add(tabItem);
-        }
+            if (comment.UserId == UserService.SavedUser.Id) commentItem.CanBeEdited = true;
+            commentControls.Add(commentItem);
+        }  
+        return commentControls;
+    }
 
-        return tabInSearchPageControls;
+    private async void UpdateCommentsInformation(List<Comment> commentsToUpdateAsync)
+    {
+        foreach (Comment comment in commentsToUpdateAsync)
+        {
+            User? authorUser = await _userService.FindUserById(comment.UserId);
+            if (authorUser is null) throw new ArgumentNullException(nameof(authorUser));
+            CommentControl? foundedComment = CommentsToShow.FirstOrDefault(c => c.CommentId == comment.Id);
+            if (foundedComment is null) throw new ArgumentNullException(nameof(foundedComment));
+            foundedComment.UserName = authorUser.Name;
+            if (UserService.SavedUser.Name == authorUser.Name) foundedComment.CanBeEdited = true;
+        }
     }
 }

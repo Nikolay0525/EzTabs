@@ -18,6 +18,7 @@
     <SolidColorBrush x:Key="Button.Static.Foreground" Color="White"/>
     <SolidColorBrush x:Key="Button.Static.DisabledForeground" Color="White"/>
     <SolidColorBrush x:Key="Button.Static.Pressed" Color="#ECF0FF"/>
+    
     <Style x:Key="CommonButton" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
@@ -278,8 +279,8 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <Style x:Key="ToggleImageButtonFilled" TargetType="{x:Type ct:ToggleImageButton}">
+    
+    <Style x:Key="ToggleImageButton" TargetType="{x:Type ct:ToggleImageButton}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
@@ -305,56 +306,54 @@
                             VerticalAlignment="{TemplateBinding VerticalAlignment}"
                             Data="{TemplateBinding PathData}"  
                             Stretch="{TemplateBinding Stretch}"
+                            StrokeThickness="{TemplateBinding StrokeThickness}"
                             Fill="White"
-                            Stroke="White"
-                            />
+                            Stroke="White"/>
                     </Border>
 
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
+                        <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="border" Value="White"/>
                             <Setter Property="Foreground" Value="Black"/>
-                            <Setter TargetName="path" Property="RenderTransform">
-                                <Setter.Value>
-                                    <ScaleTransform ScaleY="-1" />
-                                </Setter.Value>
-                            </Setter>
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation 
-                                        Storyboard.TargetName="path"
-                                        Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
-                                        To="Black"
-                                        From="White"
-                                        Duration="0:0:0.2" />
-                                        <ColorAnimation 
-                                        Storyboard.TargetName="border"
-                                        Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-                                        To="White"
-                                        From="Transparent"
-                                        Duration="0:0:0.2" />
+                                        <ColorAnimation Storyboard.TargetName="path"
+                                                    Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                                    To="Black"
+                                                    From="White"
+                                                    Duration="0:0:0.2" />
+
+                                        <ColorAnimation Storyboard.TargetName="border"
+                                                    Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                                                    To="White"
+                                                    From="Transparent"
+                                                    Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation 
-                                        Storyboard.TargetName="path"
-                                        Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
-                                        To="White"
-                                        From="Black"
-                                        Duration="0:0:0.2" />
-                                        <ColorAnimation 
-                                        Storyboard.TargetName="border"
-                                        Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-                                        To="Transparent"
-                                        From="White"
-                                        Duration="0:0:0.2" />
+                                        <ColorAnimation Storyboard.TargetName="path"
+                                                    Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                                    To="White"
+                                                    From="Black"
+                                                    Duration="0:0:0.2" />
+
+                                        <ColorAnimation Storyboard.TargetName="border"
+                                                    Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+                                                    To="Transparent"
+                                                    From="White"
+                                                    Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Static.Pressed}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Static.Pressed}"/>
                         </Trigger>
 
                         <Trigger Property="IsEnabled" Value="false">
@@ -366,6 +365,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
 
     <Style x:Key="ToggleImageButtonFlipping" TargetType="{x:Type ct:ToggleDropButton}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -436,13 +436,13 @@
                                             To="Black"
                                             From="White"
                                             Duration="0:0:0.2" />
-                                        
+
                                         <ColorAnimation 
                                             Storyboard.TargetName="path"
                                             Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
                                             To="Black"
                                             From="White"
-                                            Duration="0:0:0.2" />   
+                                            Duration="0:0:0.2" />
 
                                         <ColorAnimation 
                                             Storyboard.TargetName="border"
@@ -462,7 +462,7 @@
                                             To="White"
                                             From="Black"
                                             Duration="0:0:0.2" />
-                                        
+
                                         <ColorAnimation 
                                             Storyboard.TargetName="path"
                                             Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
@@ -475,6 +475,105 @@
                                             Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
                                             To="Transparent"
                                             From="White"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Static.Pressed}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Static.Pressed}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Static.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Static.Border}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ListToggleImageButtonFlipping" TargetType="{x:Type ct:ToggleDropButton}">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ct:ToggleDropButton}">
+                    <Border 
+                        x:Name="border" CornerRadius="5" 
+                        Background="{TemplateBinding Background}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        SnapsToDevicePixels="true"
+                        Padding="{TemplateBinding Padding}">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="20"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                x:Name="text"
+                                Grid.Column="0"
+                                TextAlignment="Center"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="{DynamicResource CommonFontFamily}"
+                                FontSize="{DynamicResource CommonFontSize}"
+                                Text="{TemplateBinding Text}"
+                                Foreground="{TemplateBinding Foreground}"/>
+                            <Path
+                                Grid.Column="2"
+                                x:Name="path" 
+                                HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
+                                VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                RenderTransformOrigin="0.5 0.5"
+                                Data="M0 0 3 3 6 0"  
+                                Stretch="Uniform"
+                                Fill="Black"
+                                Stroke="Black"/>
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="path" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleY="-1" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
+                                            To="Black"
+                                            From="Transparent"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
+                                            To="Transparent"
+                                            From="Black"
                                             Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
@@ -583,5 +682,203 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style x:Key="ListToggleImageButtonFillable" TargetType="{x:Type ct:ToggleImageButton}">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+        <Setter Property="Foreground" Value="{StaticResource Button.Static.Foreground}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ct:ToggleImageButton}">
+                    <Border 
+                        x:Name="border" CornerRadius="5" 
+                        Background="{TemplateBinding Background}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        SnapsToDevicePixels="true"
+                        Padding="{TemplateBinding Padding}">
+
+                        <Path 
+                            x:Name="path" 
+                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                            Data="{TemplateBinding PathData}"  
+                            Stretch="{TemplateBinding Stretch}"
+                            Fill="Transparent"
+                            Stroke="Black"
+                            StrokeThickness="1"
+                            />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                            Storyboard.TargetName="path"
+                                            Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                            To="Black"
+                                            From="Transparent"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                            Storyboard.TargetName="path"
+                                            Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+                                            To="Transparent"
+                                            From="Black"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
+                                            To="Black"
+                                            From="Transparent"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
+                                            To="Transparent"
+                                            From="Black"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Static.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Static.Border}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="ListToggleImageButton" TargetType="{x:Type ct:ToggleImageButton}">
+        <Setter Property="FontSize" Value="{DynamicResource SmallerFontSize}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+        <Setter Property="Foreground" Value="{StaticResource Button.Static.Foreground}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ct:ToggleImageButton}">
+                    <Border 
+                        x:Name="border" CornerRadius="5" 
+                        Background="{TemplateBinding Background}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        SnapsToDevicePixels="true"
+                        Padding="{TemplateBinding Padding}">
+
+                        <Path 
+                            x:Name="path" 
+                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                            Data="{TemplateBinding PathData}"  
+                            Stretch="{TemplateBinding Stretch}"
+                            StrokeThickness="{TemplateBinding StrokeThickness}"
+                            Fill="Black"
+                            Stroke="Black"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="Transparent"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
+                                            To="Black"
+                                            From="Transparent"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+
+                                        <ColorAnimation 
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
+                                            To="Transparent"
+                                            From="Black"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Static.Pressed}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Static.Pressed}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Static.DisabledBackground}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Static.DisabledBorder}"/>
+                            <Setter Property="Foreground" Value="{StaticResource Button.Static.DisabledForeground}"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                        Storyboard.TargetName="contentPresenter"
+                                        Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                                        To="Gray"
+                                        From="White"
+                                        Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                        Storyboard.TargetName="contentPresenter"
+                                        Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                                        To="White"
+                                        From="Gray"
+                                        Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 
 </ResourceDictionary>

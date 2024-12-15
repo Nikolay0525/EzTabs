@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EzTabs.Data.Migrations
 {
     [DbContext(typeof(EzTabsContext))]
-    [Migration("20241210103020_m7")]
-    partial class m7
+    [Migration("20241214120450_m1")]
+    partial class m1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,18 +61,15 @@ namespace EzTabs.Data.Migrations
 
             modelBuilder.Entity("EzTabs.Data.Domain.CommentRate", b =>
                 {
-                    b.Property<Guid>("CommentId")
-                        .HasColumnType("char(36)");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
-                    b.Property<bool>("Rate")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("char(36)");
 
-                    b.HasKey("CommentId", "UserId");
+                    b.HasKey("UserId", "CommentId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CommentId");
 
                     b.ToTable("CommentRate");
                 });

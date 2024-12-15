@@ -328,18 +328,18 @@ public class SearchControlViewModel : BaseViewModel
         CurrentPage = 0;
     }
 
-    private void UpdateSearchList()
+    private async void UpdateSearchList()
     {
-        List<Tab> tabsToDisplay = _searchingService.SearchTabs(_windowService.WindowHeight - 200, _currentPage, _searchString, _selectedSearchByOption, _selectedSortByOption, _authorName);
+        var tabsToDisplay = await _searchingService.SearchTabs((int)(_windowService.WindowHeight/80), _currentPage, _searchString, _selectedSearchByOption, _selectedSortByOption, _authorName);
 
-        if (tabsToDisplay.Count > (_windowService.WindowHeight - 200) / 40)
+        if (tabsToDisplay.Item2 > 0)
         {
             NextPageEnabled = true;
         }
         else { NextPageEnabled = false; }
         TabsInSearchList.Clear();
 
-        TabsInSearchList = AddTabsInSearchList(tabsToDisplay);
+        TabsInSearchList = AddTabsInSearchList(tabsToDisplay.Item1);
     }
     
     private List<TabInSearchPageControl> AddTabsInSearchList(List<Tab> tabsToDisplay)
@@ -352,7 +352,8 @@ public class SearchControlViewModel : BaseViewModel
             {
                 DataContext = this,
                 TabId = tab.Id,
-                Text = tab.Band + " - " + tab.Title
+                Text = tab.Band + " - " + tab.Title,
+                Rating = tab.Rating
             };
             if (tab.AuthorId == UserService.SavedUser.Id) tabItem.CanBeEdited = true;
             tabInSearchPageControls.Add(tabItem);

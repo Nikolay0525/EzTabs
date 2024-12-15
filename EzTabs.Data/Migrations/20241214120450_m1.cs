@@ -43,8 +43,8 @@ namespace EzTabs.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    Text = table.Column<string>(type: "longtext", nullable: true)
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Text = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DateOfCreation = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -55,7 +55,8 @@ namespace EzTabs.Data.Migrations
                         name: "FK_Notifications_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -64,7 +65,7 @@ namespace EzTabs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    AuthorId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    AuthorId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Title = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Band = table.Column<string>(type: "longtext", nullable: false)
@@ -85,6 +86,7 @@ namespace EzTabs.Data.Migrations
                     AutoSavedTabText = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Views = table.Column<long>(type: "bigint", nullable: false),
+                    Rating = table.Column<double>(type: "double", nullable: false),
                     DateOfCreation = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
@@ -94,7 +96,8 @@ namespace EzTabs.Data.Migrations
                         name: "FK_Tabs_Users_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -104,9 +107,10 @@ namespace EzTabs.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     TabId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    ParentCommentId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    UserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    Text = table.Column<string>(type: "longtext", nullable: true)
+                    ParentCommentId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Likes = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Text = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DateOfCreation = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -123,7 +127,8 @@ namespace EzTabs.Data.Migrations
                         name: "FK_Comments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -232,12 +237,11 @@ namespace EzTabs.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    CommentId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Rate = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    CommentId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CommentRate", x => new { x.CommentId, x.UserId });
+                    table.PrimaryKey("PK_CommentRate", x => new { x.UserId, x.CommentId });
                     table.ForeignKey(
                         name: "FK_CommentRate_Comments_CommentId",
                         column: x => x.CommentId,
@@ -282,9 +286,9 @@ namespace EzTabs.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CommentRate_UserId",
+                name: "IX_CommentRate_CommentId",
                 table: "CommentRate",
-                column: "UserId");
+                column: "CommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CommentReport_CommentId",

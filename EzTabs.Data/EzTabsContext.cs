@@ -57,7 +57,7 @@ public class EzTabsContext : DbContext
             .HasForeignKey(t => t.TabId);
 
         modelBuilder.Entity<CommentRate>()
-            .HasKey(cr => new { cr.CommentId, cr.UserId });
+            .HasKey(cr => new { cr.UserId, cr.CommentId });
 
         modelBuilder.Entity<CommentRate>()
             .HasOne(cr => cr.User)

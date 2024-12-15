@@ -9,7 +9,7 @@ namespace EzTabs.Presentation.Views
 {
     public partial class MainWindow : System.Windows.Window
     {
-        private readonly IWindowService _windowService;
+        private IWindowService _windowService;
         private readonly EzTabsContext _context;
 
         public MainWindow(IWindowService windowService, EzTabsContext context)
@@ -17,13 +17,12 @@ namespace EzTabs.Presentation.Views
             _context = context;
             _windowService = windowService;
             InitializeComponent();
-            SizeChanged += MainWindow_SizeChanged;
+            this.SizeChanged += MainWindow_SizeChanged;
         }
 
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            _windowService.WindowWidth = e.NewSize.Width;
-            _windowService.WindowHeight = e.NewSize.Height;
+            _windowService.ChangeHeightWidth(e.NewSize.Height, e.NewSize.Width);
         }
     }
 }

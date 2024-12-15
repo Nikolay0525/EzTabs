@@ -8,7 +8,8 @@ namespace EzTabs.Presentation.Services.ViewServices
 {
     public interface IWindowService
     {
-        double WindowWidth { get; set; }
         double WindowHeight { get; set; }
+        double WindowWidth { get; set; }
+        void ChangeHeightWidth(double height,double width);
     }
 }

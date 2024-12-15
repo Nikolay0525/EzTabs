@@ -58,18 +58,15 @@ namespace EzTabs.Data.Migrations
 
             modelBuilder.Entity("EzTabs.Data.Domain.CommentRate", b =>
                 {
-                    b.Property<Guid>("CommentId")
-                        .HasColumnType("char(36)");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
-                    b.Property<bool>("Rate")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("char(36)");
 
-                    b.HasKey("CommentId", "UserId");
+                    b.HasKey("UserId", "CommentId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CommentId");
 
                     b.ToTable("CommentRate");
                 });

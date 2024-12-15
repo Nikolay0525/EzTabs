@@ -18,6 +18,7 @@
 
     <UserControl.Resources>
         <c:BoolToVisibilityConverter x:Key="boolConverter"/>
+        <c:MultiplyConverter x:Key="multiplyConverter"/>
     </UserControl.Resources>
     
     <Grid>
@@ -67,14 +68,51 @@
             <Grid Grid.Row="0">
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+                    
+                    <Grid Grid.Column="0">
+                        <ct:ToggleImageButton
+                            Style="{DynamicResource ToggleImageButton}"
+                            x:Name="RateImageButton"
+                            PathData="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                            Command="{Binding OpenTabRateCommand}"
+                            IsChecked="{Binding IsRateOpen, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            Visibility="{Binding ImageButtonRateVisible, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource boolConverter}}"/>
+                    </Grid>
 
-                    <Grid x:Name="GridWithSongName" Grid.Column="0">
+                    <Grid x:Name="GridWithRating" Grid.Column="1">
+                        <ct:ToggleDropButton
+                            Style="{DynamicResource ToggleImageButtonFlipping}"
+                            Width="200"
+                            x:Name="RateDropButton"
+                            Text="Rate Tab"
+                            IsChecked="{Binding IsRateOpen, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            Visibility="{Binding DropButtonRateVisible, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource boolConverter}}"/>
+                        <Popup 
+                            x:Name="RatePopup" 
+                            PlacementTarget="{Binding ElementName=RateDropButton}" 
+                            Placement="Bottom" 
+                            HorizontalAlignment="Center"
+                            HorizontalOffset="0"
+                            StaysOpen="True"
+                            d:IsOpen="True"
+                            IsOpen="{Binding IsRateOpen, UpdateSourceTrigger=PropertyChanged}"
+                            AllowsTransparency="True">
+                            <sc:RateTabControl
+                                x:Name="RateTab"
+                                Width="{Binding ElementName=GridWithRating, Path=ActualWidth}"/>
+                        </Popup>
+                    </Grid>
+                    
+                    <Grid x:Name="GridWithSongName" Grid.Column="3">
                         <ct:ToggleDropButton
                             x:Name="SongTitleBandButton"
                             Style="{DynamicResource ToggleImageButtonFlipping}"
@@ -95,7 +133,7 @@
                         </Popup>
                     </Grid>
 
-                    <Grid Grid.Column="4">
+                    <Grid Grid.Column="5">
                         <Grid Grid.Row="0">
                             <ct:ToggleDropButton
                                 Width="140"
@@ -124,58 +162,6 @@
                         </Popup>
                     </Grid>
 
-                    <Grid Grid.Column="2">
-                        <ct:ToggleImageButton
-                            Style="{DynamicResource ToggleImageButton}"
-                            x:Name="RateDropButton"
-                            PathData="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                        <Popup 
-                            x:Name="RatePopup" 
-                            PlacementTarget="{Binding ElementName=RateDropButton}" 
-                            Placement="Bottom" 
-                            HorizontalAlignment="Center"
-                            HorizontalOffset="0" 
-                            StaysOpen="True"
-                            IsOpen="{Binding IsRateOpen, UpdateSourceTrigger=PropertyChanged}"
-                            AllowsTransparency="True">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="20"/>
-                                    <ColumnDefinition Width="20"/>
-                                    <ColumnDefinition Width="20"/>
-                                    <ColumnDefinition Width="20"/>
-                                    <ColumnDefinition Width="20"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid>
-                                    <Button
-                                        Style="{DynamicResource CommonButton}"
-                                        Command="{Binding RateTab}"
-                                        CommandParameter="1"
-                                        Content="1"/>
-                                    <Button
-                                        Style="{DynamicResource CommonButton}"
-                                        Command="{Binding RateTab}"
-                                        CommandParameter="2"
-                                        Content="2"/>
-                                    <Button
-                                        Style="{DynamicResource CommonButton}"
-                                        Command="{Binding RateTab}"
-                                        CommandParameter="3"
-                                        Content="3"/>
-                                    <Button
-                                        Style="{DynamicResource CommonButton}"
-                                        Command="{Binding RateTab}"
-                                        CommandParameter="4"
-                                        Content="4"/>
-                                    <Button
-                                        Style="{DynamicResource CommonButton}"
-                                        Command="{Binding RateTab}"
-                                        CommandParameter="5"
-                                        Content="5"/>
-                                </Grid>
-                            </Grid>
-                        </Popup>
-                    </Grid>
                 </Grid>
             </Grid>
             <Grid Grid.Column="1" Grid.Row="2">
@@ -201,7 +187,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -212,13 +198,12 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
-                    <ct:ToggleDropButton
-                        Style="{DynamicResource ToggleImageButtonFlipping}"
+                    <Button
+                        Style="{DynamicResource CommonButton}"
                         x:Name="WriteCommentButton"
-                        Text="Write Comment"
-                        Visibility="{Binding IsCommentSectionVisible, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}"
-                        IsChecked="{Binding IsMessageWritingVisible, Mode=TwoWay}"
-                        Padding="5"/>
+                        Content="Write Comment"
+                        Command="{Binding WriteCommentCommand}"
+                        Visibility="{Binding IsCommentSectionVisible, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
                 <Grid Grid.Column="2">
                     <ct:ToggleDropButton
@@ -243,21 +228,24 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="5"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="5"/>
-                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <ListBox 
+                        Height="{Binding WindowService.WindowHeight, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource multiplyConverter}, ConverterParameter=0.41}"
+                        ScrollViewer.CanContentScroll="False"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
                         Style="{DynamicResource CommonListBox}" 
                         x:Name="CommentsList"
                         ItemsSource="{Binding CommentsToShow, UpdateSourceTrigger=PropertyChanged}"
                         Background="White"/>
                 </Grid>
-                <Grid Grid.Row="2" Visibility="{Binding IsMessageWritingVisible, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource boolConverter}}">
+                <Grid Grid.Row="2" d:Visibility="Visible" Visibility="{Binding IsMessageWritingVisible, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource boolConverter}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="5"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -266,13 +254,20 @@
                             Style="{DynamicResource CommonTextBlock}"
                             x:Name="WhatTypeOfMessage"
                             Text="{Binding MessageType, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
                             d:Text="New Message"/>
                     </Grid>
                     <Grid Grid.Row="1">
                         <TextBox
                             Style="{DynamicResource CommonTextBox}"
                             x:Name="MessageTextBox"
-                            Text="{Binding MessageText, UpdateSourceTrigger=PropertyChanged}"/>
+                            Text="{Binding WritedMessage, UpdateSourceTrigger=PropertyChanged}"
+                            MinLines="3"
+                            MaxLines="3"
+                            MaxLength="399"
+                            VerticalScrollBarVisibility="Auto"
+                            TextWrapping="Wrap"/>
                     </Grid>
                     <Grid Grid.Row="3">
                         <Grid.ColumnDefinitions>
@@ -294,11 +289,11 @@
                                 Style="{DynamicResource CommonButton}"
                                 x:Name="CancelMessageButton"
                                 Content="Cancel"
-                                Command="{Binding CancelMessage}"/>
+                                Command="{Binding CancelWritingOfCommentCommand}"/>
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid Grid.Row="4" d:Visibility="Visible" Visibility="{Binding IsPageButtonsVisible, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource boolConverter}}">
+                <Grid Grid.Row="3" d:Visibility="Visible" Visibility="{Binding IsPageButtonsVisible, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource boolConverter}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>

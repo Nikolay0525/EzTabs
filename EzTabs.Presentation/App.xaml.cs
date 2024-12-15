@@ -41,6 +41,7 @@ public partial class App : Application
         services.AddTransient<VerificationControlViewModel>();
         services.AddTransient<UserService>();
         services.AddTransient<TabService>();
+        services.AddTransient<TabRateService>();
         services.AddTransient<TuningService>();
         services.AddTransient<CommentService>();
         services.AddTransient<CommentRateService>();

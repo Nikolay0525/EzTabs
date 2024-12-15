@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EzTabs.Presentation.Resources.Styles.CustomTypes;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -35,8 +36,14 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
             public string text;
         }*/
 
+        public static readonly DependencyProperty AuthorIdProperty =
+        DependencyProperty.Register("AuthorId", typeof(Guid), typeof(CommentControl), new PropertyMetadata(Guid.Empty));
+        
         public static readonly DependencyProperty CommentIdProperty =
         DependencyProperty.Register("CommentId", typeof(Guid), typeof(CommentControl), new PropertyMetadata(Guid.Empty));
+        
+        public static readonly DependencyProperty ParentCommentIdProperty =
+        DependencyProperty.Register("ParentCommentId", typeof(Guid), typeof(CommentControl), new PropertyMetadata(Guid.Empty));
         
         public static readonly DependencyProperty DateOfCreationProperty =
         DependencyProperty.Register("DateOfCreation", typeof(DateTime), typeof(CommentControl), new PropertyMetadata(DateTime.Now));
@@ -48,7 +55,7 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
         DependencyProperty.Register("Text", typeof(string), typeof(CommentControl), new PropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty ReplyesListProperty =
-        DependencyProperty.Register("ReplyesList", typeof(ObservableCollection<CommentControl>), typeof(CommentControl), new PropertyMetadata(new ObservableCollection<CommentControl>()));
+        DependencyProperty.Register("ReplyesList", typeof(List<CommentControl>), typeof(CommentControl), new PropertyMetadata(new List<CommentControl>()));
 
         public static readonly DependencyProperty CanBeEditedProperty =
         DependencyProperty.Register("CanBeEdited", typeof(bool), typeof(CommentControl), new PropertyMetadata(false));
@@ -59,13 +66,25 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
         public static readonly DependencyProperty LikesProperty =
         DependencyProperty.Register("Likes", typeof(int), typeof(CommentControl), new PropertyMetadata(0));
         
-        public static readonly DependencyProperty IsCommentsOpenedProperty =
-        DependencyProperty.Register("IsCommentsOpened", typeof(bool), typeof(CommentControl), new PropertyMetadata(false));
+        public static readonly DependencyProperty IsReplyesOpenedProperty =
+        DependencyProperty.Register("IsReplyesOpened", typeof(bool), typeof(CommentControl), new PropertyMetadata(false));
 
+        public Guid AuthorId
+        {
+            get { return (Guid)GetValue(AuthorIdProperty); }
+            set { SetValue(AuthorIdProperty, value); }
+        }
+        
         public Guid CommentId
         {
             get { return (Guid)GetValue(CommentIdProperty); }
             set { SetValue(CommentIdProperty, value); }
+        }
+        
+        public Guid ParentCommentId
+        {
+            get { return (Guid)GetValue(ParentCommentIdProperty); }
+            set { SetValue(ParentCommentIdProperty, value); }
         }
         
         public DateTime DateOfCreation
@@ -88,9 +107,9 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
         }
       
 
-        public ObservableCollection<CommentControl> ReplyesList
+        public List<CommentControl> ReplyesList
         {
-            get { return (ObservableCollection<CommentControl>)GetValue(ReplyesListProperty); }
+            get { return (List<CommentControl>)GetValue(ReplyesListProperty); }
             set { SetValue(ReplyesListProperty, value); }
         }
         
@@ -113,10 +132,10 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
             set { SetValue(LikesProperty, value); }
         }
         
-        public bool IsCommentsOpened
+        public bool IsReplyesOpened
         {
-            get { return (bool)GetValue(IsCommentsOpenedProperty); }
-            set { SetValue(IsCommentsOpenedProperty, value); }
+            get { return (bool)GetValue(IsReplyesOpenedProperty); }
+            set { SetValue(IsReplyesOpenedProperty, value); }
         }
     }
 }

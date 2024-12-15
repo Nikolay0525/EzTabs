@@ -56,4 +56,24 @@ public class TabService : BaseService<Tab>
         SavedTab!.JsonTabText = JsonSerializer.Serialize(tabTextInList);
         await _repository.Update(SavedTab!);
     }
+
+    public async Task UpdateTabRating(Guid tabId, List<TabRate> tabRates)
+    {
+        double avgRate = 0;
+
+        foreach(var tabRate in tabRates)
+        {
+            avgRate += tabRate.Rate;
+        }
+
+        Tab? tab = await _repository.GetById(tabId); 
+
+        if (tab != null)
+        {
+            if (tabRates.Count != 0) 
+            tab.Rating = avgRate /= tabRates.Count;
+            else tab.Rating = 0;
+            await _repository.Update(tab);
+        }
+    }
 }

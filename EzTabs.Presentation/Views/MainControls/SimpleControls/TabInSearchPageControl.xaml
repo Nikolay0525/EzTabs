@@ -50,12 +50,11 @@
                             <ColumnDefinition Width="5"/>
                             <ColumnDefinition Width="20"/>
                             <ColumnDefinition Width="5"/>
-                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="40"/>
                             <ColumnDefinition Width="5"/>
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="1">
                             <Path
-                                Width="20"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 Stretch="Uniform"
@@ -64,10 +63,10 @@
                         </Grid>
                         <Grid Grid.Column="3">
                             <TextBlock 
-                                Width="30"
                                 Style="{DynamicResource CommonTextBlock}" 
                                 Text="{Binding Rating, ElementName=rootControl}"
                                 Foreground="Black"
+                                TextAlignment="Center"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"/>
                         </Grid>
@@ -78,6 +77,7 @@
         <Grid Grid.Column="1">
             <Button
                 Style="{DynamicResource ListButton}"
+                d:Visibility="Collapsed"
                 Visibility="{Binding CanBeEdited, ElementName=rootControl, Converter={StaticResource boolConverter}}"
                 Background="Transparent"
                 BorderBrush="Transparent"

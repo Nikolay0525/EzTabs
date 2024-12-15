@@ -29,6 +29,10 @@ public partial class TabControl : UserControl
                     var infoPopupOffset = InfoPopup.HorizontalOffset;
                     InfoPopup.HorizontalOffset = infoPopupOffset + 1;
                     InfoPopup.HorizontalOffset = infoPopupOffset;
+                    
+                    var ratePopupOffset = RatePopup.HorizontalOffset;
+                    RatePopup.HorizontalOffset = ratePopupOffset + 1;
+                    RatePopup.HorizontalOffset = ratePopupOffset;
                 }
             };
             w.SizeChanged += (sender3, e2) =>
@@ -42,6 +46,10 @@ public partial class TabControl : UserControl
                     var infoPopupOffset = InfoPopup.HorizontalOffset;
                     InfoPopup.HorizontalOffset = infoPopupOffset + 1;
                     InfoPopup.HorizontalOffset = infoPopupOffset;
+
+                    var ratePopupOffset = RatePopup.HorizontalOffset;
+                    RatePopup.HorizontalOffset = ratePopupOffset + 1;
+                    RatePopup.HorizontalOffset = ratePopupOffset;
                 }
             };
         }
@@ -50,5 +58,6 @@ public partial class TabControl : UserControl
     {
         ZoomPopup.IsOpen = false;
         InfoPopup.IsOpen = false;
+        RatePopup.IsOpen = false;
     }
 }

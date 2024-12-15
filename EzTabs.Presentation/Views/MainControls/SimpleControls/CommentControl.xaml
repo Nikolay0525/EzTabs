@@ -15,7 +15,8 @@
 
     <UserControl.Resources>
         <c:BoolToVisibilityConverter x:Key="boolConverter"/>
-        <c:GuidAndBoolCommandParametersConverter x:Key="boolAndGuidConverter"/>
+        <c:GuidAndBoolCommandParametersConverter x:Key="guidAndBoolConverter"/>
+        <c:ListToVisibiltyConverter x:Key="countConverter"/>
     </UserControl.Resources>
     
     <Border Background="White" BorderBrush="Black" BorderThickness="1" CornerRadius="10">
@@ -75,7 +76,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="5"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -93,7 +94,7 @@
                             Command="{Binding SendLikeStateCommand}"
                             IsChecked="{Binding Liked, ElementName=rootControl}">
                             <ToggleButton.CommandParameter>
-                                <MultiBinding Converter="{StaticResource boolAndGuidConverter}">
+                                <MultiBinding Converter="{StaticResource guidAndBoolConverter}">
                                     <Binding Path="CommentId" ElementName="rootControl" />
                                     <Binding Path="Liked" ElementName="rootControl"/>
                                 </MultiBinding>
@@ -111,32 +112,51 @@
                             d:Text="100"/>
                     </Grid>
                 </Grid>
-                <Grid Grid.Column="2">
+                <Grid Grid.Column="2" d:Visibility="Collapsed" Visibility="{Binding ReplyesList, ElementName=rootControl, Converter={StaticResource countConverter}}">
                     <ct:ToggleDropButton
                         Style="{DynamicResource ListToggleImageButtonFlipping}"
                         Foreground="Black"
-                        IsChecked="{Binding IsCommentsOpened, ElementName=rootControl, Mode=TwoWay}"
-                        Text="Show replyes"/>
+                        IsChecked="{Binding IsReplyesOpened, ElementName=rootControl, Mode=TwoWay}"
+                        Command="{Binding OpenReplyesOfCommentCommand}"
+                        Text="Show replyes">
+                        <ToggleButton.CommandParameter>
+                            <MultiBinding Converter="{StaticResource guidAndBoolConverter}">
+                                <Binding Path="CommentId" ElementName="rootControl" />
+                                <Binding Path="IsReplyesOpened" ElementName="rootControl"/>
+                            </MultiBinding>
+                        </ToggleButton.CommandParameter>
+                    </ct:ToggleDropButton>
                 </Grid>
                 <Grid Grid.Column="4">
                     <Button
                         Style="{DynamicResource ListButton}"
                         Foreground="Black"
                         Content="Reply"
-                        CommandParameter="{Binding GetMessage, ElementName=rootControl}"
-                        Command="{Binding SubmitReplyCommand}"
-                        />
+                        CommandParameter="{Binding CommentId, ElementName=rootControl}"
+                        Command="{Binding WriteReplyOnCommentCommand}"/>
                 </Grid>
             </Grid>
-            <Grid Grid.Row="6" Grid.Column="1" Visibility="{Binding IsCommentsOpened, ElementName=rootControl, Converter={StaticResource boolConverter}}" d:Visibility="Visible">
+            <Grid Grid.Row="6" Grid.Column="1" Visibility="{Binding IsReplyesOpened, ElementName=rootControl, Converter={StaticResource boolConverter}}" d:Visibility="Visible">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="5"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="5"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <ListBox
                         Style="{DynamicResource CommonListBox}"
-                        ItemsSource="{Binding ReplyesList, ElementName=rootControl}"/>
+                        ItemsSource="{Binding ReplyesList, ElementName=rootControl}"
+                        />
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Button
+                        Style="{DynamicResource ListButton}"
+                        Foreground="Black"
+                        Content="Show More"
+                        Visibility="{Binding ReplyesList.Count, ElementName=rootControl, Converter={StaticResource countConverter}}"
+                        CommandParameter="{Binding CommentId, ElementName=rootControl}"
+                        Command="{Binding IncreaseAmountOfReplyes}"/>    
                 </Grid>
             </Grid>
         </Grid>

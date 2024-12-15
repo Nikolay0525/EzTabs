@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="EzTabs.Presentation.Views.MainControls.SimpleControls.RateTabControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls"
+             xmlns:ct="clr-namespace:EzTabs.Presentation.Resources.Styles.CustomTypes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="#2e2e2e">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="40"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <ct:ImageButtonFillable
+                BorderBrush="Transparent"
+                Style="{DynamicResource ImageButtonFillable}"
+                Command="{Binding RateTabCommand}"
+                CommandParameter="1"
+                IsFilled="{Binding OneStarCheck, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                PathData="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <ct:ImageButtonFillable
+                BorderBrush="Transparent"
+                Style="{DynamicResource ImageButtonFillable}"
+                Command="{Binding RateTabCommand}"
+                CommandParameter="2"
+                IsFilled="{Binding TwoStarCheck, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                PathData="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                />
+        </Grid>
+        <Grid Grid.Column="2">
+            <ct:ImageButtonFillable
+                BorderBrush="Transparent"
+                Style="{DynamicResource ImageButtonFillable}"
+                Command="{Binding RateTabCommand}"
+                CommandParameter="3"
+                IsFilled="{Binding ThreeStarCheck, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                PathData="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                 />
+        </Grid>
+        <Grid Grid.Column="3">
+            <ct:ImageButtonFillable
+                BorderBrush="Transparent"
+                Style="{DynamicResource ImageButtonFillable}"
+                Command="{Binding RateTabCommand}"
+                CommandParameter="4"
+                IsFilled="{Binding FourStarCheck, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                PathData="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                />
+        </Grid>
+        <Grid Grid.Column="4">
+            <ct:ImageButtonFillable
+                BorderBrush="Transparent"
+                Style="{DynamicResource ImageButtonFillable}"
+                Command="{Binding RateTabCommand}"
+                CommandParameter="5"
+                IsFilled="{Binding FiveStarCheck, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                PathData="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                />
+        </Grid>
+    </Grid>
+</UserControl>

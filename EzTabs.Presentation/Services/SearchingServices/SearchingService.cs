@@ -1,11 +1,8 @@
 ﻿using EzTabs.Data;
 using EzTabs.Data.Domain;
-using EzTabs.Data.Repository;
-
 using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels.Enums;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace EzTabs.Presentation.Services.SearchingServices
 {
@@ -18,7 +15,7 @@ namespace EzTabs.Presentation.Services.SearchingServices
             _context = context;
         }
 
-        public async Task<(List<Comment>, int)> ShowComments(int amount, int currentPage, SortByOption sortByOption)
+        public async Task<(List<Comment>, int)> SearchComments(int amount, int currentPage, SortByOption sortByOption)
         {
             IQueryable<Comment> comments = _context!.Set<Comment>();
 
@@ -50,12 +47,50 @@ namespace EzTabs.Presentation.Services.SearchingServices
                 })
                 .ToListAsync();
 
+            return (pagedComments, comments.Count(c => c.ParentCommentId == Guid.Empty) - (currentPage + 1) * amount);
+        }
+        
+        public async Task<(List<Comment>, int)> SearchCommentReplyes(int amount, Guid parentCommentId)
+        {
+            IQueryable<Comment> comments = _context!.Set<Comment>();
+
+            Guid savedTabId = TabService.SavedTab!.Id;
+            comments = comments.Where(c => c.TabId == savedTabId && c.ParentCommentId == parentCommentId);
+            comments = comments.OrderBy(c => c.DateOfCreation);
+
+            int totalComments = await comments.CountAsync();
+
+            List<Comment> pagedComments = await comments
+                .AsNoTracking()
+                .Take(amount)
+                .Select(c => new Comment
+                {
+                    Id = c.Id,
+                    UserId = c.UserId,
+                    TabId = c.TabId,
+                    Text = c.Text,
+                    Likes = c.Likes,
+                    ParentCommentId = c.ParentCommentId,
+                    DateOfCreation = c.DateOfCreation
+                })
+                .ToListAsync();
+
             return (pagedComments, totalComments);
         }
 
-        public async Task<(List<Tab>, int)> SearchTabs(int amount, int currentPage, string searchText, SearchByOption searchByOption, SortByOption sortByOption, string authorName)
+        public async Task<(List<Tab>, int)> SearchTabs(int amount, int currentPage, string searchText, Guid userid, bool onlyFavourite, SearchByOption searchByOption, SortByOption sortByOption, string authorName)
         {
             IQueryable<Tab> tabs = _context!.Set<Tab>();
+
+            if (onlyFavourite)
+            {
+                var favouriteTabIds = await _context.Set<FavouriteTab>()
+                                        .Where(ft => ft.UserId == userid)
+                                        .Select(ft => ft.TabId)
+                                        .ToListAsync();
+
+                tabs = tabs.Where(tab => favouriteTabIds.Contains(tab.Id));
+            }
 
             if (searchByOption == SearchByOption.SongAuthor)
             {
@@ -98,7 +133,7 @@ namespace EzTabs.Presentation.Services.SearchingServices
                 })
                 .ToListAsync();
 
-            return (pagedTabs, totalRecords);
+            return (pagedTabs, tabs.Count() - (currentPage + 1) * amount);
         }
     }
 }

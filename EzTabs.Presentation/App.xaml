@@ -6,7 +6,6 @@
              xmlns:vac="clr-namespace:EzTabs.Presentation.Views.AuthControls"
              xmlns:vmmc="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels"
              xmlns:vcbp="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts"
-             xmlns:vmcbp="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs"
              xmlns:vdc="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls"
              xmlns:vmc="clr-namespace:EzTabs.Presentation.Views.MainControls">
     <Application.Resources>
@@ -40,10 +39,6 @@
                 <vmc:TabEditingControl />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type vmcbp:ControlBarViewModel}">
-                <vcbp:ControlBar />
-            </DataTemplate>
-
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/ButtonStyle.xaml"/>
                 <ResourceDictionary Source="Resources/Styles/TextBoxStyle.xaml"/>
@@ -54,6 +49,7 @@
                 <ResourceDictionary Source="Resources/Styles/CheckBoxStyle.xaml"/>
                 <ResourceDictionary Source="Resources/Styles/ScrollViewerStyle.xaml"/>
                 <ResourceDictionary Source="Resources/Styles/ScrollBarStyle.xaml"/>
+                <ResourceDictionary Source="Resources/Styles/SliderStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -10,7 +10,7 @@ using System.Windows.Data;
 
 namespace EzTabs.Presentation.Converters
 {
-    public class ListToVisibiltyConverter : IValueConverter
+    public class List0ToVisibiltyConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

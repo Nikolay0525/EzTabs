@@ -4,7 +4,7 @@ using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
-using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs;
+
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Input;
@@ -154,13 +154,14 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
     public ICommand RemoveBarButtonCommand { get; }
     public ICommand CreateLineButtonCommand { get; }
     public ICommand RemoveLineButtonCommand { get; }
+    public ICommand ExtendBarButtonCommand { get; }
+    public ICommand ShortenBarButtonCommand { get; }
     public ICommand MoveCursorCommand { get; }
     public ICommand WriteNumberCommand { get; }
     public ICommand RemoveSymbolCommand { get; }
 
     public TabEditingControlViewModel(IViewModelService viewModelService, INavigationService navigationService, TuningService tuningService, TabService tabService) : base(viewModelService, navigationService)
     {
-        ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
         _tuningService = tuningService;
         _tabService = tabService;
         Task.Run(CreateTabText);
@@ -168,6 +169,8 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
         RemoveLineButtonCommand = new RelayCommand(RemoveRow);
         CreateBarsButtonCommand = new RelayCommand(CreateBar);
         RemoveBarButtonCommand = new RelayCommand(RemoveBar);
+        ExtendBarButtonCommand = new RelayCommand(ExtendBar);
+        ShortenBarButtonCommand = new RelayCommand(ShortenBar);
         GoToMainPageCommand = new AsyncRelayCommand(GoToMainPage);
         MoveCursorCommand = new RelayCommand<string>(MoveCursor);
         HandleKeyCommand = new RelayCommand<string>(HandleKeyPress);
@@ -182,6 +185,7 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
 
     private void HandleKeyPress(string? symbol)
     {
+        if (symbol == null) return;
         _tabRows[_cursorRow][_cursorLine][_cursorBar] = _tabRows[_cursorRow][_cursorLine][_cursorBar]
             .Remove(_cursorPosition, 1)
             .Insert(_cursorPosition, symbol!);
@@ -382,10 +386,52 @@ public class TabEditingControlViewModel : BaseViewModel, ITrackElementFocus
         int tabRowsCountBeforeRemoving = _tabRows[_cursorRow][_cursorLine].Count - 1;
         if (_tabRows[_cursorRow][_cursorLine].Count <= 1) return;
         _tabRows[_cursorRow] = RemoveStringsBar(_tabRows[_cursorRow]);
-        if (_cursorBar == tabRowsCountBeforeRemoving) SwitchCursorBar("Left");
+        if (_cursorBar >= tabRowsCountBeforeRemoving) SwitchCursorBar("Left");
+        UpdateTabText();
+    }
+    
+    private void ExtendBar()
+    {
+        _tabRows[_cursorRow] = EditLastColumnOfBar(true, _tabRows[_cursorRow]);
         UpdateTabText();
     }
 
+    private void ShortenBar()
+    {
+        int lengthBeforeRemoving = _tabRows[_cursorRow][_cursorLine][_cursorBar].Length - 2;
+        if (_tabRows[_cursorRow][_cursorLine][_cursorBar].Length <= 2) return;
+        _tabRows[_cursorRow] = EditLastColumnOfBar(false, _tabRows[_cursorRow]);
+        if (_cursorPosition >= lengthBeforeRemoving) MoveCursor("Left");
+        UpdateTabText();
+    }
+
+    private List<List<string>> EditLastColumnOfBar(bool addOrRemove, List<List<string>> stringsBarsToEdit)
+    {
+        if(addOrRemove)
+        {
+            for (int j = 0; j < stringsBarsToEdit.Count; j++)
+            {
+                if (string.IsNullOrWhiteSpace(stringsBarsToEdit[j][CursorBar]))
+                {
+                    stringsBarsToEdit[j][_cursorBar] = stringsBarsToEdit[j][_cursorBar].Insert(stringsBarsToEdit[j][CursorBar].Length - 1, " ");
+                    continue;
+                }
+                stringsBarsToEdit[j][_cursorBar] = stringsBarsToEdit[j][_cursorBar].Insert(stringsBarsToEdit[j][_cursorBar].Length - 1, "-");
+                continue;
+            }
+            return stringsBarsToEdit;
+        }
+        else
+        {
+            for (int j = 0; j < stringsBarsToEdit.Count; j++)
+            {
+                stringsBarsToEdit[j][_cursorBar] = stringsBarsToEdit[j][_cursorBar].Remove(stringsBarsToEdit[j][CursorBar].Length - 2, 1);
+                continue;
+            }
+            return stringsBarsToEdit;
+        }
+    }
+    
     private List<List<string>> CreateStrings(List<Tuning> tuningsOfStrings)
     {
         List<List<string>> strings = [];

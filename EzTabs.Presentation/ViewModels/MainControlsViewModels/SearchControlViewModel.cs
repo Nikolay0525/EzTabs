@@ -7,19 +7,25 @@ using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.Services.ViewServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels.Enums;
-using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs;
+
 using EzTabs.Presentation.Views.MainControls.SimpleControls;
+using EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls;
 using System.Collections.ObjectModel;
+using System.Timers;
+using System.Windows;
 using System.Windows.Input;
 
 namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 
 public class SearchControlViewModel : BaseViewModel
 {
+
     private readonly TabService _tabService;
+    private readonly FavouriteTabService _favouriteTabService;
     private readonly SearchingService _searchingService;
-    private List<TabInSearchPageControl> _tabsInSearchList = new();
     private readonly IWindowService _windowService;
+
+    private List<TabInSearchPageControl> _tabsInSearchList = new();
 
     private bool _firstPageVisibility = false;
     private bool _previousPageEnabled = false;
@@ -31,6 +37,7 @@ public class SearchControlViewModel : BaseViewModel
     private bool _onlyFavouriteTabs = false;
     private bool _isAuthorNameVisible = false;
 
+    private System.Timers.Timer _debounceTimer;
     private string _authorName;
     private string _searchString;
     private int _currentPage = 0;
@@ -105,6 +112,7 @@ public class SearchControlViewModel : BaseViewModel
         {
             _authorName = value;
             OnPropertyChanged();
+            StartDebounceTimer();
         }
     }
 
@@ -118,6 +126,7 @@ public class SearchControlViewModel : BaseViewModel
             if (_selectedSearchByOption == SearchByOption.SongAuthor) IsAuthorNameVisible = true;
             else IsAuthorNameVisible = false;
             OnPropertyChanged();
+            PerformSearch();
         }
     }
     
@@ -129,6 +138,7 @@ public class SearchControlViewModel : BaseViewModel
             _selectedSortByOptionText = value;
             _selectedSortByOption = _sortByOptions.GetValueOrDefault(value);
             OnPropertyChanged();
+            PerformSearch();
         }
     }
     
@@ -140,6 +150,7 @@ public class SearchControlViewModel : BaseViewModel
         {
             _onlyFavouriteTabs = value;
             OnPropertyChanged();
+            PerformSearch();
         }
     }
 
@@ -181,7 +192,7 @@ public class SearchControlViewModel : BaseViewModel
         {
             _searchString = value;
             OnPropertyChanged();
-            UpdateSearchList();
+            StartDebounceTimer();
         }
     }
 
@@ -194,7 +205,6 @@ public class SearchControlViewModel : BaseViewModel
             OnPropertyChanged();
             if (_currentPage > 0) PreviousPageEnabled = true;
             else PreviousPageEnabled = false;
-            UpdateSearchList();
         }
     }
 
@@ -230,6 +240,9 @@ public class SearchControlViewModel : BaseViewModel
 
     public BaseViewModel ControlBarViewModel { get; private set; }
 
+    public ICommand CreateTabCommand { get; }
+    public ICommand PerformSearchCommand { get; }
+    public ICommand SendFavouriteStateCommand { get; }
     public ICommand HandleSearchByCommand { get; }
     public ICommand HandleSortByCommand { get; }
     public ICommand NextPageCommand { get; }
@@ -241,22 +254,52 @@ public class SearchControlViewModel : BaseViewModel
     public ICommand GoEditClickedTabCommand { get; }
 
 
-    public SearchControlViewModel(INavigationService navigationService ,IViewModelService viewModelService, IWindowService windowService, TabService tabService, SearchingService searchingService) : base(viewModelService, navigationService)
+    public SearchControlViewModel(INavigationService navigationService ,IViewModelService viewModelService, IWindowService windowService, 
+        TabService tabService, FavouriteTabService favouriteTabService, SearchingService searchingService) : base(viewModelService, navigationService)
     {
         _windowService = windowService;
         _tabService = tabService;
+        _favouriteTabService = favouriteTabService;
         _searchingService = searchingService;
-        ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
+        CreateTabCommand = new RelayCommand(NavigateToCreationOfTab);
+        PerformSearchCommand = new RelayCommand(PerformSearch);
+        SendFavouriteStateCommand = new AsyncRelayCommand<object?>(SendFavouriteState);
         HandleSearchByCommand = new RelayCommand<string>(HandleSearchBy);
         HandleSortByCommand = new RelayCommand<string>(HandleSortBy);
-        NextPageCommand = new RelayCommand(NextPage);
-        PreviousPageCommand = new RelayCommand(PreviousPage);
-        OnTheFirstPageCommand = new RelayCommand(OnTheFirstPage);
+        NextPageCommand = new AsyncRelayCommand(NextPage);
+        PreviousPageCommand = new AsyncRelayCommand(PreviousPage);
+        OnTheFirstPageCommand = new AsyncRelayCommand(OnTheFirstPage);
         GoToCreationOfTabCommand = new RelayCommand(GoToCreationOfTab);
         GoToClickedTabCommand = new AsyncRelayCommand<Guid>(GoToClickedTab);
         GoEditClickedTabCommand = new AsyncRelayCommand<Guid>(GoEditClickedTab);
+
+        ButtonInDropControl createTab = new()
+        {
+            IsButtonVisible = true,
+            Text = "Create Tab",
+            ButtonCommand = CreateTabCommand
+        };
+        ButtonsInMenu.Insert(0, createTab);
+
+        _debounceTimer = new System.Timers.Timer(1000);
+        _debounceTimer.Elapsed += OnDebounceTimerElapsed;
+        _debounceTimer.AutoReset = false;
+
+        StartDebounceTimer();
         UpdateComboLists();
-        UpdateSearchList();
+    }
+
+    private void NavigateToCreationOfTab()
+    {
+        NavigationService.NavigateTo<TabCreationControlViewModel>();
+    }
+
+    private async Task SendFavouriteState(object? parameter)
+    {
+        if (parameter is Tuple<Guid, bool> args) // where Item1 is id of comment and Item2 is state of UI element
+        {
+            await _favouriteTabService.UpdateStateOfTab(UserService.SavedUser.Id, args.Item1, args.Item2);
+        }
     }
 
     private void UpdateComboLists()
@@ -288,12 +331,14 @@ public class SearchControlViewModel : BaseViewModel
 
     private void HandleSearchBy(string? selectedOption)
     {
+        if (selectedOption == null) return;
         SelectedSearchByOption = selectedOption;
         IsSearchByOpen = false;
     }
 
     private void HandleSortBy(string? selectedOption)
     {
+        if (selectedOption == null) return;
         SelectedSortByOption = selectedOption;
         IsSortByOpen = false;
     }
@@ -301,36 +346,56 @@ public class SearchControlViewModel : BaseViewModel
 
     private async Task GoToClickedTab(Guid tabId)
     {
-       await _tabService.GoToTab(tabId);
+        await _tabService.GoToTab(tabId);
     }
     
     private async Task GoEditClickedTab(Guid tabId)
     {
-       await _tabService.GoEditTab(tabId);
+        await _tabService.GoEditTab(tabId);
     }
 
-    private void NextPage()
+    private async Task NextPage()
     {
         int add = ++_currentPage;
         CurrentPage = add;
         if (_currentPage == 0) FirstPageVisibility = false; else FirstPageVisibility = true;
+        await UpdateSearchList();
     }
 
-    private void PreviousPage()
+    private async Task PreviousPage()
     {
         int minus = --_currentPage;
         CurrentPage = minus;
         if(_currentPage == 0) FirstPageVisibility = false; else FirstPageVisibility = true;
+        await UpdateSearchList();
     }
     
-    private void OnTheFirstPage()
+    private async Task OnTheFirstPage()
     {
         CurrentPage = 0;
+        FirstPageVisibility = false;
+        await UpdateSearchList();
     }
 
-    private async void UpdateSearchList()
+    private async void PerformSearch()
     {
-        var tabsToDisplay = await _searchingService.SearchTabs((int)(_windowService.WindowHeight/80), _currentPage, _searchString, _selectedSearchByOption, _selectedSortByOption, _authorName);
+        await UpdateSearchList();
+    }
+
+    private void StartDebounceTimer()
+    {
+        _debounceTimer.Stop();
+        _debounceTimer.Start();
+    }
+
+    private void OnDebounceTimerElapsed(object? sender, ElapsedEventArgs e)
+    {
+        Application.Current.Dispatcher.Invoke(PerformSearch);
+    }
+
+    private async Task UpdateSearchList()
+    {
+        var tabsToDisplay = await _searchingService.SearchTabs((int)(_windowService.WindowHeight / 70), _currentPage, _searchString, UserService.SavedUser.Id, OnlyFavouriteTabs, _selectedSearchByOption, _selectedSortByOption, _authorName);
 
         if (tabsToDisplay.Item2 > 0)
         {
@@ -339,10 +404,10 @@ public class SearchControlViewModel : BaseViewModel
         else { NextPageEnabled = false; }
         TabsInSearchList.Clear();
 
-        TabsInSearchList = AddTabsInSearchList(tabsToDisplay.Item1);
+        TabsInSearchList = await AddTabsInSearchList(tabsToDisplay.Item1);
     }
     
-    private List<TabInSearchPageControl> AddTabsInSearchList(List<Tab> tabsToDisplay)
+    private async Task<List<TabInSearchPageControl>> AddTabsInSearchList(List<Tab> tabsToDisplay)
     {
         List<TabInSearchPageControl> tabInSearchPageControls = new();
 
@@ -353,10 +418,13 @@ public class SearchControlViewModel : BaseViewModel
                 DataContext = this,
                 TabId = tab.Id,
                 Text = tab.Band + " - " + tab.Title,
-                Rating = tab.Rating
+                Rating = tab.Rating,
+                Favourite = false
             };
             if (tab.AuthorId == UserService.SavedUser.Id) tabItem.CanBeEdited = true;
             tabInSearchPageControls.Add(tabItem);
+            bool favourite = await _favouriteTabService.IsTabFavouriteByIds(UserService.SavedUser.Id, tab.Id);
+            tabItem.Favourite = favourite;
         }
 
         return tabInSearchPageControls;

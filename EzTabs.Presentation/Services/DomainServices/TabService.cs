@@ -22,6 +22,8 @@ public class TabService : BaseService<Tab>
     public async Task GoToTab(Guid tabId)
     {
         SavedTab = await _repository!.GetById(tabId);
+        if (SavedTab is null) throw new ArgumentNullException(nameof(SavedTab));
+        await AddViewToTab(SavedTab);
         NavigationService.NavigateTo<TabControlViewModel>();
     }
     
@@ -75,5 +77,11 @@ public class TabService : BaseService<Tab>
             else tab.Rating = 0;
             await _repository.Update(tab);
         }
+    }
+
+    public async Task AddViewToTab(Tab tab)
+    {
+        tab.AddView();
+        await _repository.Update(tab);
     }
 }

@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             mc:Ignorable="d">
+    <Grid Background="#2e2e2e">
+        <Viewbox Width="100" Height="200" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Image x:Name="peterAlert" Source="/Resources/Icons/peterAlert.jpg"/>
+        </Viewbox>
+        <TextBlock Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" Text="peter alert!"></TextBlock>
     </Grid>
 </UserControl>

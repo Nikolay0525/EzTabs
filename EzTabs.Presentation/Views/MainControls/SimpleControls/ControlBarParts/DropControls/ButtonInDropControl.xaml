@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls.ButtonInDropControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls"
+             xmlns:c="clr-namespace:EzTabs.Presentation.Converters"
+             mc:Ignorable="d"
+             x:Name="rootControl">
+    <UserControl.Resources>
+        <c:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Button
+            Style="{DynamicResource CommonButton}"
+            Command="{Binding ButtonCommand, ElementName=rootControl}"
+            x:Name="button"
+            Content="{Binding Text, ElementName=rootControl}"
+            Visibility="{Binding IsButtonVisible,Converter={StaticResource BoolToVisibilityConverter}, ElementName=rootControl}"/>
+    </Grid>
+</UserControl>

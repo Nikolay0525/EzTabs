@@ -16,43 +16,47 @@
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
 
-        <Button Style="{DynamicResource CommonButton}" 
-                x:Name="BpmMinusButton"
-                Padding="0,0,0,8"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                Content="-"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Height="30"
-                Width="30"
-                Click="OnMinusButtonClick">
+        <Button 
+            Style="{DynamicResource CommonButton}" 
+            x:Name="BpmMinusButton"
+            Padding="0,0,0,8"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Content="-"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Height="30"
+            Width="30"
+            Click="OnMinusButtonClick">
         </Button>
 
         <Grid Grid.Column="1">
 
-            <Slider x:Name="BpmSlider"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    Minimum="{Binding Minimum, ElementName=rootControl}"
-                    Maximum="{Binding Maximum, ElementName=rootControl}"
-                    Value="{Binding CurrentValue, ElementName=rootControl, Mode=TwoWay}"
-                    IsSnapToTickEnabled="True"
-                    TickFrequency="1"/>
+            <Slider 
+                Style="{DynamicResource CommonSlider}" 
+                x:Name="BpmSlider"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Minimum="{Binding Minimum, ElementName=rootControl}"
+                Maximum="{Binding Maximum, ElementName=rootControl}"
+                Value="{Binding CurrentValue, ElementName=rootControl, Mode=TwoWay}"
+                IsSnapToTickEnabled="True"
+                TickFrequency="1"/>
         </Grid>
 
         <Grid Grid.Column="2">
-            <Button Style="{DynamicResource CommonButton}" 
-                    x:Name="BpmPlusButton"
-                    Padding="0,0,0,0"
-                    Content="+"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Height="30"
-                    Width="30"
-                    Click="OnPlusButtonClick">
+            <Button 
+                Style="{DynamicResource CommonButton}" 
+                x:Name="BpmPlusButton"
+                Padding="0,0,0,0"
+                Content="+"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Height="30"
+                Width="30"
+                Click="OnPlusButtonClick">
             </Button>
         </Grid>
     </Grid>

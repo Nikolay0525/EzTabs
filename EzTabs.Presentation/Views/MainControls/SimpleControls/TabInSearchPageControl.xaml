@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls"
     xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels"
-    xmlns:c="clr-namespace:EzTabs.Presentation.Converters"
+    xmlns:c="clr-namespace:EzTabs.Presentation.Converters" xmlns:ct="clr-namespace:EzTabs.Presentation.Resources.Styles.CustomTypes"
     mc:Ignorable="d" 
     d:DesignHeight="40"
     d:DesignWidth="540"
@@ -15,6 +15,7 @@
 
     <UserControl.Resources>
         <c:BoolToVisibilityConverter x:Key="boolConverter"/>
+        <c:GuidAndBoolCommandParametersConverter x:Key="guidAndBoolConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -35,6 +36,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
                         <TextBlock 
@@ -46,6 +48,21 @@
                             VerticalAlignment="Center"/>
                     </Grid>
                     <Grid Grid.Column="1">
+                        <ct:ToggleImageButton
+                            Style="{DynamicResource ListToggleImageButtonFillable}"
+                            Foreground="Black"
+                            PathData="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"  
+                            Command="{Binding SendFavouriteStateCommand}"
+                            IsChecked="{Binding Favourite, ElementName=rootControl}">
+                            <ToggleButton.CommandParameter>
+                                <MultiBinding Converter="{StaticResource guidAndBoolConverter}">
+                                    <Binding Path="TabId" ElementName="rootControl" />
+                                    <Binding Path="Favourite" ElementName="rootControl"/>
+                                </MultiBinding>
+                            </ToggleButton.CommandParameter>
+                        </ct:ToggleImageButton>
+                    </Grid>
+                    <Grid Grid.Column="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="5"/>
                             <ColumnDefinition Width="20"/>

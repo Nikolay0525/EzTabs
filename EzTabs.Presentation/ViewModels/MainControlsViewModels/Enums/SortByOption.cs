@@ -10,6 +10,7 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels.Enums
     {
         Popularity,
         Rating,
-        Newest
+        Newest,
+        Oldest
     }
 }

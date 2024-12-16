@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Icons\peterAlert.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Resources\Icons\appIcon.ico" />
   </ItemGroup>
 
@@ -27,6 +31,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EzTabs.Data\EzTabs.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Icons\peterAlert.jpg" />
   </ItemGroup>
 
 </Project>

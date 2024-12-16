@@ -1,17 +1,45 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ValidationServices;
 using EzTabs.Presentation.Services.ViewModelServices;
+using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
+using EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Collections;
 using System.ComponentModel;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 
 namespace EzTabs.Presentation.ViewModels.BaseViewModels;
 
 public abstract class BaseViewModel : ObservableObject ,INotifyPropertyChanged, INotifyDataErrorInfo
 {
+    private string _username;
+    private List<ButtonInDropControl> _buttonsInMenu;
+
+    public string Username
+    {
+        get => _username;
+        set
+        {
+            _username = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public List<ButtonInDropControl> ButtonsInMenu
+    {
+        get => _buttonsInMenu;
+        set
+        {
+            _buttonsInMenu = value;
+            OnPropertyChanged();
+        }
+    }
+
     private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
     public bool HasErrors => _errors.Count > 0;
 
@@ -19,6 +47,7 @@ public abstract class BaseViewModel : ObservableObject ,INotifyPropertyChanged, 
 
     private INavigationService _navigationService;
     private IViewModelService _viewModelService;
+
     public INavigationService NavigationService 
     { 
         get => _navigationService; 
@@ -37,6 +66,8 @@ public abstract class BaseViewModel : ObservableObject ,INotifyPropertyChanged, 
             OnPropertyChanged();
         }
     }
+
+    public ICommand SignOutCommand { get; }
 
     public static void ShowMessage(string title, string message)
     {
@@ -85,6 +116,24 @@ public abstract class BaseViewModel : ObservableObject ,INotifyPropertyChanged, 
     {
         ViewModelService = viewModelService;
         NavigationService = navigationService;
+
+        if (UserService.SavedUser != null) Username = UserService.SavedUser.Name;
+        SignOutCommand = new RelayCommand(SignOut);
+
+        ButtonsInMenu = new()
+        {
+            new ButtonInDropControl()
+            {
+                IsButtonVisible = true,
+                Text = "Sign Out",
+                ButtonCommand = SignOutCommand
+            }
+        };
+    }
+
+    protected virtual void SignOut()
+    {
+        NavigationService.NavigateTo<LoginControlViewModel>();
     }
 }
 

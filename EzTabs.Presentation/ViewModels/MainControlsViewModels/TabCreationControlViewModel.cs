@@ -5,7 +5,7 @@ using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ValidationServices.CustomAttributes;
 using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
-using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs;
+
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
@@ -169,7 +169,6 @@ public class TabCreationControlViewModel : BaseViewModel
     {
         _tabService = tabService;
         _tuningService = tuningService;
-        ControlBarViewModel = ViewModelService.CreateViewModel<ControlBarViewModel>();
         CreateTabCommand = new AsyncRelayCommand(CreateTab);
         GoToSearchControlCommand = new RelayCommand(GoToSearchControl);
         AddTuningCommand = new RelayCommand(AddTuning);

@@ -9,7 +9,7 @@ using EzTabs.Presentation.ViewModels;
 using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels;
-using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs;
+
 using EzTabs.Presentation.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,11 +37,11 @@ public partial class App : Application
         services.AddTransient<TabControlViewModel>();
         services.AddTransient<TabCreationControlViewModel>();
         services.AddTransient<TabEditingControlViewModel>();
-        services.AddTransient<ControlBarViewModel>();
         services.AddTransient<VerificationControlViewModel>();
         services.AddTransient<UserService>();
         services.AddTransient<TabService>();
         services.AddTransient<TabRateService>();
+        services.AddTransient<FavouriteTabService>();
         services.AddTransient<TuningService>();
         services.AddTransient<CommentService>();
         services.AddTransient<CommentRateService>();

@@ -5,53 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls"
              xmlns:conv="clr-namespace:EzTabs.Presentation.Converters"
-             xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs" 
-             d:DataContext="{d:DesignInstance Type=vm:ControlBarViewModel}"
+             x:Name="rootControl"
+             d:Height="300" d:Width="100"
              mc:Ignorable="d">
 
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
     <Border CornerRadius="10" Background="#2e2e2e">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Button 
-                    Style="{DynamicResource CommonButton}"
-                    Command="{Binding}"
-                    x:Name="ModerationButton"
-                    Content="Moderation"
-                    Visibility="{Binding ShowModerationButton,Converter={StaticResource BoolToVisibilityConverter}}"/>  
-            </Grid>
-            <Grid Grid.Row="2">
-                <Button 
-                    Style="{DynamicResource CommonButton}"
-                    Command="{Binding}"
-                    x:Name="SettingsButton"
-                    Content="Settings"/>
-            </Grid>
-            <Grid Grid.Row="4">
-                <Button 
-                    Style="{DynamicResource CommonButton}"
-                    Command="{Binding CreateTabCommand}"
-                    x:Name="CreateTabButton"
-                    Content="Create Tab"/>
-            </Grid>
-            <Grid Grid.Row="6">
-                <Button 
-                    Style="{DynamicResource CommonButton}"
-                    Command="{Binding SignOutCommand}"
-                    x:Name="SignOutButton"
-                    Content="Sign Out"/>
-            </Grid>
-        </Grid>
+        <ListBox
+            Style="{DynamicResource CommonListBox}"
+            Background="#2e2e2e"
+            BorderThickness="0"
+            
+            ItemsSource="{Binding ListOfButtons, UpdateSourceTrigger=PropertyChanged, ElementName=rootControl}"/>
     </Border>
 </UserControl>

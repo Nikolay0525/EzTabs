@@ -21,12 +21,15 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
         
         private static readonly DependencyProperty CanBeEditedProperty =
              DependencyProperty.Register("CanBeEdited", typeof(bool), typeof(TabInSearchPageControl), new PropertyMetadata(false));
+        
+        private static readonly DependencyProperty FavouriteProperty =
+             DependencyProperty.Register("Favourite", typeof(bool), typeof(TabInSearchPageControl), new PropertyMetadata(false));
 
         public Guid TabId
         {
             get { return (Guid)GetValue(TabIdProperty); }
             set { SetValue(TabIdProperty, value); }
-        }
+        } 
         
         public double Rating
         {
@@ -44,6 +47,12 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
         {
             get { return (bool)GetValue(CanBeEditedProperty); }
             set { SetValue(CanBeEditedProperty, value); }
+        }
+        
+        public bool Favourite
+        {
+            get { return (bool)GetValue(FavouriteProperty); }
+            set { SetValue(FavouriteProperty, value); }
         }
     }
 }

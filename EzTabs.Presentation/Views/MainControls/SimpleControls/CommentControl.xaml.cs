@@ -57,6 +57,12 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
         public static readonly DependencyProperty ReplyesListProperty =
         DependencyProperty.Register("ReplyesList", typeof(List<CommentControl>), typeof(CommentControl), new PropertyMetadata(new List<CommentControl>()));
 
+        public static readonly DependencyProperty ReplyesToShowProperty =
+        DependencyProperty.Register("ReplyesToShow", typeof(int), typeof(CommentControl), new PropertyMetadata(2));
+
+        public static readonly DependencyProperty ShowMoreVisibileProperty =
+        DependencyProperty.Register("ShowMoreVisibile", typeof(bool), typeof(CommentControl), new PropertyMetadata(false));
+        
         public static readonly DependencyProperty CanBeEditedProperty =
         DependencyProperty.Register("CanBeEdited", typeof(bool), typeof(CommentControl), new PropertyMetadata(false));
 
@@ -111,14 +117,26 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
         {
             get { return (List<CommentControl>)GetValue(ReplyesListProperty); }
             set { SetValue(ReplyesListProperty, value); }
+        } 
+        
+        public int ReplyesToShow
+        {
+            get { return (int)GetValue(ReplyesToShowProperty); }
+            set { SetValue(ReplyesToShowProperty, value); }
         }
         
+        public bool ShowMoreVisibile
+        {
+            get { return (bool)GetValue(ShowMoreVisibileProperty); }
+            set { SetValue(ShowMoreVisibileProperty, value); }
+        }
 
         public bool CanBeEdited
         {
             get { return (bool)GetValue(CanBeEditedProperty); }
             set { SetValue(CanBeEditedProperty, value); }
         }
+        
         
         public bool Liked
         {

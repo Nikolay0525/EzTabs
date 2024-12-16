@@ -8,7 +8,7 @@ using EzTabs.Presentation.Services.ViewModelServices;
 using EzTabs.Presentation.Services.ViewServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels.Enums;
-using EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs;
+
 using EzTabs.Presentation.Views.MainControls.SimpleControls;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
@@ -21,8 +21,6 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 
 public class TabControlViewModel : BaseViewModel
 {
-    public BaseViewModel ControlBarViewModel { get; private set; }
-
     private IWindowService _windowService;
 
     private UserService _userService;
@@ -74,7 +72,6 @@ public class TabControlViewModel : BaseViewModel
     private List<CommentControl> _commentsToShow = new();
     private string _selectedOrderByOptionText = "Order By";
     private SortByOption _selectedOrderByOption = 0;
-    private double _commentsHeight;
 
     private Dictionary<string, SortByOption> SortByOptions { get; } = new()
     {
@@ -444,6 +441,7 @@ public class TabControlViewModel : BaseViewModel
     public ICommand WriteCommentCommand { get; }
     public ICommand WriteReplyOnCommentCommand { get; }
     public ICommand OpenReplyesOfCommentCommand { get; }
+    public ICommand IncreaseReplyesAmountCommand { get; }
     public ICommand CancelWritingOfCommentCommand { get; }
     public ICommand SendLikeStateCommand { get; }
     public ICommand NextPageCommand { get; }
@@ -469,14 +467,14 @@ public class TabControlViewModel : BaseViewModel
         SendLikeStateCommand = new AsyncRelayCommand<object>(SendLikeState);
         WriteCommentCommand = new RelayCommand(WriteComment);
         WriteReplyOnCommentCommand = new AsyncRelayCommand<Guid>(ReplyOnComment);
-        OpenReplyesOfCommentCommand = new AsyncRelayCommand<object>(UpdateCommentReplyes);
+        OpenReplyesOfCommentCommand = new AsyncRelayCommand<object>(OpenCommentReplyes);
+        IncreaseReplyesAmountCommand = new AsyncRelayCommand<Guid>(IncreaseReplyesAmount);
         CancelWritingOfCommentCommand = new RelayCommand(CancelWritingOfComment);
         NextPageCommand = new RelayCommand(NextPage);
         PreviousPageCommand = new RelayCommand(PreviousPage);
         OnTheFirstPageCommand = new RelayCommand(OnTheFirstPage);
         GoToSearchCommand = new RelayCommand(GoToSearchControl);
         HandleSortByCommand = new RelayCommand<string>(HandleSortBy);
-        ControlBarViewModel = viewModelService.CreateViewModel<ControlBarViewModel>();
         UpdateCommentsList();
         UpdateTabText();
         UpdateSortByList();
@@ -596,6 +594,7 @@ public class TabControlViewModel : BaseViewModel
     private void OnTheFirstPage()
     {
         CurrentPage = 0;
+        FirstPageVisibility = false;
     }
 
     private void UpdateSortByList()
@@ -647,7 +646,7 @@ public class TabControlViewModel : BaseViewModel
 
     private async void UpdateCommentsList()
     {
-        var commentsToDisplay = await _searchingService.ShowComments((int)(WindowService.WindowHeight / 270), _currentPage, _selectedOrderByOption);
+        var commentsToDisplay = await _searchingService.SearchComments((int)(WindowService.WindowHeight / 270), _currentPage, _selectedOrderByOption);
 
         if (commentsToDisplay.Item2 > 0)
         {
@@ -703,23 +702,37 @@ public class TabControlViewModel : BaseViewModel
         return commentsToUpdate;
     }
     
-    private async Task UpdateCommentReplyes(object? parameter)
+    private async Task OpenCommentReplyes(object? parameter)
     {
         if (parameter is Tuple<Guid, bool> args && args.Item2) // where Item1 is id of comment and Item2 is state of UI element
         {
-            var allReplyesOnComment = await _commentService.GetCommentReplyesById(args.Item1);
-            if (allReplyesOnComment.Count == 0) return;
-
-            CommentControl? updatingCommentControl = SearchForComment(args.Item1, CommentsToShow);
-            if (updatingCommentControl is null) return;
-
-            List<CommentControl> replyesControls = await AddCommentsInCommentsList(allReplyesOnComment, parentGuidCheck => parentGuidCheck != Guid.Empty);
-            replyesControls = await UpdateCommentsInformation(replyesControls);
-
-            replyesControls = replyesControls.OrderBy(rc => rc.DateOfCreation).ToList();
-
-            updatingCommentControl.ReplyesList = replyesControls;
+            await UpdateReplyesById(false, args.Item1);
         }
+    }
+
+    private async Task UpdateReplyesById(bool increaseAmount, Guid commentId)
+    {
+        CommentControl? updatingCommentControl = SearchForComment(commentId, CommentsToShow);
+        if (updatingCommentControl is null) return;
+
+        if (increaseAmount) updatingCommentControl.ReplyesToShow *= 2;
+
+        (List<Comment>, int) allReplyesOnComment = await _searchingService.SearchCommentReplyes(updatingCommentControl.ReplyesToShow, commentId);
+        if (allReplyesOnComment.Item2 == 0) return;
+        if (allReplyesOnComment.Item2 > updatingCommentControl.ReplyesToShow) updatingCommentControl.ShowMoreVisibile = true;
+        else { updatingCommentControl.ShowMoreVisibile = false; }
+
+        List<CommentControl> replyesControls = await AddCommentsInCommentsList(allReplyesOnComment.Item1, parentGuidCheck => parentGuidCheck != Guid.Empty);
+        replyesControls = await UpdateCommentsInformation(replyesControls);
+
+        replyesControls = replyesControls.OrderBy(rc => rc.DateOfCreation).ToList();
+
+        updatingCommentControl.ReplyesList = replyesControls;
+    }
+
+    private async Task IncreaseReplyesAmount(Guid commentId)
+    {
+        await UpdateReplyesById(true, commentId);
     }
 
     private CommentControl? SearchForComment(Guid commentId, List<CommentControl> comments)

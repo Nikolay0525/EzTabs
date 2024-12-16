@@ -1,4 +1,5 @@
 ﻿using EzTabs.Presentation.Services.ViewModelServices;
+using EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -41,5 +42,23 @@ public partial class ControlBar : UserControl
     void ControlBarPopUpCloser_Loaded(object? sender, EventArgs e)
     {
         MenuPopup.IsOpen = false;
+    }
+
+    public static readonly DependencyProperty UsernameProperty =
+        DependencyProperty.Register("Username", typeof(string), typeof(ControlBar), new PropertyMetadata(string.Empty));
+    
+    public static readonly DependencyProperty MenuButtonListProperty =
+        DependencyProperty.Register("MenuButtonList", typeof(List<ButtonInDropControl>), typeof(ControlBar), new PropertyMetadata(new List<ButtonInDropControl>()));
+    
+    public string Username
+    {
+        get { return (string)GetValue(UsernameProperty); }
+        set { SetValue(UsernameProperty, value); }
+    }
+
+    public List<ButtonInDropControl> MenuButtonList
+    {
+        get { return (List<ButtonInDropControl>)GetValue(MenuButtonListProperty); }
+        set { SetValue(MenuButtonListProperty, value); }
     }
 }

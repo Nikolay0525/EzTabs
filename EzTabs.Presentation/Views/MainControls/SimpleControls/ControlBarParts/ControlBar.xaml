@@ -6,10 +6,9 @@
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts"
              xmlns:ct="clr-namespace:EzTabs.Presentation.Resources.Styles.CustomTypes"
              xmlns:dc="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls"
-             xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels.SimpleControlsViewModels.ControlBarPartsVMs" 
-             d:DataContext="{d:DesignInstance Type=vm:ControlBarViewModel}"
              mc:Ignorable="d"
-             Height="40">
+             Height="40"
+             x:Name="rootControl">
     <Grid>
         <Grid Grid.Column="1" Background="Transparent">
             <Grid.ColumnDefinitions>
@@ -21,51 +20,67 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0" Background="Transparent">
-                <ct:ImageButton Style="{DynamicResource ImageButton}" x:Name="NotificationButton"
-                                Background="Transparent"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Padding="3"
-                                PathData="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"
-                                StrokeThickness="0.5">
-                </ct:ImageButton>
+                <ct:ToggleImageButton 
+                    Style="{DynamicResource ToggleImageButton}"
+                    x:Name="NotificationButton"
+                    Background="Transparent"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Padding="3"
+                    PathData="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"
+                    StrokeThickness="0.5">
+                    <Popup 
+                        x:Name="NotificationPopup" 
+                        PlacementTarget="{Binding ElementName=NotificationButton}" 
+                        Placement="Bottom" 
+                        HorizontalOffset="-113" 
+                        StaysOpen="True"
+                        IsOpen="{Binding Path=IsChecked, UpdateSourceTrigger=PropertyChanged, ElementName=NotificationButton}"
+                        AllowsTransparency="True">
+                        <dc:NotificationDropControl
+                            />
+                    </Popup>
+                </ct:ToggleImageButton>
                 
                 
             </Grid>
             <Grid Grid.Column="2">
                 <Border CornerRadius="5" Background="White">
-                    <TextBlock Style="{DynamicResource CommonTextBlock}"
-                               x:Name="UsernameTextBlock"
-                               FontSize="{DynamicResource CommonFontSize}"
-                               Foreground="Black"
-                               TextAlignment="Center"
-                               Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                               VerticalAlignment="Stretch"
-                               HorizontalAlignment="Stretch"/> 
+                    <TextBlock 
+                        Style="{DynamicResource CommonTextBlock}"
+                        x:Name="UsernameTextBlock"
+                        FontSize="{DynamicResource CommonFontSize}"
+                        Foreground="Black"
+                        TextAlignment="Center"
+                        Text="{Binding Username, UpdateSourceTrigger=PropertyChanged, ElementName=rootControl}"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch"/>
                 </Border>
             </Grid>
             
             <Grid Grid.Column="4" Background="Transparent">
-                <ct:ToggleImageButton Style="{DynamicResource ToggleImageButton}"
-                                IsChecked="{Binding IsMenuOpen, Mode=TwoWay}"
-                                x:Name="MenuButton"
-                                Background="Transparent"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Padding="3"
-                                PathData="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
-                                StrokeThickness="0.5">   
+                <ct:ToggleImageButton 
+                    Style="{DynamicResource ToggleImageButton}"
+                    x:Name="MenuButton"
+                    Background="Transparent"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Padding="3"
+                    PathData="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+                    StrokeThickness="0.5">   
 
                 </ct:ToggleImageButton>
 
-                <Popup x:Name="MenuPopup" 
-                       PlacementTarget="{Binding ElementName=MenuButton}" 
-                       Placement="Bottom" 
-                       HorizontalOffset="-100" 
-                       StaysOpen="True"
-                       IsOpen="{Binding IsMenuOpen, UpdateSourceTrigger=PropertyChanged}"
-                       AllowsTransparency="True">
-                    <dc:MenuDropControl/>
+                <Popup 
+                    x:Name="MenuPopup" 
+                    PlacementTarget="{Binding ElementName=MenuButton}" 
+                    Placement="Bottom" 
+                    HorizontalOffset="-113" 
+                    StaysOpen="True"
+                    IsOpen="{Binding Path=IsChecked, UpdateSourceTrigger=PropertyChanged, ElementName=MenuButton}"
+                    AllowsTransparency="True">
+                    <dc:MenuDropControl
+                        ListOfButtons="{Binding MenuButtonList, UpdateSourceTrigger=PropertyChanged, ElementName=rootControl}"/>
                 </Popup>
             </Grid>
         </Grid>

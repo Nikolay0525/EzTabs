@@ -16,7 +16,7 @@
     <UserControl.Resources>
         <c:BoolToVisibilityConverter x:Key="boolConverter"/>
         <c:GuidAndBoolCommandParametersConverter x:Key="guidAndBoolConverter"/>
-        <c:ListToVisibiltyConverter x:Key="countConverter"/>
+        <c:List0ToVisibiltyConverter x:Key="countConverter"/>
     </UserControl.Resources>
     
     <Border Background="White" BorderBrush="Black" BorderThickness="1" CornerRadius="10">
@@ -154,9 +154,9 @@
                         Style="{DynamicResource ListButton}"
                         Foreground="Black"
                         Content="Show More"
-                        Visibility="{Binding ReplyesList.Count, ElementName=rootControl, Converter={StaticResource countConverter}}"
+                        Visibility="{Binding ShowMoreVisibile, ElementName=rootControl, Converter={StaticResource boolConverter}}"
                         CommandParameter="{Binding CommentId, ElementName=rootControl}"
-                        Command="{Binding IncreaseAmountOfReplyes}"/>    
+                        Command="{Binding IncreaseReplyesAmountCommand}"/>    
                 </Grid>
             </Grid>
         </Grid>

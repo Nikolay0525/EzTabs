@@ -145,6 +145,11 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid>
+                        <Grid.Effect>
+                            <BlurEffect Radius="{Binding BlurRadius, UpdateSourceTrigger=PropertyChanged, ElementName=rootControl}" KernelType="Gaussian"/>
+                        </Grid.Effect>
+
+
                         <ListBox
                             Style="{DynamicResource CommonListBox}"
                             ItemsSource="{Binding ReplyesList, ElementName=rootControl}"

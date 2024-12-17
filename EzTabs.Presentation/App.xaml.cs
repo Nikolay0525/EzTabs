@@ -1,5 +1,5 @@
 ﻿using EzTabs.Data;
-
+using EzTabs.Presentation.Services.AppServices;
 using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.SearchingServices;
@@ -59,11 +59,27 @@ public partial class App : Application
 
     protected override async void OnStartup(StartupEventArgs e)
     {
-        var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-        if (mainWindow is null) throw new ArgumentNullException(nameof(mainWindow));
-        mainWindow.Show();
+        try
+        {
+            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            if (mainWindow is null) throw new ArgumentNullException(nameof(mainWindow));
+            mainWindow.Show();
 
-        base.OnStartup(e);
+            base.OnStartup(e);
+            Logger.Log("Application started successfully.");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogException(ex);
+            MessageBox.Show("An error occurred during startup. Check logs for details.");
+        }
+        
+    }
+
+    protected override void OnExit(ExitEventArgs e)
+    {
+        Logger.Log("Application is shutting down.");
+        base.OnExit(e);
     }
 }
 

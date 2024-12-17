@@ -31,6 +31,7 @@ public class EzTabsContext : DbContext
 
         if (currentDirectory == null)
         {
+            currentDirectory = Directory.GetCurrentDirectory();
             while (!File.Exists(Path.Combine(currentDirectory, "EzTabs.Presentation.exe")))
             {
                 currentDirectory = Directory.GetParent(currentDirectory)?.FullName;

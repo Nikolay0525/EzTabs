@@ -7,6 +7,7 @@ using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.ValidationServices.CustomAttributes;
 using EzTabs.Presentation.Services.ViewModelServices;
+using EzTabs.Presentation.Services.ViewServices;
 
 namespace EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 
@@ -14,20 +15,20 @@ public class RegistrationControlViewModel : BaseViewModel
 {
     private UserService? _userService;
 
-    private string? _username;
+    private string? _name;
     private string? _email;
     private string? _password;
     private string? _confirmPassword;
 
     [Required(ErrorMessage = "Username is required")]
     [MinLength(2, ErrorMessage = "Username length can't be less than 2 charecters")]
-    public string? Username
+    public string? Name
     {
-        get => _username;
+        get => _name;
         set
         {
-            _username = value;
-            OnPropertyChanged(nameof(Username));
+            _name = value;
+            OnPropertyChanged();
         }
     }
 
@@ -39,7 +40,7 @@ public class RegistrationControlViewModel : BaseViewModel
         set
         {
             _email = value;
-            OnPropertyChanged(nameof(Email));
+            OnPropertyChanged();
         }
     }
 
@@ -51,7 +52,7 @@ public class RegistrationControlViewModel : BaseViewModel
         set
         {
             _password = value;
-            OnPropertyChanged(nameof(Password));
+            OnPropertyChanged();
         }
     }
 
@@ -63,14 +64,14 @@ public class RegistrationControlViewModel : BaseViewModel
         set
         {
             _confirmPassword = value;
-            OnPropertyChanged(nameof(ConfirmPassword));
+            OnPropertyChanged();
         }
     }
 
     public ICommand RegisterCommand { get; }
     public ICommand GoToLoginCommand { get; }
 
-    public RegistrationControlViewModel(INavigationService navigationService, IViewModelService viewModelService, UserService userService) : base(viewModelService, navigationService)
+    public RegistrationControlViewModel(INavigationService navigationService, IViewModelService viewModelService, IWindowService windowService, UserService userService) : base(viewModelService, navigationService, windowService)
     {
         _userService = userService;
         RegisterCommand = new AsyncRelayCommand(Register);
@@ -79,27 +80,37 @@ public class RegistrationControlViewModel : BaseViewModel
 
     private async Task Register()
     {
-        Validate();
-        if (HasErrors) return;
-
-        if (_userService is null) throw new ArgumentNullException(nameof(_userService));
-        if (_username is null || _email is null || _password is null) throw new NullReferenceException("Some of user data is missing");
-        string verificationCode = Guid.NewGuid().ToString();
-        List<string> errors = await _userService.RegisterUser(_username, _email, _password, verificationCode);
-        #region validation
-        if (errors.Count != 0)
+        try
         {
-            var errorMessage = new StringBuilder("Please correct the following errors:\n");
-            foreach (var error in errors)
-            {
-                errorMessage.AppendLine(error);
-            }
+            Validate();
+            if (HasErrors) return;
+            ViewModelService.SomethingLoading = true;
 
-            ShowMessage("Validation Error", errorMessage.ToString());
-            return;
+            if (_userService is null) throw new ArgumentNullException(nameof(_userService));
+            if (_name is null || _email is null || _password is null) throw new NullReferenceException("Some of user data is missing");
+            string verificationCode = Guid.NewGuid().ToString();
+            List<string> errors = await _userService.RegisterUser(_name, _email, _password, verificationCode);
+            #region validation
+            if (errors.Count != 0)
+            {
+                var errorMessage = new StringBuilder("Please correct the following errors:\n");
+                foreach (var error in errors)
+                {
+                    errorMessage.AppendLine(error);
+                }
+                ViewModelService.SomethingLoading = false;
+                ShowMessage("Validation Error", errorMessage.ToString());
+                return;
+            }
+            #endregion
+            ViewModelService.SomethingLoading = false;
+            NavigationService.NavigateTo<VerificationControlViewModel>();
         }
-        #endregion
-        NavigationService.NavigateTo<VerificationControlViewModel>();
+        catch (Exception ex)
+        {
+            ViewModelService.SomethingLoading = false;
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private void GoToLogin()

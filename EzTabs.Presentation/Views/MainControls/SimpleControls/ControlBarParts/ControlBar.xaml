@@ -33,7 +33,7 @@
                         x:Name="NotificationPopup" 
                         PlacementTarget="{Binding ElementName=NotificationButton}" 
                         Placement="Bottom" 
-                        HorizontalOffset="-113" 
+                        HorizontalOffset="0" 
                         StaysOpen="True"
                         IsOpen="{Binding Path=IsChecked, UpdateSourceTrigger=PropertyChanged, ElementName=NotificationButton}"
                         AllowsTransparency="True">
@@ -75,7 +75,7 @@
                     x:Name="MenuPopup" 
                     PlacementTarget="{Binding ElementName=MenuButton}" 
                     Placement="Bottom" 
-                    HorizontalOffset="-113" 
+                    HorizontalOffset="-133" 
                     StaysOpen="True"
                     IsOpen="{Binding Path=IsChecked, UpdateSourceTrigger=PropertyChanged, ElementName=MenuButton}"
                     AllowsTransparency="True">

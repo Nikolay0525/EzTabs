@@ -7,6 +7,7 @@ using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels;
 using EzTabs.Presentation.Views.AuthControls;
+using EzTabs.Presentation.Views.SimpleWindows;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,14 +18,6 @@ public class MainWindowViewModel : BaseViewModel
 {
     private double _blurRadius = 0;
 
-    public MainWindowViewModel(INavigationService navigationService, IViewModelService viewModelService) : base(viewModelService, navigationService)
-    {
-        NavigationService = navigationService;
-        ViewModelService = viewModelService;
-        NavigationService.NavigateTo<LoginControlViewModel>();
-        ViewModelService.OnSomethingLoadingChanged += OnSomethingLoadingChanged;
-    }
-
     public double BlurRadius
     {
         get => _blurRadius;
@@ -33,6 +26,14 @@ public class MainWindowViewModel : BaseViewModel
             _blurRadius = value;
             OnPropertyChanged(nameof(BlurRadius));
         }
+    }
+
+    public MainWindowViewModel(INavigationService navigationService, IViewModelService viewModelService, IWindowService windowService) : base(viewModelService, navigationService, windowService)
+    {
+        NavigationService = navigationService;
+        ViewModelService = viewModelService;
+        NavigationService.NavigateTo<LoginControlViewModel>();
+        ViewModelService.OnSomethingLoadingChanged += OnSomethingLoadingChanged;
     }
 
     private void OnSomethingLoadingChanged()

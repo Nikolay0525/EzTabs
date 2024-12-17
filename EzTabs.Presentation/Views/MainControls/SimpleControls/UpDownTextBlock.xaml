@@ -32,7 +32,9 @@
                     TextAlignment="Center"
                     Width="{Binding TextBoxWidth, ElementName=rootControl}"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center">
+                    VerticalAlignment="Center"
+                    PreviewTextInput="OnTextBoxPreviewTextInput"
+                    LostFocus="OnTextBoxLostFocus">
 
                 </TextBox>
             </Grid>

@@ -160,7 +160,7 @@
                                 x:Name="ZoomTextBox"
                                 CurrentValue="{Binding Zoom, Mode=TwoWay}"
                                 Minimum="5"
-                                Maximum="150"
+                                Maximum="195"
                                 TextBoxWidth="50"
                                 ButtonStepMultiplier="5"/>
                         </Popup>
@@ -237,14 +237,22 @@
                     <RowDefinition Height="5"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
-                    <ListBox 
-                        Height="{Binding WindowService.WindowHeight, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource multiplyConverter}, ConverterParameter=0.41}"
-                        ScrollViewer.CanContentScroll="False"
-                        ScrollViewer.VerticalScrollBarVisibility="Auto"
-                        Style="{DynamicResource CommonListBox}" 
-                        x:Name="CommentsList"
-                        ItemsSource="{Binding CommentsToShow, UpdateSourceTrigger=PropertyChanged}"
-                        Background="White"/>
+                    <Grid>
+                        <Grid.Effect>
+                            <BlurEffect Radius="{Binding CommentsBlurRadius, UpdateSourceTrigger=PropertyChanged}" KernelType="Gaussian"/>
+                        </Grid.Effect>
+                        <ListBox 
+                            Height="{Binding WindowService.WindowHeight, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource multiplyConverter}, ConverterParameter=0.41}"
+                            ScrollViewer.CanContentScroll="False"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            Style="{DynamicResource CommonListBox}" 
+                            x:Name="CommentsList"
+                            ItemsSource="{Binding CommentsToShow, UpdateSourceTrigger=PropertyChanged}"
+                            Background="White"/>
+                    </Grid>
+                    <Grid>
+                        <ct:LoadingCircle BorderBrush="Black" Style="{DynamicResource LoadingControlStyle}" IsLoading="{Binding IsCommentsLoading, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
                 </Grid>
                 <Grid Grid.Row="2" d:Visibility="Visible" Visibility="{Binding IsMessageWritingVisible, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource boolConverter}}">
                     <Grid.RowDefinitions>
@@ -258,7 +266,8 @@
                             Style="{DynamicResource CommonTextBlock}"
                             x:Name="WhatTypeOfMessage"
                             Text="{Binding MessageType, UpdateSourceTrigger=PropertyChanged}"
-                            HorizontalAlignment="Center"
+                            TextAlignment="Center"
+                            HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             d:Text="New Message"/>
                     </Grid>
@@ -276,19 +285,17 @@
                     <Grid Grid.Row="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="5"/>
-                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="1">
+                        <Grid Grid.Column="0">
                             <Button
                                 Style="{DynamicResource CommonButton}"
                                 x:Name="SubmitMessageButton"
                                 Content="Submit"
                                 Command="{Binding SubmitCommentCommand}"/>
                         </Grid>
-                        <Grid Grid.Column="3">
+                        <Grid Grid.Column="2">
                             <Button
                                 Style="{DynamicResource CommonButton}"
                                 x:Name="CancelMessageButton"

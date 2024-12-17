@@ -78,7 +78,7 @@
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="5"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -144,10 +144,16 @@
                     <RowDefinition Height="5"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
-                    <ListBox
-                        Style="{DynamicResource CommonListBox}"
-                        ItemsSource="{Binding ReplyesList, ElementName=rootControl}"
-                        />
+                    <Grid>
+                        <ListBox
+                            Style="{DynamicResource CommonListBox}"
+                            ItemsSource="{Binding ReplyesList, ElementName=rootControl}"
+                            />
+                    </Grid>
+                    <Grid>
+                        <ct:LoadingCircle BorderBrush="Black" Style="{DynamicResource LoadingControlStyle}" IsLoading="{Binding IsLoading, UpdateSourceTrigger=PropertyChanged, ElementName=rootControl}"/>
+                    </Grid>
+
                 </Grid>
                 <Grid Grid.Row="2">
                     <Button

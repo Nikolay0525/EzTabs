@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.AuthControls"
              xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.AuthControlsViewModels" 
+             xmlns:sc="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls"
              d:DataContext="{d:DesignInstance Type=vm:RegistrationControlViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="540" d:DesignWidth="960"
@@ -13,10 +14,7 @@
              FontWeight="{DynamicResource CommonFontWeight}"
              FontSize="{DynamicResource CommonFontSize}"
              Background="#2e2e2e">
-    <UserControl.Resources>
-
-    </UserControl.Resources>
-
+    
     <Grid>
 
         <TextBlock 
@@ -32,7 +30,7 @@
         <TextBox 
             Style="{DynamicResource CommonTextBox}" 
             x:Name="UsernameTextBox"
-            Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
             Width="400" 
             MaxLength="20"
             HorizontalAlignment="Center" 
@@ -67,9 +65,9 @@
             VerticalAlignment="Center"
             Margin="0,0,0,100"/>
 
-        <TextBox 
-            Style="{DynamicResource CommonTextBox}" x:Name="PasswordTextBox" 
-            Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+        <sc:BindablePasswordBox 
+            x:Name="PasswordTextBox" 
+            Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
             Width="400" 
             MaxLength="20"
             HorizontalAlignment="Center" 
@@ -86,10 +84,9 @@
             VerticalAlignment="Center"
             Margin="0,0,0,-50"/>
 
-        <TextBox 
-            Style="{DynamicResource CommonTextBox}" 
+        <sc:BindablePasswordBox  
             x:Name="ConfirmPasswordTextBox" 
-            Text="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged}"
+            Password="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged}"
             Width="400" 
             MaxLength="20"
             HorizontalAlignment="Center" 

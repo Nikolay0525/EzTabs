@@ -21,20 +21,28 @@ public partial class ControlBar : UserControl
         {
             w.LocationChanged += (sender2, args) =>
             {
-                if (MenuPopup != null)
+                if (MenuPopup != null && NotificationPopup != null)
                 {
-                    var offset = MenuPopup.HorizontalOffset;
-                    MenuPopup.HorizontalOffset = offset + 1;
-                    MenuPopup.HorizontalOffset = offset;
+                    var menuOffset = MenuPopup.HorizontalOffset;
+                    MenuPopup.HorizontalOffset = menuOffset + 1;
+                    MenuPopup.HorizontalOffset = menuOffset;
+
+                    var notifOffset = NotificationPopup.HorizontalOffset;
+                    NotificationPopup.HorizontalOffset = notifOffset + 1;
+                    NotificationPopup.HorizontalOffset = notifOffset;
                 }
             };
             w.SizeChanged += (sender3, e2) =>
             {
-                if (MenuPopup != null)
+                if (MenuPopup != null && NotificationPopup != null)
                 {
-                    var offset = MenuPopup.HorizontalOffset;
-                    MenuPopup.HorizontalOffset = offset + 1;
-                    MenuPopup.HorizontalOffset = offset;
+                    var menuOffset = MenuPopup.HorizontalOffset;
+                    MenuPopup.HorizontalOffset = menuOffset + 1;
+                    MenuPopup.HorizontalOffset = menuOffset;
+                    
+                    var notifOffset = NotificationPopup.HorizontalOffset;
+                    NotificationPopup.HorizontalOffset = notifOffset + 1;
+                    NotificationPopup.HorizontalOffset = notifOffset;
                 }
             };
         }
@@ -42,6 +50,7 @@ public partial class ControlBar : UserControl
     void ControlBarPopUpCloser_Loaded(object? sender, EventArgs e)
     {
         MenuPopup.IsOpen = false;
+        NotificationPopup.IsOpen = false;
     }
 
     public static readonly DependencyProperty UsernameProperty =

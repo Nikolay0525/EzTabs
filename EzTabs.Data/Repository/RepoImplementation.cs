@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EzTabs.Data.Domain.BaseModels;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq.Expressions;
 
 namespace EzTabs.Data.Repository
@@ -14,74 +16,228 @@ namespace EzTabs.Data.Repository
             _dbSet = context.Set<T>();
         }
 
-        public static async Task<RepoImplementation<T>> CreateRepoAsync()
+        public async Task<OperationResult<IEnumerable<T>>> GetAll()
         {
-            var context = new EzTabsContext();
-            await context.Database.EnsureCreatedAsync();
+            try
+            {
+                var entities = await _dbSet.ToListAsync();
+                return new OperationResult<IEnumerable<T>>
+                {
+                    Success = true,
+                    Data = entities,
+                    ErrorMessage = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<IEnumerable<T>>
+                {
+                    Success = false,
+                    Data = null,
+                    ErrorMessage = ex.Message
+                };
+            }
+        }
 
-            return new RepoImplementation<T>(context);
+        public async Task<OperationResult<T>> GetById(Guid id)
+        {
+            try
+            {
+                var item = await _dbSet.FindAsync(id);
+                return new OperationResult<T>
+                {
+                    Success = true,
+                    Data = item,
+                    ErrorMessage = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<T>
+                {
+                    Success = false,
+                    Data = null,
+                    ErrorMessage = ex.Message
+                };
+            }
         }
         
-        public static RepoImplementation<T> CreateRepoSync()
+        public async Task<OperationResult<T>> GetByCompositeId(Guid firstKey, Guid secondKey)
         {
-            var context = new EzTabsContext();
-
-            return new RepoImplementation<T>(context);
+            try
+            {
+                var item = await _dbSet.FindAsync(firstKey, secondKey);
+                return new OperationResult<T>
+                {
+                    Success = true,
+                    Data = item,
+                    ErrorMessage = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<T>
+                {
+                    Success = false,
+                    Data = null,
+                    ErrorMessage = ex.Message
+                };
+            }
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<OperationResult<bool>> AnyAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet.ToListAsync();
+            try
+            {
+                var item = await _dbSet.AnyAsync(predicate);
+                return new OperationResult<bool>
+                {
+                    Success = true,
+                    Data = item,
+                    ErrorMessage = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<bool>
+                {
+                    Success = false,
+                    Data = false,
+                    ErrorMessage = ex.Message
+                };
+            }
         }
 
-        public async Task<T?> GetById(Guid id)
+        public async Task<OperationResult<T>> Add(T entity)
         {
-            return await _dbSet.FindAsync(id);
-        }
-        
-        public async Task<T?> GetByCompositeId(Guid firstKey, Guid secondKey)
-        {
-            return await _dbSet.FindAsync(firstKey, secondKey);
-        }
-        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _dbSet.AnyAsync(predicate);
-        }
-
-        public async Task Add(T entity)
-        {
-            await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task Add(IEnumerable<T> entities)
-        {
-            await _dbSet.AddRangeAsync(entities);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _dbSet.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return new OperationResult<T>
+                {
+                    Success = true,
+                    ErrorMessage = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<T>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
+            }
         }
 
-        public async Task Update(T entity)
+        public async Task<OperationResult<T>> Add(IEnumerable<T> entities)
         {
-            _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _dbSet.AddRangeAsync(entities);
+                await _context.SaveChangesAsync();
+                return new OperationResult<T>
+                {
+                    Success = true,
+                    ErrorMessage = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<T>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
+            }
         }
 
-        public async Task Update(IEnumerable<T> entities)
+        public async Task<OperationResult<T>> Update(T entity)
         {
-            _dbSet.UpdateRange(entities);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _dbSet.Update(entity);
+                await _context.SaveChangesAsync();
+                return new OperationResult<T>
+                {
+                    Success = true,
+                    ErrorMessage = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<T>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
+            }
         }
 
-        public async Task Delete(T entity)
+        public async Task<OperationResult<T>> Update(IEnumerable<T> entities)
         {
-            _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _dbSet.UpdateRange(entities);
+                await _context.SaveChangesAsync();
+                return new OperationResult<T>
+                {
+                    Success = true,
+                    ErrorMessage = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<T>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
+            }
         }
 
-        public async Task Delete(IEnumerable<T> entities)
+        public async Task<OperationResult<T>> Delete(T entity)
         {
-            _dbSet.RemoveRange(entities);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _dbSet.Remove(entity);
+                await _context.SaveChangesAsync();
+                return new OperationResult<T>
+                {
+                    Success = true,
+                    ErrorMessage = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<T>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
+            }
+        }
+
+        public async Task<OperationResult<T>> Delete(IEnumerable<T> entities)
+        {
+            try
+            {
+                _dbSet.RemoveRange(entities);
+                await _context.SaveChangesAsync();
+                return new OperationResult<T>
+                {
+                    Success = true,
+                    ErrorMessage = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult<T>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
+            }
         }
 
     }

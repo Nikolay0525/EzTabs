@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls" xmlns:maincontrolsviewmodels="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels" 
              d:DataContext="{d:DesignInstance Type=maincontrolsviewmodels:TabControlViewModel}"
-             d:Width="1000"
+             d:Width="700"
              mc:Ignorable="d"
              Background="Transparent"
              >
@@ -24,15 +24,16 @@
             <Grid Grid.Column="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="5"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="5"/>
-                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="5"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="5"/>
@@ -47,13 +48,15 @@
                             Style="{DynamicResource CommonTextBlock}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Text="Band"/>
+                            Text="Band"
+                            FontWeight="DemiBold"/>
                     </Grid>
                     <Grid Grid.Column="2" Grid.Row="1">
                         <TextBlock
                             Style="{DynamicResource CommonTextBlock}"
-                            HorizontalAlignment="Center"
+                            HorizontalAlignment="Left"
                             VerticalAlignment="Center"
+                            d:Text="Band"
                             Text="{Binding Band, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                     <Grid Grid.Column="0" Grid.Row="3">
@@ -61,13 +64,15 @@
                             Style="{DynamicResource CommonTextBlock}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Text="Song"/>
+                            Text="Song"
+                            FontWeight="DemiBold"/>
                     </Grid>
                     <Grid Grid.Column="2" Grid.Row="3">
                         <TextBlock
                             Style="{DynamicResource CommonTextBlock}"
-                            HorizontalAlignment="Center"
+                            HorizontalAlignment="Left"
                             VerticalAlignment="Center"
+                            d:Text="Title"
                             Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                     <Grid Grid.Column="0" Grid.Row="5">
@@ -75,43 +80,96 @@
                             Style="{DynamicResource CommonTextBlock}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Text="Author"/>
+                            Text="Author"
+                            FontWeight="DemiBold"/>
                     </Grid>
                     <Grid Grid.Column="2"  Grid.Row="5">
                         <TextBlock
                             Style="{DynamicResource CommonTextBlock}"
-                            HorizontalAlignment="Center"
+                            HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             d:Text="aaaaaaaaaaaaaaaaaaaa"
                             Text="{Binding AuthorName, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
-                    <Grid Grid.Column="0" Grid.Row="7">
+                    <Grid Grid.Column="0"  Grid.Row="7">
                         <TextBlock
                             Style="{DynamicResource CommonTextBlock}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Text="Key"/>
+                            Text="Genre"
+                            FontWeight="DemiBold"/>
                     </Grid>
-                    <Grid Grid.Column="2" Grid.Row="7">
+                    <Grid Grid.Column="2"  Grid.Row="7">
+                        <TextBlock
+                            Style="{DynamicResource CommonTextBlock}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            d:Text="Genre"
+                            Text="{Binding Genre, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                    <Grid Grid.Column="4" Grid.Row="1">
                         <TextBlock
                             Style="{DynamicResource CommonTextBlock}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
+                            Text="Key"
+                            FontWeight="DemiBold"/>
+                    </Grid>
+                    <Grid Grid.Column="6" Grid.Row="1">
+                        <TextBlock
+                            Style="{DynamicResource CommonTextBlock}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            d:Text="A"
                             Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
-                    <Grid Grid.Column="0" Grid.Row="9">
+                    <Grid Grid.Column="4" Grid.Row="3">
                         <TextBlock
                             Style="{DynamicResource CommonTextBlock}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Text="BPM"/>
+                            Text="BPM"
+                            FontWeight="DemiBold"/>
                     </Grid>
-                    <Grid Grid.Column="2" Grid.Row="9">
+                    <Grid Grid.Column="6" Grid.Row="3">
                         <TextBlock
                             Style="{DynamicResource CommonTextBlock}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Text="{Binding Bpm, UpdateSourceTrigger=PropertyChanged}"/>
+                            d:Text="120"
+                            Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                    <Grid Grid.Column="4" Grid.Row="5">
+                        <TextBlock
+                            Style="{DynamicResource CommonTextBlock}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Text="Views"
+                            FontWeight="DemiBold"/>
+                    </Grid>
+                    <Grid Grid.Column="6" Grid.Row="5">
+                        <TextBlock
+                            Style="{DynamicResource CommonTextBlock}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            d:Text="123456"
+                            Text="{Binding Views, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                    <Grid Grid.Column="4" Grid.Row="7">
+                        <TextBlock
+                            Style="{DynamicResource CommonTextBlock}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Text="Rate"
+                            FontWeight="DemiBold"/>
+                    </Grid>
+                    <Grid Grid.Column="6" Grid.Row="7">
+                        <TextBlock
+                            Style="{DynamicResource CommonTextBlock}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            d:Text="4.5"
+                            Text="{Binding Rate, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Grid>
             </Grid>
@@ -128,16 +186,18 @@
                         Style="{DynamicResource CommonTextBlock}"
                         FontSize="{DynamicResource SmallerFontSize}"
                         Text="Description"
-                        HorizontalAlignment="Center"
+                        FontWeight="DemiBold"
+                        HorizontalAlignment="Left"
                         VerticalAlignment="Center"/>
                 </Grid>
                 <Grid Grid.Row="3">
-                    <Border CornerRadius="5" BorderBrush="White" BorderThickness="1" Padding="5">
+                    <Border CornerRadius="5" Background="White" BorderBrush="White" BorderThickness="1" Padding="5">
                         <TextBlock
                             Style="{DynamicResource CommonTextBlock}"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             TextAlignment="Left"
+                            Foreground="Black"
                             Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/> 
                     </Border>
                 </Grid>

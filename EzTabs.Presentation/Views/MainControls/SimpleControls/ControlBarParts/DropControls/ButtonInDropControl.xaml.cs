@@ -19,7 +19,7 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.
     {
         public ButtonInDropControl()
         {
-            Width = 150;
+            Width = 170;
             InitializeComponent();
         }
 

@@ -40,7 +40,15 @@ public class EzTabsContext : DbContext
 
         var json = File.ReadAllText(currentDirectory + "/ConnectionString.json");
         var jsonConverted = JsonConvert.DeserializeObject<Connection>(json);
-        optionsBuilder.UseMySql(jsonConverted.ConnectionString, new MySqlServerVersion(jsonConverted.Version));
+        optionsBuilder
+            .UseMySql(jsonConverted.ConnectionString, new MySqlServerVersion(jsonConverted.Version), 
+            mySqlOptions =>
+            {
+                mySqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 3,
+                    maxRetryDelay: TimeSpan.FromSeconds(5),
+                    errorNumbersToAdd: null);
+            });
         optionsBuilder.LogTo(message => Debug.WriteLine(message));
     }
 

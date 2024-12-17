@@ -30,14 +30,17 @@ public class TuningService : BaseService<Tuning>
 
         tunings.Add(new Tuning() { StringNote = string.Empty, StringOrder = tunings.Count+1, TabId = tab.Id });
 
-        await _repository.Add(tunings);
+        var operation = await _repository.Add(tunings);
+        if (!operation.Success) throw new InvalidOperationException(operation.ErrorMessage);
     }
     
     public async Task<List<Tuning>> GetAllTunings(Tab tab)
     {
-        IEnumerable<Tuning> alltunings = await _repository.GetAll();
+        var alltunings = await _repository.GetAll();
+        if (!alltunings.Success) throw new InvalidOperationException(alltunings.ErrorMessage);
+
         List<Tuning> tunings = new List<Tuning>();
-        foreach(var tuning in alltunings)
+        foreach(var tuning in alltunings.Data!)
         {
             if (tuning.TabId == tab.Id) tunings.Add(tuning);
         }

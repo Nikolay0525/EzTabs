@@ -4,8 +4,10 @@ using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ValidationServices;
 using EzTabs.Presentation.Services.ViewModelServices;
+using EzTabs.Presentation.Services.ViewServices;
 using EzTabs.Presentation.ViewModels.AuthControlsViewModels;
 using EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls;
+using EzTabs.Presentation.Views.SimpleWindows;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Collections;
 using System.ComponentModel;
@@ -47,6 +49,7 @@ public abstract class BaseViewModel : ObservableObject ,INotifyPropertyChanged, 
 
     private INavigationService _navigationService;
     private IViewModelService _viewModelService;
+    private IWindowService _windowService;
 
     public INavigationService NavigationService 
     { 
@@ -66,16 +69,51 @@ public abstract class BaseViewModel : ObservableObject ,INotifyPropertyChanged, 
             OnPropertyChanged();
         }
     }
+    public IWindowService WindowService 
+    { 
+        get => _windowService; 
+        set
+        {
+            _windowService = value;
+            OnPropertyChanged();
+        }
+    }
 
     public ICommand SignOutCommand { get; }
-
-    public static void ShowMessage(string title, string message)
+    
+    public static void ShowMessage(string title, string text)
     {
-        MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
+        OkMessage message = new(title,text);
+        message.ShowDialog();
     }
-    public static MessageBoxResult ShowOkCancelMessage(string title, string message)
+
+    public static void ShowInfoMessage(string title, string text)
     {
-        return MessageBox.Show(message, title, MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+        OkInfoMessage message = new(title,text);
+        message.ShowDialog();
+    }
+    public static bool ShowOkCancelMessage(string title, string text)
+    {
+        OkCancelMessage message = new(title, text);
+        bool? resultNull = message.ShowDialog();
+
+        return resultNull ?? false;
+
+    }
+    public static bool ShowOkNoMessage(string title, string text)
+    {
+        OkNoMessage message = new(title, text);
+        bool? resultNull = message.ShowDialog();
+
+        return resultNull ?? false;
+
+    }
+    public static string ShowConfirmMessage(string title, string text)
+    {
+        ConfirmMessage message = new(title, text);
+        bool? resultNull = message.ShowDialog();
+        if (resultNull == true) return message.UserInputTextBox.Text;
+        return string.Empty;
     }
 
     public void Validate(IEnumerable<string>? SpecificProperties = null)
@@ -112,10 +150,11 @@ public abstract class BaseViewModel : ObservableObject ,INotifyPropertyChanged, 
         ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
     }
 
-    public BaseViewModel(IViewModelService viewModelService, INavigationService navigationService)
+    public BaseViewModel(IViewModelService viewModelService, INavigationService navigationService, IWindowService windowService)
     {
         ViewModelService = viewModelService;
         NavigationService = navigationService;
+        WindowService = windowService;
 
         if (UserService.SavedUser != null) Username = UserService.SavedUser.Name;
         SignOutCommand = new RelayCommand(SignOut);

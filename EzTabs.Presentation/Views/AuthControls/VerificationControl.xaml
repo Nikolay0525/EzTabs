@@ -13,9 +13,6 @@
              FontFamily="{DynamicResource CommonFontFamily}"
              FontSize="{DynamicResource CommonFontSize}"
              Background="#2e2e2e">
-    <UserControl.Resources>
-
-    </UserControl.Resources>
 
     <Grid>
         <TextBlock

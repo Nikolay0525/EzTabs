@@ -24,7 +24,7 @@ public class EqualToAttribute : ValidationAttribute
 
         if (value == null || comparisonValue == null || !value.Equals(comparisonValue))
         {
-            return new ValidationResult(ErrorMessage);
+            return new ValidationResult(ErrorMessage, new[] { validationContext.MemberName });
         }
 
         return ValidationResult.Success;

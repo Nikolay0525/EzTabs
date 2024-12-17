@@ -18,6 +18,7 @@ public sealed class Tab : Entity
     public long Views { get; set; } = 0;
     public double Rating { get; set; } = 0;
     public DateTime DateOfCreation { get; set; } = DateTime.Now;
+    public DateTime DateOfBackup { get; set; }
     public User? Author { get; set; }
     public List<Tuning>? Tunings { get; set; }
     public List<TabReport>? TabReports { get; set; }

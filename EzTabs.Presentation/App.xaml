@@ -7,7 +7,9 @@
              xmlns:vmmc="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels"
              xmlns:vcbp="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts"
              xmlns:vdc="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls"
-             xmlns:vmc="clr-namespace:EzTabs.Presentation.Views.MainControls">
+             xmlns:vmc="clr-namespace:EzTabs.Presentation.Views.MainControls"
+             ShutdownMode="OnMainWindowClose">
+    
     <Application.Resources>
         <ResourceDictionary>
 

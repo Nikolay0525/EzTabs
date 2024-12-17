@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EzTabs.Presentation.Views.AuthControls"
              xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.AuthControlsViewModels" 
+             xmlns:sc="clr-namespace:EzTabs.Presentation.Views.MainControls.SimpleControls"
              d:DataContext="{d:DesignInstance Type=vm:LoginControlViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="540" d:DesignWidth="960"
@@ -13,16 +14,12 @@
              FontWeight="{DynamicResource CommonFontWeight}"
              FontSize="{DynamicResource CommonFontSize}"
              Background="#2e2e2e">
-
-    <UserControl.Resources>
-
-    </UserControl.Resources>
     <Grid>
 
         <TextBlock 
             x:Name="UsernameTextBlock"
             FontSize="{DynamicResource SmallerFontSize}"
-            Width="270"
+            Width="400"
             Text="Username"
             TextAlignment="Left"
             HorizontalAlignment="Center"
@@ -32,7 +29,8 @@
         <TextBox 
             Style="{DynamicResource CommonTextBox}" x:Name="UsernameTextBox" 
             Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-            Width="270" 
+            Width="400" 
+            MaxLength="20"
             HorizontalAlignment="Center" 
             VerticalAlignment="Center" 
             Margin="0,0,0,150"/>
@@ -40,35 +38,36 @@
         <TextBlock 
             x:Name="PasswordTextBlock"
             FontSize="{DynamicResource SmallerFontSize}"
-            Width="270"
+            Width="400"
             Text="Password"
             TextAlignment="Left"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Margin="0,0,0,75"/>
+            Margin="0,0,0,75"
+            />
 
-        <TextBox 
-            Style="{DynamicResource CommonTextBox}" x:Name="PasswordTextBox" 
-            Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
-            Width="270" 
+        <sc:BindablePasswordBox 
+            x:Name="PasswordTextBox" 
+            Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+            Width="400" 
+            MaxLength="20"
             HorizontalAlignment="Center" 
-            VerticalAlignment="Center" 
-            Margin="0,0,0,0"/>
+            VerticalAlignment="Center"/>
 
         <Button 
             Style="{DynamicResource CommonButton}" x:Name="LoginButton" 
             Command="{Binding LoginCommand}"
             Height="39.5"
-            Width="270"
+            Width="400"
             Content="Login"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Margin="0,125,0,0"/>
 
-        <Button 
+        <Button
             Style="{DynamicResource CommonButton}" x:Name="SignUpButton"
             Command="{Binding GoToRegistrationCommand}"
-            Width="270"
+            Width="400"
             Content="Sign Up"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"

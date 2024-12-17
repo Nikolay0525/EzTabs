@@ -17,17 +17,26 @@ namespace EzTabs.Presentation.Services.DomainServices
         public async Task<(List<TabRate>, bool)> ApplyTabRate(Guid tabId, Guid userId, int rate)
         {
             bool removeAllStars = false;
-            TabRate? tabRate = await _repository.GetByCompositeId(userId,tabId);
+            var tabRate = await _repository.GetByCompositeId(userId,tabId);
+            if (!tabRate.Success) throw new InvalidOperationException(tabRate.ErrorMessage);
 
-            if (tabRate != null && tabRate.Rate != rate)
+            if (tabRate != null && tabRate.Data!.Rate != rate)
             {
-                tabRate.Rate = rate;
-                await _repository.Update(tabRate);
+                tabRate.Data.Rate = rate;
+                var operation = await _repository.Update(tabRate.Data);
+                if (!operation.Success) throw new InvalidOperationException(operation.ErrorMessage);
             }
-            else if (tabRate != null && tabRate.Rate == rate) { await _repository.Delete(tabRate); removeAllStars = true; }
+            else if (tabRate != null && tabRate.Data!.Rate == rate)
+            { 
+                var operation = await _repository.Delete(tabRate.Data); removeAllStars = true;
+                if (!operation.Success) throw new InvalidOperationException(operation.ErrorMessage);
+            }
 
-            if(tabRate == null) await _repository.Add(new TabRate() { TabId = tabId, UserId = userId, Rate = rate });
-
+            if (tabRate == null)
+            {
+                var operation = await _repository.Add(new TabRate() { TabId = tabId, UserId = userId, Rate = rate });
+                if (!operation.Success) throw new InvalidOperationException(operation.ErrorMessage);
+            }
             var allTabs = await GetAllTabRatesById(tabId);
             return (allTabs, removeAllStars);
         }
@@ -35,7 +44,8 @@ namespace EzTabs.Presentation.Services.DomainServices
         public async Task<List<TabRate>> GetAllTabRatesById(Guid tabId)
         {
             var allRates = await _repository.GetAll();
-            return allRates.Where(tr => tr.TabId == tabId).ToList();
+            if (!allRates.Success) throw new InvalidOperationException(allRates.ErrorMessage);
+            return allRates.Data!.Where(tr => tr.TabId == tabId).ToList();
         }
     }
 }

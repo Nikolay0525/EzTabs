@@ -11,6 +11,7 @@
     xmlns:vm="clr-namespace:EzTabs.Presentation.ViewModels.MainControlsViewModels" 
     xmlns:ct="clr-namespace:EzTabs.Presentation.Resources.Styles.CustomTypes" 
     xmlns:vs="clr-namespace:EzTabs.Presentation.Services.ViewServices" 
+    xmlns:c="clr-namespace:EzTabs.Presentation.Converters" 
     d:DataContext="{d:DesignInstance Type=vm:TabEditingControlViewModel}"
     FontFamily="{DynamicResource CommonFontFamily}"
     FontWeight="{DynamicResource CommonFontWeight}"
@@ -20,6 +21,10 @@
     Background="#2e2e2e"
     vs:ViewKeyReaderService.KeyCommand="{Binding HandleKeyCommand}">
 
+    <UserControl.Resources>
+        <c:BoolToVisibilityConverter x:Key="boolConverter"/>
+    </UserControl.Resources> 
+   
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5"/>
@@ -179,6 +184,8 @@
                     x:Name="ZoomTextBox"
                     CurrentValue="{Binding Zoom, Mode=TwoWay}"
                     TextBoxWidth="50"
+                    Maximum="195"
+                    Minimum="5"
                     ButtonStepMultiplier="5"/>
             </Grid>
 
@@ -209,6 +216,30 @@
 
                 </ScrollViewer>
             </Border>
+        </Grid>
+        <Grid Grid.Row="5" Grid.Column="1">
+            <TextBlock
+                Style="{DynamicResource CommonTextBlock}"
+                FontSize="12"
+                Background="White"
+                Foreground="Black"
+                Text="OVR"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Width="40"
+                Margin="0,20,0,0"
+                Visibility="{Binding Insert, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock
+                Style="{DynamicResource CommonTextBlock}"
+                FontSize="12"
+                Background="White"
+                Foreground="Black"
+                Text="Saved"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Width="40"
+                Margin="0,0,0,0"
+                Visibility="{Binding MakingBackup, Converter={StaticResource boolConverter}, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
     </Grid>
 </UserControl>

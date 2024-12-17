@@ -37,4 +37,13 @@
     <Resource Include="Resources\Icons\peterAlert.jpg" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\SimpleWindows\OkInfoMessage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\SimpleWindows\OkNoMessage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

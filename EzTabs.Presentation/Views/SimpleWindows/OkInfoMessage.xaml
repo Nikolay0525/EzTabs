@@ -1,0 +1,60 @@
+﻿<Window x:Class="EzTabs.Presentation.Views.SimpleWindows.OkInfoMessage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EzTabs.Presentation.Views.SimpleWindows"
+        xmlns:ct="clr-namespace:EzTabs.Presentation.Resources.Styles.CustomTypes"
+        mc:Ignorable="d"
+        Title="ConfirmMessage" SizeToContent="WidthAndHeight" MaxWidth="400" ResizeMode="NoResize" 
+        WindowStartupLocation="CenterScreen"
+        FontSize="{DynamicResource CommonFontSize}">
+    <Grid Background="#2e2e2e">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Viewbox>
+                    <Grid>
+                        <Path Fill="White" Data="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                        <Path Fill="White" Data="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                    </Grid>
+                </Viewbox>
+            </Grid>
+            <Grid Grid.Column="2">
+                <TextBlock
+                    Style="{DynamicResource CommonTextBlock}"
+                    x:Name="MessageTextBlock"
+                    TextAlignment="Left"
+                    TextWrapping="Wrap"
+                    d:Text="Write anything you want"
+                    Foreground="White"/>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="3">
+            <Grid Grid.Column="0">
+                <Button
+                    Style="{DynamicResource CommonButton}"
+                    x:Name="OkButton"
+                    Content="Ok"
+                    Click="OkButton_Click"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

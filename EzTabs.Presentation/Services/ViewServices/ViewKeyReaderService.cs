@@ -70,7 +70,9 @@ public static class ViewKeyReaderService
             }
             if(Keyboard.Modifiers == ModifierKeys.Shift && e.Key != Key.LeftShift & e.Key != Key.RightShift)
             {
-                command.Execute(_stringProducedByKeyWithShift.GetValueOrDefault(e.Key));
+                var key = _stringProducedByKeyWithShift.GetValueOrDefault(e.Key);
+                if (key is null) return;
+                command.Execute(key);
                 return;
             }
             if (e.Key >= Key.D0 && e.Key <= Key.D9)
@@ -78,7 +80,7 @@ public static class ViewKeyReaderService
                 command.Execute(e.Key.ToString().Replace("D",""));
                 return;
             }
-            if (e.Key >= Key.A && e.Key <= Key.Z)
+            if (e.Key >= Key.A && e.Key <= Key.Z || e.Key == Key.Insert)
             {
                 command.Execute(e.Key.ToString().ToLower());
                 return;

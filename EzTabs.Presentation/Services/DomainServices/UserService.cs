@@ -29,17 +29,20 @@ public class UserService : BaseService<User>
         };
         if (name is null || email is null || password is null) throw new NullReferenceException("Some of user data is missing");
         var users = await _repository.GetAll();
-        if (users.FirstOrDefault(u => u.Name == newUser.Name) != null)
+        if (!users.Success) throw new InvalidOperationException(users.ErrorMessage);
+
+        if (users.Data!.FirstOrDefault(u => u.Name == newUser.Name) != null)
         {
             errors.Add("Username: Such name already used");
         }
-        if (users.FirstOrDefault(u => u.Email == newUser.Email) != null)
+        if (users.Data!.FirstOrDefault(u => u.Email == newUser.Email) != null)
         {
             errors.Add("Email: Such email already used");
         }
         if (errors.Count != 0) return errors;
-        newUser.Role = users.Any() ? UserRole.User : UserRole.Admin;
-        await _repository.Add(newUser);
+        newUser.Role = users.Data!.Any() ? UserRole.User : UserRole.Admin;
+        var operation = await _repository.Add(newUser);
+        if (!operation.Success) throw new InvalidOperationException(operation.ErrorMessage);
         SavedUser = newUser;
         await Task.Run(() => EmailService.SendVerificationEmail(email, verificationCode));
         return errors;
@@ -49,12 +52,13 @@ public class UserService : BaseService<User>
     {
         if (SavedUser == null || verificationCode == null)
         {
-            throw new NullReferenceException();
+            throw new NullReferenceException(nameof(SavedUser)+" "+nameof(verificationCode));
         };
         if (SavedUser.VerificationCode == verificationCode)
         {
             SavedUser.IsEmailVerified = true;
-            await _repository.Update(SavedUser);
+            var operation = await _repository.Update(SavedUser);
+            if (!operation.Success) throw new InvalidOperationException(operation.ErrorMessage);
             return true;
         }
         return false;
@@ -62,7 +66,9 @@ public class UserService : BaseService<User>
     public async Task<bool> LoginUser(User userToLogin)
     {     
         var allUsers = await _repository.GetAll();
-        var foundedUser = allUsers.FirstOrDefault(u => u.Name == userToLogin.Name);
+        if (!allUsers.Success) throw new InvalidOperationException(allUsers.ErrorMessage);
+        
+        var foundedUser = allUsers.Data!.FirstOrDefault(u => u.Name == userToLogin.Name);
         if (foundedUser != null && foundedUser.Password == userToLogin.Password)
         {
             SavedUser = foundedUser;
@@ -73,7 +79,8 @@ public class UserService : BaseService<User>
 
     public async Task<User?> FindUserById(Guid userId)
     {
-        var foundedUser = await _repository.GetById(userId); 
-        return foundedUser;
+        var foundedUser = await _repository.GetById(userId);
+        if (!foundedUser.Success) throw new InvalidOperationException(foundedUser.ErrorMessage);
+        return foundedUser.Data;
     }
 }

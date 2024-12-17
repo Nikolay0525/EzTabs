@@ -1,0 +1,73 @@
+﻿<Window x:Class="EzTabs.Presentation.Views.SimpleWindows.OkCancelMessage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EzTabs.Presentation.Views.SimpleWindows"
+        xmlns:ct="clr-namespace:EzTabs.Presentation.Resources.Styles.CustomTypes"
+        mc:Ignorable="d"
+        Title="ConfirmMessage" SizeToContent="WidthAndHeight" MaxWidth="400" ResizeMode="NoResize" 
+        WindowStartupLocation="CenterScreen"
+        FontSize="{DynamicResource CommonFontSize}">
+    <Grid Background="#2e2e2e">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Viewbox>
+                    <Grid>
+                        <Path Fill="White" Data="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.15.15 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.2.2 0 0 1-.054.06.1.1 0 0 1-.066.017H1.146a.1.1 0 0 1-.066-.017.2.2 0 0 1-.054-.06.18.18 0 0 1 .002-.183L7.884 2.073a.15.15 0 0 1 .054-.057m1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767z"/>
+                        <Path Fill="White" Data="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+                    </Grid>
+                </Viewbox>
+            </Grid>
+            <Grid Grid.Column="2">
+                <TextBlock
+                    Style="{DynamicResource CommonTextBlock}"
+                    x:Name="MessageTextBlock"
+                    TextAlignment="Left"
+                    TextWrapping="Wrap"
+                    d:Text="Write anything you want"
+                    Foreground="White"/>
+            </Grid>
+
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Button
+                    Style="{DynamicResource CommonButton}"
+                    x:Name="OkButton"
+                    Content="Ok"
+                    Click="OkButton_Click"/>
+            </Grid>
+            <Grid Grid.Column="2">
+                <Button
+                    Style="{DynamicResource CommonButton}"
+                    x:Name="CancelButton"
+                    Content="Cancel"
+                    Click="CancelButton_Click"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

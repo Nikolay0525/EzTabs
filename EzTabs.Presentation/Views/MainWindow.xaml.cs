@@ -1,9 +1,6 @@
 ﻿using EzTabs.Data;
-using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ViewServices;
-using EzTabs.Presentation.ViewModels.MainControlsViewModels;
 using System.Windows;
-using System.Windows.Input;
 
 namespace EzTabs.Presentation.Views
 {

@@ -24,18 +24,6 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
             InitializeComponent();
         }
 
-/*        public class LikeState
-        {
-            public Guid commentId;
-            public bool isLiked;
-        }
-        
-        public class Message
-        {
-            public Guid commentId;
-            public string text;
-        }*/
-
         public static readonly DependencyProperty AuthorIdProperty =
         DependencyProperty.Register("AuthorId", typeof(Guid), typeof(CommentControl), new PropertyMetadata(Guid.Empty));
         
@@ -68,6 +56,12 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
 
         public static readonly DependencyProperty LikedProperty =
         DependencyProperty.Register("Liked", typeof(bool), typeof(CommentControl), new PropertyMetadata(false));
+        
+        public static readonly DependencyProperty IsLoadingProperty =
+        DependencyProperty.Register("IsLoading", typeof(bool), typeof(CommentControl), new PropertyMetadata(true));
+        
+        public static readonly DependencyProperty BlurRadiusProperty =
+        DependencyProperty.Register("BlurRadius", typeof(double), typeof(CommentControl), new PropertyMetadata(20.0));
         
         public static readonly DependencyProperty LikesProperty =
         DependencyProperty.Register("Likes", typeof(int), typeof(CommentControl), new PropertyMetadata(0));
@@ -104,8 +98,7 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
             get { return (string)GetValue(UserNameProperty); }
             set { SetValue(UserNameProperty, value); }
         }
-        
-
+       
         public string Text
         {
             get { return (string)GetValue(TextProperty); }
@@ -154,6 +147,24 @@ namespace EzTabs.Presentation.Views.MainControls.SimpleControls
         {
             get { return (bool)GetValue(IsReplyesOpenedProperty); }
             set { SetValue(IsReplyesOpenedProperty, value); }
+        }
+        public double BlurRadius
+        {
+            get { return (double)GetValue(BlurRadiusProperty); }
+            set
+            {
+                SetValue(BlurRadiusProperty, value);
+            }
+        }
+        
+        public bool IsLoading
+        {
+            get { return (bool)GetValue(IsLoadingProperty); }
+            set 
+            { 
+                SetValue(IsLoadingProperty, value);
+                SetValue(BlurRadiusProperty, IsLoading ? 20.0 : 0.0);
+            }
         }
     }
 }

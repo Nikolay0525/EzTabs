@@ -15,7 +15,8 @@
              FontSize="{DynamicResource CommonFontSize}"
              FontWeight="{DynamicResource CommonFontWeight}"
              d:DesignHeight="540" d:DesignWidth="960"
-             Background="#2e2e2e">
+             Background="#2e2e2e"
+             >
     <UserControl.Resources>
         <c:BoolToVisibilityConverter x:Key="boolConverter"/>
     </UserControl.Resources>
@@ -142,13 +143,21 @@
         </Grid>
         
         <Grid Grid.Column ="1" Grid.Row="4" Background="Transparent">
-            <ListBox 
-                Grid.Column="1" 
-                Grid.Row="1" 
-                Style="{DynamicResource CommonListBox}" 
-                x:Name="TabList"
-                ItemsSource="{Binding TabsInSearchList, UpdateSourceTrigger=PropertyChanged}"
-                Background="White"/>
+            <Grid>
+                <Grid.Effect>
+                    <BlurEffect Radius="{Binding BlurRadius, UpdateSourceTrigger=PropertyChanged}" KernelType="Gaussian"/>
+                </Grid.Effect>
+                <ListBox 
+                    Grid.Column="1" 
+                    Grid.Row="1" 
+                    Style="{DynamicResource CommonListBox}" 
+                    x:Name="TabList"
+                    ItemsSource="{Binding TabsInSearchList, UpdateSourceTrigger=PropertyChanged}"
+                    Background="White"/>
+            </Grid>
+            <Grid>
+                <ct:LoadingCircle BorderBrush="Black" Style="{DynamicResource LoadingControlStyle}" IsLoading="{Binding IsLoading}"/>
+            </Grid>
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="6">

@@ -4,15 +4,15 @@ namespace EzTabs.Data.Repository
 {
     public interface IRepo<T> where T : class
     {
-        Task<IEnumerable<T>> GetAll();
-        Task<T?> GetById(Guid id);
-        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
-        Task Add(T entity);
-        Task Add(IEnumerable<T> entity);
-        Task Update(T entity);
-        Task Update(IEnumerable<T> entity);
-        Task Delete(T entity);
-        Task Delete(IEnumerable<T> entity);
+        Task<OperationResult<IEnumerable<T>>> GetAll();
+        Task<OperationResult<T>> GetById(Guid id);
+        Task<OperationResult<bool>> AnyAsync(Expression<Func<T, bool>> predicate);
+        Task<OperationResult<T>> Add(T entity);
+        Task<OperationResult<T>> Add(IEnumerable<T> entity);
+        Task<OperationResult<T>> Update(T entity);
+        Task<OperationResult<T>> Update(IEnumerable<T> entity);
+        Task<OperationResult<T>> Delete(T entity);
+        Task<OperationResult<T>> Delete(IEnumerable<T> entity);
 
     }
 }

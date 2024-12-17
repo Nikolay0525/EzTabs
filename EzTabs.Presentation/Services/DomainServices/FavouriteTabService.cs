@@ -16,16 +16,27 @@ namespace EzTabs.Presentation.Services.DomainServices
 
         public async Task UpdateStateOfTab(Guid userId, Guid tabId, bool isFavourite)
         {
-            FavouriteTab? favouriteTab = await _repository.GetByCompositeId(userId, tabId);
-            if (favouriteTab is null && isFavourite) await _repository.Add(new FavouriteTab() { UserId = userId, TabId = tabId });
-            else if (favouriteTab != null && !isFavourite) { await _repository.Delete(favouriteTab); }
+            var favouriteTab = await _repository.GetByCompositeId(userId, tabId);
+            if (!favouriteTab.Success) throw new InvalidOperationException(favouriteTab.ErrorMessage);
+
+            if (favouriteTab.Data is null && isFavourite)
+            {
+                var operation = await _repository.Add(new FavouriteTab() { UserId = userId, TabId = tabId });
+                if (!operation.Success) throw new InvalidOperationException(operation.ErrorMessage);
+            }
+            else if (favouriteTab.Data != null && !isFavourite) 
+            { 
+                var operation = await _repository.Delete(favouriteTab.Data);
+                if (!operation.Success) throw new InvalidOperationException(operation.ErrorMessage);
+            }
         }
         
         public async Task<bool> IsTabFavouriteByIds(Guid userId, Guid tabId)
         {
-            FavouriteTab? favouriteTab = await _repository.GetByCompositeId(userId, tabId);
+            var favouriteTab = await _repository.GetByCompositeId(userId, tabId);
+            if (!favouriteTab.Success) throw new InvalidOperationException(favouriteTab.ErrorMessage);
 
-            if (favouriteTab != null) return true;
+            if (favouriteTab.Data != null) return true;
 
             return false;
         }

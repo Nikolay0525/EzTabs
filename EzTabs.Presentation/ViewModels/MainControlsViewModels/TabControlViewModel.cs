@@ -10,8 +10,10 @@ using EzTabs.Presentation.ViewModels.BaseViewModels;
 using EzTabs.Presentation.ViewModels.MainControlsViewModels.Enums;
 
 using EzTabs.Presentation.Views.MainControls.SimpleControls;
+using EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,7 +23,6 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 
 public class TabControlViewModel : BaseViewModel
 {
-    private IWindowService _windowService;
 
     private UserService _userService;
     private SearchingService _searchingService;
@@ -29,6 +30,7 @@ public class TabControlViewModel : BaseViewModel
     private CommentRateService _commentRateService;
     private TabService _tabService;
     private TabRateService _tabRateService;
+
     private Guid _parentCommentId = Guid.Empty;
 
     private int _currentPage = 0;
@@ -66,6 +68,8 @@ public class TabControlViewModel : BaseViewModel
     private string _key;
     private string _bpm;
     private string _description;
+    private string _views;
+    private string _rate;
 
     private ObservableCollection<ComboButtonControl> _listOfSortByOptions = new();
     private List<Comment> _listOfCommentsToShow = new();
@@ -73,11 +77,35 @@ public class TabControlViewModel : BaseViewModel
     private string _selectedOrderByOptionText = "Order By";
     private SortByOption _selectedOrderByOption = 0;
 
+    private bool _isCommentsLoading = true;
+    private double _commentsBlurRadius = 20;
+
     private Dictionary<string, SortByOption> SortByOptions { get; } = new()
     {
         { "Most Popular", SortByOption.Rating},
         { "Newest", SortByOption.Newest }
     };
+
+    public bool IsCommentsLoading
+    {
+        get => _isCommentsLoading;
+        set
+        {
+            _isCommentsLoading = value;
+            CommentsBlurRadius = _isCommentsLoading ? 20 : 0;
+            OnPropertyChanged();
+        }
+    }
+
+    public double CommentsBlurRadius
+    {
+        get => _commentsBlurRadius;
+        set
+        {
+            _commentsBlurRadius = value;
+            OnPropertyChanged();
+        }
+    }
 
     public ObservableCollection<ComboButtonControl> ListOfSortByOptions 
     { 
@@ -395,6 +423,24 @@ public class TabControlViewModel : BaseViewModel
             OnPropertyChanged();
         }
     }
+    public string Views 
+    { 
+        get => _views;
+        set
+        {
+            _views = value;
+            OnPropertyChanged();
+        }
+    }
+    public string Rate 
+    { 
+        get => _rate;
+        set
+        {
+            _rate = value;
+            OnPropertyChanged();
+        }
+    }
     public string Description 
     { 
         get => _description;
@@ -425,16 +471,7 @@ public class TabControlViewModel : BaseViewModel
         }
     }
 
-    public IWindowService WindowService
-    {
-        get => _windowService;
-        set
-        {
-            _windowService = value;
-            OnPropertyChanged();
-        }
-    }
-
+    public ICommand ExportInFileCommand { get; }
     public ICommand OpenTabRateCommand { get; }
     public ICommand RateTabCommand { get; }
     public ICommand SubmitCommentCommand { get; }
@@ -452,15 +489,15 @@ public class TabControlViewModel : BaseViewModel
     public ICommand ShowSortByOptionsCommand { get; }
 
     public TabControlViewModel(IViewModelService viewModelService, INavigationService navigationService, IWindowService windowService, 
-        UserService userService, SearchingService searchingService, CommentRateService commentRateService, CommentService commentService, TabService tabService ,TabRateService tabRateService)  : base(viewModelService, navigationService)
+        UserService userService, SearchingService searchingService, CommentRateService commentRateService, CommentService commentService, TabService tabService ,TabRateService tabRateService)  : base(viewModelService, navigationService, windowService)
     {
-        _windowService = windowService;
         _userService = userService;
         _searchingService = searchingService;
         _commentRateService = commentRateService;
         _commentService = commentService;
         _tabRateService = tabRateService;
         _tabService = tabService;
+        ExportInFileCommand = new RelayCommand(ExportTab);
         OpenTabRateCommand = new AsyncRelayCommand(SetTabRate);
         RateTabCommand = new AsyncRelayCommand<string>(RateTab);
         SubmitCommentCommand = new AsyncRelayCommand(SubmitComment);
@@ -479,56 +516,112 @@ public class TabControlViewModel : BaseViewModel
         UpdateTabText();
         UpdateSortByList();
         Task.Run(UpdateTabInfoAsync);
+
+        ButtonInDropControl exportTab = new()
+        {
+            IsButtonVisible = true,
+            Text = "Export Tab",
+            ButtonCommand = ExportInFileCommand
+        };
+        ButtonsInMenu.Insert(0, exportTab);
+    }
+
+    private void ExportTab()
+    {
+        try
+        {
+            string rootFolder = AppDomain.CurrentDomain.BaseDirectory;
+
+            string targetFolder = Path.Combine(rootFolder, "ExportedTabs");
+
+            Directory.CreateDirectory(targetFolder);
+
+            var title = Title.Replace(" ", "_");
+            var band = Band.Replace(" ", "_");
+
+            string filePath = Path.Combine(targetFolder, $"{title}_{band}_By_{AuthorName}.txt");
+
+            File.WriteAllText(filePath, TabText);
+
+            ShowInfoMessage("Editor", $"Successfully exported in {filePath}");
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private async Task RateTab(string? rate)
     {
-        if (!int.TryParse(rate, out int rateInt)) return;
-        var allTabRates = await _tabRateService.ApplyTabRate(TabService.SavedTab!.Id, UserService.SavedUser.Id, rateInt);
-        await _tabService.UpdateTabRating(TabService.SavedTab.Id, allTabRates.Item1);
+        try
+        {
+            if (!int.TryParse(rate, out int rateInt)) return;
+            var allTabRates = await _tabRateService.ApplyTabRate(TabService.SavedTab!.Id, UserService.SavedUser.Id, rateInt);
+            await _tabService.UpdateTabRating(TabService.SavedTab.Id, allTabRates.Item1);
 
-        Action<bool>[] propertySetters =
-        [
-            value => OneStarCheck = value,
+            Action<bool>[] propertySetters =
+            [
+                value => OneStarCheck = value,
             value => TwoStarCheck = value,
             value => ThreeStarCheck = value,
             value => FourStarCheck = value,
             value => FiveStarCheck = value
-        ];
+            ];
 
-        if (allTabRates.Item2) rateInt = 0;
+            if (allTabRates.Item2) rateInt = 0;
 
-        for (int i = 0; i < propertySetters.Length; i++)
+            for (int i = 0; i < propertySetters.Length; i++)
+            {
+                propertySetters[i](i < rateInt);
+            }
+        }
+        catch (Exception ex)
         {
-            propertySetters[i](i < rateInt); 
+            ShowMessage("Exception", ex.Message);
         }
     }
     
     private async Task SetTabRate()
     {
-        List<TabRate> tabRates = await _tabRateService.GetAllTabRatesById(TabService.SavedTab!.Id);
-        if (tabRates == null) return;
-        TabRate? userTabRate = tabRates.Find(tr => tr.UserId == UserService.SavedUser.Id);
-        if (userTabRate == null) return;
+        try
+        {
+            List<TabRate> tabRates = await _tabRateService.GetAllTabRatesById(TabService.SavedTab!.Id);
+            if (tabRates == null) return;
+            TabRate? userTabRate = tabRates.Find(tr => tr.UserId == UserService.SavedUser.Id);
+            if (userTabRate == null) return;
 
-        Action<bool>[] propertySetters =
-        [
-            value => OneStarCheck = value,
+            Action<bool>[] propertySetters =
+            [
+                value => OneStarCheck = value,
             value => TwoStarCheck = value,
             value => ThreeStarCheck = value,
             value => FourStarCheck = value,
             value => FiveStarCheck = value
-        ];
+            ];
 
-        for (int i = 0; i < propertySetters.Length; i++)
+            for (int i = 0; i < propertySetters.Length; i++)
+            {
+                propertySetters[i](i < userTabRate.Rate);
+            }
+        }
+        catch (Exception ex)
         {
-            propertySetters[i](i < userTabRate.Rate);
+            ShowMessage("Exception", ex.Message);
         }
     }
 
     private async Task SubmitComment()
     {
-        await _commentService.CreateComment(UserService.SavedUser.Id, TabService.SavedTab!.Id, WritedMessage, _parentCommentId);
+        try
+        {
+            await _commentService.CreateComment(UserService.SavedUser.Id, TabService.SavedTab!.Id, WritedMessage, _parentCommentId);
+            UpdateCommentsList();
+            CancelWritingOfComment();
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
     
     private void WriteComment()
@@ -539,11 +632,18 @@ public class TabControlViewModel : BaseViewModel
     
     private async Task ReplyOnComment(Guid commentId)
     {
-        IsMessageWritingVisible = true;
-        _parentCommentId = commentId;
-        var comment = await _commentService.FindCommentById(commentId);
-        var user = await _userService.FindUserById(comment!.UserId);
-        MessageType = "New Reply on @" + user!.Name + " comment";
+        try
+        {
+            IsMessageWritingVisible = true;
+            _parentCommentId = commentId;
+            var comment = await _commentService.FindCommentById(commentId);
+            var user = await _userService.FindUserById(comment!.UserId);
+            MessageType = "New Reply on @" + user!.Name + " comment";
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
     
     private void CancelWritingOfComment()
@@ -556,24 +656,31 @@ public class TabControlViewModel : BaseViewModel
 
     private async Task SendLikeState(object? parameter)
     {
-        if(parameter is Tuple<Guid, bool> args) // where Item1 is id of comment and Item2 is state of UI element
+        try
         {
-            int likes = await _commentRateService.ApplyCommentRate(UserService.SavedUser.Id, args.Item1, args.Item2);
-            await _commentService.UpdateAmountOfLikesById(args.Item1, likes);
-
-            var commentControl = _commentsToShow.Find(cc => cc.CommentId == args.Item1);
-
-            commentControl ??= SearchForComment(args.Item1, CommentsToShow);
-            if (commentControl == null) return;
-
-            if(args.Item2)
+            if (parameter is Tuple<Guid, bool> args) // where Item1 is id of comment and Item2 is state of UI element
             {
-                commentControl.Likes++;
+                int likes = await _commentRateService.ApplyCommentRate(UserService.SavedUser.Id, args.Item1, args.Item2);
+                await _commentService.UpdateAmountOfLikesById(args.Item1, likes);
+
+                var commentControl = _commentsToShow.Find(cc => cc.CommentId == args.Item1);
+
+                commentControl ??= SearchForComment(args.Item1, CommentsToShow);
+                if (commentControl == null) return;
+
+                if (args.Item2)
+                {
+                    commentControl.Likes++;
+                }
+                else if (!args.Item2)
+                {
+                    commentControl.Likes--;
+                }
             }
-            else if (!args.Item2)
-            {
-                commentControl.Likes--;
-            }
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
         }
     }
 
@@ -599,24 +706,38 @@ public class TabControlViewModel : BaseViewModel
 
     private void UpdateSortByList()
     {
-        foreach (var option in SortByOptions)
+        try
         {
-            var button = new ComboButtonControl()
+            foreach (var option in SortByOptions)
             {
-                Command = this.HandleSortByCommand,
-                CommandParameter = option.Key,
-                Text = $"{option.Key}"
-            };
+                var button = new ComboButtonControl()
+                {
+                    Command = this.HandleSortByCommand,
+                    CommandParameter = option.Key,
+                    Text = $"{option.Key}"
+                };
 
-            ListOfSortByOptions.Add(button);
+                ListOfSortByOptions.Add(button);
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
         }
     }
 
     private void HandleSortBy(string? selectedOption)
     {
-        if (selectedOption is null) throw new ArgumentNullException(nameof(selectedOption));
-        SelectedOrderByOption = selectedOption;
-        IsSortByOpen = false;
+        try
+        {
+            if (selectedOption is null) throw new ArgumentNullException(nameof(selectedOption));
+            SelectedOrderByOption = selectedOption;
+            IsSortByOpen = false;
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     
@@ -633,106 +754,162 @@ public class TabControlViewModel : BaseViewModel
         Key = TabService.SavedTab!.Key;
         Bpm = TabService.SavedTab!.BitsPerMinute.ToString();
         Description = TabService.SavedTab!.Description;
+        Views = TabService.SavedTab!.Views.ToString();
+        Rate = TabService.SavedTab!.Rating.ToString();
         TabText = TabService.SavedTab!.TabText;
     }
 
     private async Task UpdateTabInfoAsync()
     {
-        var foundedUser = await _userService.FindUserById(TabService.SavedTab!.AuthorId);
-        if (foundedUser is null) return;
-        AuthorName = foundedUser.Name;
-        TitleBand = TabService.SavedTab!.Title + " - " + TabService.SavedTab!.Band + " by " + "@" + foundedUser.Name;
+        try
+        {
+            var foundedUser = await _userService.FindUserById(TabService.SavedTab!.AuthorId);
+            if (foundedUser is null) return;
+            AuthorName = foundedUser.Name;
+            TitleBand = TabService.SavedTab!.Title + " - " + TabService.SavedTab!.Band + " by " + "@" + foundedUser.Name;
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private async void UpdateCommentsList()
     {
-        var commentsToDisplay = await _searchingService.SearchComments((int)(WindowService.WindowHeight / 270), _currentPage, _selectedOrderByOption);
-
-        if (commentsToDisplay.Item2 > 0)
+        try
         {
-            NextPageEnabled = true;
+            IsCommentsLoading = true;
+            var commentsToDisplay = await _searchingService.SearchComments((int)(WindowService.WindowHeight / 270), _currentPage, _selectedOrderByOption);
+
+            if (commentsToDisplay.Item2 > 0)
+            {
+                NextPageEnabled = true;
+            }
+            else { NextPageEnabled = false; }
+            CommentsToShow.Clear();
+            CommentsToShow = await AddCommentsInCommentsList(commentsToDisplay.Item1, parentGuidCheck => parentGuidCheck == Guid.Empty);
+            CommentsToShow = await UpdateCommentsInformation(_commentsToShow);
+            IsCommentsLoading = false;
         }
-        else { NextPageEnabled = false; }
-        CommentsToShow.Clear();
-        CommentsToShow = await AddCommentsInCommentsList(commentsToDisplay.Item1, parentGuidCheck => parentGuidCheck == Guid.Empty);
-        CommentsToShow = await UpdateCommentsInformation(_commentsToShow);
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private async Task<List<CommentControl>> AddCommentsInCommentsList(List<Comment> commentsToDisplay, Func<Guid, bool> condition)
     {
-        List<CommentControl> commentControls = new();
-
-        foreach (Comment comment in commentsToDisplay)
+        try
         {
-            if (!condition(comment.ParentCommentId)) continue;
-            CommentControl commentItem = new()
+            List<CommentControl> commentControls = new();
+            foreach (Comment comment in commentsToDisplay)
             {
-                AuthorId = comment.UserId,
-                CommentId = comment.Id,
-                ParentCommentId = comment.ParentCommentId,
-                UserName = string.Empty,
-                Text = comment.Text ?? string.Empty,
-                ReplyesList = new(),
-                Likes = comment.Likes,
-                Liked = false,
-                DateOfCreation = comment.DateOfCreation,
-                CanBeEdited = false,
-                IsReplyesOpened = false,
-                DataContext = this
-            };
+                if (!condition(comment.ParentCommentId)) continue;
+                CommentControl commentItem = new()
+                {
+                    AuthorId = comment.UserId,
+                    CommentId = comment.Id,
+                    ParentCommentId = comment.ParentCommentId,
+                    UserName = string.Empty,
+                    Text = comment.Text ?? string.Empty,
+                    ReplyesList = new(),
+                    Likes = comment.Likes,
+                    Liked = false,
+                    DateOfCreation = comment.DateOfCreation,
+                    CanBeEdited = false,
+                    IsReplyesOpened = false,
+                    DataContext = this
+                };
 
-            if (comment.UserId == UserService.SavedUser.Id) commentItem.CanBeEdited = true;
-            commentControls.Add(commentItem);
-            
-            bool liked = await _commentRateService.IsCommentLiked(UserService.SavedUser.Id, comment.Id);
-            if (liked) commentItem.Liked = true;
-        }  
-        return commentControls;
+                if (comment.UserId == UserService.SavedUser.Id) commentItem.CanBeEdited = true;
+                commentControls.Add(commentItem);
+
+                bool liked = await _commentRateService.IsCommentLiked(UserService.SavedUser.Id, comment.Id);
+                if (liked) commentItem.Liked = true;
+            }
+            return commentControls;
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+            return new();
+        }
     }
 
     private async Task<List<CommentControl>> UpdateCommentsInformation(List<CommentControl> commentsToUpdate)
     {
-        foreach (CommentControl comment in commentsToUpdate)
+        try
         {
-            User? authorUser = await _userService.FindUserById(comment.AuthorId);
-            if (authorUser is null) throw new ArgumentNullException(nameof(authorUser));
-            comment.UserName = authorUser.Name;
-            comment.ReplyesList = await _commentService.IsThereAnyReplyes(comment.CommentId, this);
+            foreach (CommentControl comment in commentsToUpdate)
+            {
+                User? authorUser = await _userService.FindUserById(comment.AuthorId);
+                if (authorUser is null) throw new ArgumentNullException(nameof(authorUser));
+                comment.UserName = authorUser.Name;
+                comment.ReplyesList = await _commentService.IsThereAnyReplyes(comment.CommentId, this);
+            }
+            return commentsToUpdate;
         }
-        return commentsToUpdate;
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+            return new();
+        }
     }
     
     private async Task OpenCommentReplyes(object? parameter)
     {
-        if (parameter is Tuple<Guid, bool> args && args.Item2) // where Item1 is id of comment and Item2 is state of UI element
+        try
         {
-            await UpdateReplyesById(false, args.Item1);
+            if (parameter is Tuple<Guid, bool> args && args.Item2) // where Item1 is id of comment and Item2 is state of UI element
+            {
+                await UpdateReplyesById(false, args.Item1);
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
         }
     }
 
     private async Task UpdateReplyesById(bool increaseAmount, Guid commentId)
     {
-        CommentControl? updatingCommentControl = SearchForComment(commentId, CommentsToShow);
-        if (updatingCommentControl is null) return;
+        try
+        {
+            CommentControl? updatingCommentControl = SearchForComment(commentId, CommentsToShow);
+            if (updatingCommentControl is null) return;
+            updatingCommentControl.IsLoading = true;
 
-        if (increaseAmount) updatingCommentControl.ReplyesToShow *= 2;
+            if (increaseAmount) updatingCommentControl.ReplyesToShow *= 2;
 
-        (List<Comment>, int) allReplyesOnComment = await _searchingService.SearchCommentReplyes(updatingCommentControl.ReplyesToShow, commentId);
-        if (allReplyesOnComment.Item2 == 0) return;
-        if (allReplyesOnComment.Item2 > updatingCommentControl.ReplyesToShow) updatingCommentControl.ShowMoreVisibile = true;
-        else { updatingCommentControl.ShowMoreVisibile = false; }
+            (List<Comment>, int) allReplyesOnComment = await _searchingService.SearchCommentReplyes(updatingCommentControl.ReplyesToShow, commentId);
+            if (allReplyesOnComment.Item2 == 0) return;
+            if (allReplyesOnComment.Item2 > updatingCommentControl.ReplyesToShow) updatingCommentControl.ShowMoreVisibile = true;
+            else { updatingCommentControl.ShowMoreVisibile = false; }
 
-        List<CommentControl> replyesControls = await AddCommentsInCommentsList(allReplyesOnComment.Item1, parentGuidCheck => parentGuidCheck != Guid.Empty);
-        replyesControls = await UpdateCommentsInformation(replyesControls);
+            List<CommentControl> replyesControls = await AddCommentsInCommentsList(allReplyesOnComment.Item1, parentGuidCheck => parentGuidCheck != Guid.Empty);
+            replyesControls = await UpdateCommentsInformation(replyesControls);
 
-        replyesControls = replyesControls.OrderBy(rc => rc.DateOfCreation).ToList();
+            replyesControls = replyesControls.OrderBy(rc => rc.DateOfCreation).ToList();
 
-        updatingCommentControl.ReplyesList = replyesControls;
+            updatingCommentControl.ReplyesList = replyesControls;
+            updatingCommentControl.IsLoading = false;
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private async Task IncreaseReplyesAmount(Guid commentId)
     {
-        await UpdateReplyesById(true, commentId);
+        try
+        {
+            await UpdateReplyesById(true, commentId);
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private CommentControl? SearchForComment(Guid commentId, List<CommentControl> comments)

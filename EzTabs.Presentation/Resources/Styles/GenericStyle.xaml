@@ -5,6 +5,7 @@
     xmlns:bc="clr-namespace:EzTabs.Presentation.Converters">
 
     <Style x:Key="LoadingControlStyle" TargetType="{x:Type ct:LoadingCircle}">
+        <Setter Property="BorderBrush" Value="White"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ct:LoadingCircle}">
@@ -15,7 +16,7 @@
                         Stretch="Uniform"
                         Width="100"
                         Height="100"
-                        Stroke="White"
+                        Stroke="{TemplateBinding BorderBrush}"
                         RenderTransformOrigin="0.5 0.5"
                         StrokeThickness="1"
                         StrokeDashArray="270 78"

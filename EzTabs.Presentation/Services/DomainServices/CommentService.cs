@@ -1,5 +1,6 @@
 ﻿using EzTabs.Data;
 using EzTabs.Data.Domain;
+using EzTabs.Data.Repository;
 using EzTabs.Presentation.Services.DomainServices.BaseServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Views.MainControls.SimpleControls;
@@ -28,13 +29,15 @@ namespace EzTabs.Presentation.Services.DomainServices
 
             if (parentCommentId != Guid.Empty) comment.ParentCommentId = parentCommentId;
 
-            await _repository.Add(comment);
+            var operation = await _repository.Add(comment);
+            if (!operation.Success) throw new InvalidOperationException(operation.ErrorMessage);
         }
         
         public async Task<Comment?> FindCommentById(Guid commentId)
         {
             var comment = await _repository.GetById(commentId);
-            return comment;
+            if (!comment.Success) throw new InvalidOperationException(comment.ErrorMessage);
+            return comment.Data;
         }
 
         public async Task UpdateAmountOfLikesById(Guid commentId, int likes)
@@ -42,20 +45,25 @@ namespace EzTabs.Presentation.Services.DomainServices
             Comment? comment = await FindCommentById(commentId);
             if (comment is null) return;
             comment.Likes = likes;
-            await _repository.Update(comment);
+            var operation = await _repository.Update(comment);
+            if (!operation.Success) throw new InvalidOperationException(operation.ErrorMessage);
         }
 
         public async Task<List<Comment>> GetCommentReplyesById(Guid parentCommentId)
         {
             var replyes = await _repository.GetAll();
-            replyes = replyes.Where(c => c.ParentCommentId == parentCommentId);
-            return replyes.ToList();
+            if(!replyes.Success) throw new InvalidOperationException(replyes.ErrorMessage);
+
+            replyes.Data = replyes.Data!.Where(c => c.ParentCommentId == parentCommentId);
+            return replyes.Data.ToList();
         }
 
         public async Task<List<CommentControl>> IsThereAnyReplyes(Guid commentId, object dataContext)
         {
             var comments = await _repository.GetAll();
-            List<CommentControl> dummyList = comments.Any(r => r.ParentCommentId == commentId) ? new() { new CommentControl() { DataContext = dataContext } } : new();
+            if(!comments.Success) throw new InvalidOperationException(comments.ErrorMessage);
+
+            List<CommentControl> dummyList = comments.Data!.Any(r => r.ParentCommentId == commentId) ? new() { new CommentControl() { DataContext = dataContext } } : new();
             return dummyList;
         }
     }

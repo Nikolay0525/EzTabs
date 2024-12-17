@@ -10,6 +10,7 @@ using EzTabs.Presentation.ViewModels.MainControlsViewModels.Enums;
 
 using EzTabs.Presentation.Views.MainControls.SimpleControls;
 using EzTabs.Presentation.Views.MainControls.SimpleControls.ControlBarParts.DropControls;
+using EzTabs.Presentation.Views.SimpleWindows;
 using System.Collections.ObjectModel;
 using System.Timers;
 using System.Windows;
@@ -20,11 +21,10 @@ namespace EzTabs.Presentation.ViewModels.MainControlsViewModels;
 public class SearchControlViewModel : BaseViewModel
 {
 
-    private readonly TabService _tabService;
-    private readonly FavouriteTabService _favouriteTabService;
-    private readonly SearchingService _searchingService;
-    private readonly IWindowService _windowService;
-
+    private TabService _tabService;
+    private UserService _userService;
+    private FavouriteTabService _favouriteTabService;
+    private SearchingService _searchingService;
     private List<TabInSearchPageControl> _tabsInSearchList = new();
 
     private bool _firstPageVisibility = false;
@@ -50,6 +50,9 @@ public class SearchControlViewModel : BaseViewModel
     private ObservableCollection<ComboButtonControl> _listOfSearchByOptions = new();
     private ObservableCollection<ComboButtonControl> _listOfSortByOptions = new();
 
+    private bool _isLoading = true;
+    private double _blurRadius = 20;
+
     private Dictionary<string,SearchByOption> _searchByOptions { get; } = new()
     {
         {"Song & Band", SearchByOption.BandTitle},
@@ -62,6 +65,27 @@ public class SearchControlViewModel : BaseViewModel
         {"Highly Rated" , SortByOption.Rating },
         {"Newest" , SortByOption.Newest }
     };
+
+    public bool IsLoading
+    {
+        get => _isLoading;
+        set
+        {
+            _isLoading = value;
+            BlurRadius = _isLoading ? 20 : 0;
+            OnPropertyChanged();
+        }
+    }
+    
+    public double BlurRadius
+    {
+        get => _blurRadius;
+        set
+        {
+            _blurRadius = value;
+            OnPropertyChanged(nameof(BlurRadius));
+        }
+    }
 
     public ObservableCollection<ComboButtonControl> ListOfSearchByOptions
     {
@@ -228,18 +252,15 @@ public class SearchControlViewModel : BaseViewModel
         } 
     }
 
-    public bool PreviousPageEnabled 
-    { 
+    public bool PreviousPageEnabled
+    {
         get => _previousPageEnabled;
-        set 
+        set
         {
             _previousPageEnabled = value;
             OnPropertyChanged();
         }
     }
-
-    public BaseViewModel ControlBarViewModel { get; private set; }
-
     public ICommand CreateTabCommand { get; }
     public ICommand PerformSearchCommand { get; }
     public ICommand SendFavouriteStateCommand { get; }
@@ -255,12 +276,13 @@ public class SearchControlViewModel : BaseViewModel
 
 
     public SearchControlViewModel(INavigationService navigationService ,IViewModelService viewModelService, IWindowService windowService, 
-        TabService tabService, FavouriteTabService favouriteTabService, SearchingService searchingService) : base(viewModelService, navigationService)
+        TabService tabService, UserService userService, FavouriteTabService favouriteTabService, SearchingService searchingService) : base(viewModelService, navigationService, windowService)
     {
-        _windowService = windowService;
         _tabService = tabService;
+        _userService = userService;
         _favouriteTabService = favouriteTabService;
         _searchingService = searchingService;
+
         CreateTabCommand = new RelayCommand(NavigateToCreationOfTab);
         PerformSearchCommand = new RelayCommand(PerformSearch);
         SendFavouriteStateCommand = new AsyncRelayCommand<object?>(SendFavouriteState);
@@ -296,90 +318,160 @@ public class SearchControlViewModel : BaseViewModel
 
     private async Task SendFavouriteState(object? parameter)
     {
-        if (parameter is Tuple<Guid, bool> args) // where Item1 is id of comment and Item2 is state of UI element
+        try
         {
-            await _favouriteTabService.UpdateStateOfTab(UserService.SavedUser.Id, args.Item1, args.Item2);
+            if (parameter is Tuple<Guid, bool> args) // where Item1 is id of comment and Item2 is state of UI element
+            {
+                await _favouriteTabService.UpdateStateOfTab(UserService.SavedUser.Id, args.Item1, args.Item2);
+            }
         }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        } 
     }
 
     private void UpdateComboLists()
     {
-        foreach (var option in _sortByOptions)
+        try
         {
-            var button = new ComboButtonControl()
+            foreach (var option in _sortByOptions)
             {
-                Command = this.HandleSortByCommand,
-                CommandParameter = option.Key,
-                Text = $"{option.Key}"
-            };
+                var button = new ComboButtonControl()
+                {
+                    Command = this.HandleSortByCommand,
+                    CommandParameter = option.Key,
+                    Text = $"{option.Key}"
+                };
 
-            ListOfSortByOptions.Add(button);
+                ListOfSortByOptions.Add(button);
+            }
+
+            foreach (var option in _searchByOptions)
+            {
+                var button = new ComboButtonControl()
+                {
+                    Command = this.HandleSearchByCommand,
+                    CommandParameter = option.Key,
+                    Text = $"{option.Key}"
+                };
+
+                ListOfSearchByOptions.Add(button);
+            }
         }
-
-        foreach (var option in _searchByOptions)
+        catch (Exception ex)
         {
-            var button = new ComboButtonControl()
-            {
-                Command = this.HandleSearchByCommand,
-                CommandParameter = option.Key,
-                Text = $"{option.Key}"
-            };
-
-            ListOfSearchByOptions.Add(button);
+            ShowMessage("Exception", ex.Message);
         }
     }
 
     private void HandleSearchBy(string? selectedOption)
     {
-        if (selectedOption == null) return;
-        SelectedSearchByOption = selectedOption;
-        IsSearchByOpen = false;
+        try
+        {
+            if (selectedOption == null) return;
+            SelectedSearchByOption = selectedOption;
+            IsSearchByOpen = false;
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private void HandleSortBy(string? selectedOption)
     {
-        if (selectedOption == null) return;
-        SelectedSortByOption = selectedOption;
-        IsSortByOpen = false;
+        try
+        {
+            if (selectedOption == null) return;
+            SelectedSortByOption = selectedOption;
+            IsSortByOpen = false;
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
 
     private async Task GoToClickedTab(Guid tabId)
     {
-        await _tabService.GoToTab(tabId);
+        try
+        {
+            await _tabService.GoToTab(tabId);
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
     
     private async Task GoEditClickedTab(Guid tabId)
     {
-        await _tabService.GoEditTab(tabId);
+        try
+        {
+            await _tabService.GoEditTab(tabId);
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private async Task NextPage()
     {
-        int add = ++_currentPage;
-        CurrentPage = add;
-        if (_currentPage == 0) FirstPageVisibility = false; else FirstPageVisibility = true;
-        await UpdateSearchList();
+        try
+        {
+            int add = ++_currentPage;
+            CurrentPage = add;
+            if (_currentPage == 0) FirstPageVisibility = false; else FirstPageVisibility = true;
+            await UpdateSearchList();
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private async Task PreviousPage()
     {
-        int minus = --_currentPage;
-        CurrentPage = minus;
-        if(_currentPage == 0) FirstPageVisibility = false; else FirstPageVisibility = true;
-        await UpdateSearchList();
+        try
+        {
+            int minus = --_currentPage;
+            CurrentPage = minus;
+            if (_currentPage == 0) FirstPageVisibility = false; else FirstPageVisibility = true;
+            await UpdateSearchList();
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
     
     private async Task OnTheFirstPage()
     {
-        CurrentPage = 0;
-        FirstPageVisibility = false;
-        await UpdateSearchList();
+        try
+        {
+            CurrentPage = 0;
+            FirstPageVisibility = false;
+            await UpdateSearchList();
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private async void PerformSearch()
     {
-        await UpdateSearchList();
+        try
+        {
+            await UpdateSearchList();
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private void StartDebounceTimer()
@@ -395,39 +487,59 @@ public class SearchControlViewModel : BaseViewModel
 
     private async Task UpdateSearchList()
     {
-        var tabsToDisplay = await _searchingService.SearchTabs((int)(_windowService.WindowHeight / 70), _currentPage, _searchString, UserService.SavedUser.Id, OnlyFavouriteTabs, _selectedSearchByOption, _selectedSortByOption, _authorName);
-
-        if (tabsToDisplay.Item2 > 0)
+        try
         {
-            NextPageEnabled = true;
-        }
-        else { NextPageEnabled = false; }
-        TabsInSearchList.Clear();
+            IsLoading = true;
+            var tabsToDisplay = await _searchingService.SearchTabs((int)(WindowService.WindowHeight / 70), _currentPage, _searchString, UserService.SavedUser.Id, OnlyFavouriteTabs, _selectedSearchByOption, _selectedSortByOption, _authorName);
 
-        TabsInSearchList = await AddTabsInSearchList(tabsToDisplay.Item1);
+            if (tabsToDisplay.Item2 > 0)
+            {
+                NextPageEnabled = true;
+            }
+            else { NextPageEnabled = false; }
+            TabsInSearchList.Clear();
+
+            TabsInSearchList = await AddTabsInSearchList(tabsToDisplay.Item1);
+            IsLoading = false;
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
     
     private async Task<List<TabInSearchPageControl>> AddTabsInSearchList(List<Tab> tabsToDisplay)
     {
-        List<TabInSearchPageControl> tabInSearchPageControls = new();
-
-        foreach (Tab tab in tabsToDisplay)
+        try
         {
-            TabInSearchPageControl tabItem = new()
-            {
-                DataContext = this,
-                TabId = tab.Id,
-                Text = tab.Band + " - " + tab.Title,
-                Rating = tab.Rating,
-                Favourite = false
-            };
-            if (tab.AuthorId == UserService.SavedUser.Id) tabItem.CanBeEdited = true;
-            tabInSearchPageControls.Add(tabItem);
-            bool favourite = await _favouriteTabService.IsTabFavouriteByIds(UserService.SavedUser.Id, tab.Id);
-            tabItem.Favourite = favourite;
-        }
+            List<TabInSearchPageControl> tabInSearchPageControls = new();
 
-        return tabInSearchPageControls;
+            foreach (Tab tab in tabsToDisplay)
+            {
+                TabInSearchPageControl tabItem = new()
+                {
+                    DataContext = this,
+                    TabId = tab.Id,
+                    Text = tab.Band + " - " + tab.Title,
+                    Rating = tab.Rating,
+                    Favourite = false
+                };
+                if (tab.AuthorId == UserService.SavedUser.Id) tabItem.CanBeEdited = true;
+                tabInSearchPageControls.Add(tabItem);
+                bool favourite = await _favouriteTabService.IsTabFavouriteByIds(UserService.SavedUser.Id, tab.Id);
+                var user = await _userService.FindUserById(tab.AuthorId);
+                if (user != null) tabItem.Text = tab.Band + " - " + tab.Title + " by @" + user.Name;
+                tabItem.Favourite = favourite;
+            }
+
+            return tabInSearchPageControls;
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+
+            return new();
+        }
     }
 
     private void GoToCreationOfTab()

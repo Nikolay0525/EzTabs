@@ -4,6 +4,7 @@ using EzTabs.Presentation.Services.DomainServices;
 using EzTabs.Presentation.Services.NavigationServices;
 using EzTabs.Presentation.Services.ValidationServices.CustomAttributes;
 using EzTabs.Presentation.Services.ViewModelServices;
+using EzTabs.Presentation.Services.ViewServices;
 using EzTabs.Presentation.ViewModels.BaseViewModels;
 
 using System.Collections.ObjectModel;
@@ -129,7 +130,7 @@ public class TabCreationControlViewModel : BaseViewModel
     }
 
     [Required(ErrorMessage = "String Order is required")]
-    [AllowedCharacters(@"^[1-8]+$", ErrorMessage = "Only number 1-8 can be set as String Order")]
+    [Interval(1,8,ErrorMessage = "Order of string should be between 1-8")]
     public int StringOrder
     {
         get => _stringOrder;
@@ -153,6 +154,7 @@ public class TabCreationControlViewModel : BaseViewModel
         }
     }
 
+    [MinLength(1, ErrorMessage = "You must have atleast 1 string added to tunings")]
     public ObservableCollection<string> ListOfTunings
     {
         get => _listOfTunings;
@@ -165,7 +167,8 @@ public class TabCreationControlViewModel : BaseViewModel
     public ICommand EditTuningCommand { get; }
     public ICommand RemoveTuningCommand { get; }
 
-    public TabCreationControlViewModel(INavigationService navigationService, IViewModelService viewModelService, TabService tabService, TuningService tuningService) : base(viewModelService, navigationService)
+    public TabCreationControlViewModel(INavigationService navigationService, IViewModelService viewModelService, IWindowService windowService, 
+        TabService tabService, TuningService tuningService) : base(viewModelService, navigationService, windowService)
     {
         _tabService = tabService;
         _tuningService = tuningService;
@@ -183,116 +186,165 @@ public class TabCreationControlViewModel : BaseViewModel
 
     private void ManageButtonAccessibility()
     {
-        if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
-        if (_tunings.FirstOrDefault(t => t.StringOrder == StringOrder) == null)
+        try
         {
-            AddVisibilitySwitch = true;
-            EditRemoveVisibilitySwitch = false;
+            if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
+            if (_tunings.FirstOrDefault(t => t.StringOrder == StringOrder) == null)
+            {
+                AddVisibilitySwitch = true;
+                EditRemoveVisibilitySwitch = false;
+            }
+            else
+            {
+                AddVisibilitySwitch = false;
+                EditRemoveVisibilitySwitch = true;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            AddVisibilitySwitch = false;
-            EditRemoveVisibilitySwitch = true;
+            ShowMessage("Exception", ex.Message);
         }
     }
 
     private void OnSelecting()
     {
-        if (SelectedItem is null) return;
-        var selectedItem = SelectedItem.Split(":");
-        if (int.TryParse(selectedItem[0], out int result) != default)
+        try
         {
-            StringOrder = result;
-            StringNote = selectedItem[1];
+            if (SelectedItem is null) return;
+            var selectedItem = SelectedItem.Split(":");
+            if (int.TryParse(selectedItem[0], out int result) != default)
+            {
+                StringOrder = result;
+                StringNote = selectedItem[1];
+            }
+            else { throw new ArgumentException(nameof(result) + "is default"); }
         }
-        else { throw new ArgumentException(nameof(result) + "is default"); }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private void AddTuning()
     {
-        List<string> SpecificProperties = new()
+        try
         {
-            nameof(StringOrder),
-            nameof(StringNote)
-        };
-        Validate(SpecificProperties);
-        if (HasErrors) return;
+            List<string> SpecificProperties = new()
+            {
+                nameof(StringOrder),
+                nameof(StringNote)
+            };
+            Validate(SpecificProperties);
+            if (HasErrors) return;
 
-        var stringNote = StringNote;
+            var stringNote = StringNote;
 
-        if (StringNote.Length < 2) stringNote = stringNote + " ";
+            if (StringNote.Length < 2) stringNote = stringNote + " ";
 
-        if (_tunings.Any(t => t.StringOrder == StringOrder))
-        {
-            ShowMessage("Validation", "You can't add two same order strings");
-            return;
+            if (_tunings.Any(t => t.StringOrder == StringOrder))
+            {
+                ShowMessage("Validation", "You can't add two same order strings");
+                return;
+            }
+            var newTuning = new Tuning
+            {
+                StringOrder = StringOrder,
+                StringNote = stringNote
+            };
+            _tunings.Add(newTuning);
+            ListUpdater(_tunings);
+            ManageButtonAccessibility();
         }
-        var newTuning = new Tuning
+        catch (Exception ex)
         {
-            StringOrder = StringOrder,
-            StringNote = stringNote
-        };
-        _tunings.Add(newTuning);
-        ListUpdater(_tunings);
-        ManageButtonAccessibility();
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private void EditTuning()
     {
-        if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
-        if (ListOfTunings is null) throw new ArgumentNullException(nameof(_tunings));
-        if (StringNote is null) throw new ArgumentNullException(nameof(StringNote));
-
-        var editingTuning = _tunings.FirstOrDefault(t => t.StringOrder == StringOrder);
-
-        if (editingTuning != null)
+        try
         {
-            editingTuning.StringNote = StringNote;
-            ListUpdater(_tunings);
+            if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
+            if (ListOfTunings is null) throw new ArgumentNullException(nameof(_tunings));
+            if (StringNote is null) throw new ArgumentNullException(nameof(StringNote));
+
+            var editingTuning = _tunings.FirstOrDefault(t => t.StringOrder == StringOrder);
+
+            if (editingTuning != null)
+            {
+                editingTuning.StringNote = StringNote;
+                ListUpdater(_tunings);
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
         }
     }
 
     private void RemoveTuning()
     {
-        if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
-        if (ListOfTunings is null) throw new ArgumentNullException(nameof(_tunings));
-
-        var removingTuning = _tunings.FirstOrDefault(t => t.StringOrder == StringOrder);
-
-        if (removingTuning != null)
+        try
         {
-            _tunings.Remove(removingTuning);
-            ListUpdater(_tunings);
+            if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
+            if (ListOfTunings is null) throw new ArgumentNullException(nameof(_tunings));
+
+            var removingTuning = _tunings.FirstOrDefault(t => t.StringOrder == StringOrder);
+
+            if (removingTuning != null)
+            {
+                _tunings.Remove(removingTuning);
+                ListUpdater(_tunings);
+            }
+            ManageButtonAccessibility();
         }
-        ManageButtonAccessibility();
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 
     private void ListUpdater(ObservableCollection<Tuning> tunings)
     {
-        ListOfTunings.Clear();
-        foreach (var tuning in tunings.OrderBy(t => t.StringOrder))
+        try
         {
-            ListOfTunings.Add($"{tuning.StringOrder}:{tuning.StringNote}");
-            OnPropertyChanged(nameof(ListOfTunings));
+            ListOfTunings.Clear();
+            foreach (var tuning in tunings.OrderBy(t => t.StringOrder))
+            {
+                ListOfTunings.Add($"{tuning.StringOrder}:{tuning.StringNote}");
+                OnPropertyChanged(nameof(ListOfTunings));
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
         }
     }
 
     private async Task CreateTab()
     {
-        Validate();
-        if (HasErrors) return;
-        if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
-        var tuningsList = _tunings.ToList();
-        if (Title is null || Band is null || Genre is null || Key is null || Description is null) throw new ArgumentNullException("There are null reference in Title or Band or Genre or Key or Description properties");
-        Tab? createdTab = await _tabService.CreateTab(UserService.SavedUser.Id, Title, Band, Genre, Key, BitsPerMinute, Description);
-        #region validation
-        if (createdTab is null)
+        try
         {
-            ShowMessage("Validation Error", "You can't create your own two absolute same tablature, change Title, Band, or Genre");
-            return;
+            Validate();
+            if (HasErrors) return;
+            if (_tunings is null) throw new ArgumentNullException(nameof(_tunings));
+            var tuningsList = _tunings.ToList();
+            if (Title is null || Band is null || Genre is null || Key is null || Description is null) throw new ArgumentNullException("There are null reference in Title or Band or Genre or Key or Description properties");
+            Tab? createdTab = await _tabService.CreateTab(UserService.SavedUser.Id, Title, Band, Genre, Key, BitsPerMinute, Description);
+            #region validation
+            if (createdTab is null)
+            {
+                ShowMessage("Validation Error", "You can't create your own two absolute same tablature, change Title, Band, or Genre");
+                return;
+            }
+            #endregion
+            await _tuningService.CreateTuning(createdTab, tuningsList);
+            NavigationService.NavigateTo<TabEditingControlViewModel>();
         }
-        #endregion
-        await _tuningService.CreateTuning(createdTab, tuningsList);
-        NavigationService.NavigateTo<TabEditingControlViewModel>();
+        catch (Exception ex)
+        {
+            ShowMessage("Exception", ex.Message);
+        }
     }
 }
